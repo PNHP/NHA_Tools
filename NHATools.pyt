@@ -46,8 +46,9 @@ working. Now using the input feature layer instead of the data source (full path
 -Calculates municipalities, usgs quads, and protected lands
 3/2/2016
 - upgraded all the lines that reference the ArcGIS version to 10.3 from 10.2
-- Add new users to user dictionary - 'pwoods', 'sschuette'
-
+- Add new users to user dictionary - 'pwoods', 'sschuette', 'bgeorgic'
+3/3/2016
+- Must establish a direct Database Connection to user version of database in ArcCatalog through Geodatabase Connection Properties; use syntax 'PNHP.username.phg-gis'
 
 To Do List/Future Ideas:
 *Batch tool that will work on counties/multiple counties
@@ -67,7 +68,7 @@ arcpy.env.overwriteOutput = True
 ################################################################################
 
 # Dictionary of usernames and initials to use when determining NHA join ID
-user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly'}
+user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg'}
 
 # List of exceptions to be used when extracting quad name, these will remain uppercase instead of being converted to title case
 exceptions = ['NE', 'NW', 'SE', 'SW', 'US']
