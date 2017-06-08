@@ -5,10 +5,13 @@ Purpose:
 Author:      K. Erath
 
 Created:     15Jan2014
-Updated:     03Mar2016
-
+Updated:     08June2017
 
 Updates:
+6/8/2017
+NHA Version 2 Tool
+- allow the path of the Supporting Landscapes to be set via a parameter. 
+- tried to delete the v1 tool - no long relevant
 7/24/2014
 NHA Version 1 Tool
 - Truncate old site name if it is longer than the limit for that field (70 characters)
