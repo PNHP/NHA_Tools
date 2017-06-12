@@ -281,8 +281,8 @@ class CreateNHAv2(object):
         params = [
         parameter('Site Name', 'site_name', 'GPString'),
         parameter('Source Report', 'src_report', 'GPString', defaultValue='None', parameterType='Optional'),
-        parameter('Selected CPP Core(s)', 'cpp_core', defaultValue=r'Conservation Planning Polygons\CPP_Core_2017_05_12'),
-        parameter('CPP Supporting(s)', 'cpp_slp', defaultValue=r'Conservation Planning Polygons\CPP_Supporting_2017_05_12'),
+        parameter('Selected CPP Core(s)', 'cpp_core', defaultValue=r'Conservation Planning Polygons\CPP_Core'),
+        parameter('CPP Supporting(s)', 'cpp_slp', defaultValue=r'Conservation Planning Polygons\CPP_Supporting'),
         parameter("Exclude CPPs marked 'not approved' or 'problematic source feature'", 'exclude_cpps', datatype='GPBoolean', defaultValue=True)]
         return params
 
