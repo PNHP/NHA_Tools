@@ -5,7 +5,7 @@ Purpose:
 Author:      K. Erath
 
 Created:     15Jan2014
-Updated:     08June2017
+Updated:     11Dec2017
 
 Updates:
 6/8/2017
@@ -52,6 +52,10 @@ working. Now using the input feature layer instead of the data source (full path
 - Add new users to user dictionary - 'pwoods', 'sschuette', 'bgeorgic'
 3/3/2016
 - Must establish a direct Database Connection to user version of database in ArcCatalog through Geodatabase Connection Properties; use syntax 'PNHP.username.phg-gis'
+11/29/2017
+-Updated connections to pgh-gis0. Updated changed file names for input sources: Quad24k, PaMunicipalities
+12/11/2017
+-Updated PaMunicipalities field to 'MUNICIPAL1', replacing 'Name_Proper_Type'in search cursor and added code for title case formatting. Request submitted to Brad Georgic to update values to include muni type. 
 
 To Do List/Future Ideas:
 *Batch tool that will work on counties/multiple counties
@@ -294,17 +298,17 @@ class CreateNHAv2(object):
         cpp_core = parameters[2].valueAsText
         cpp_slp = parameters[3].valueAsText  
         exclude_cpps = parameters[4].value
-        # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.2\ArcCatalog\PNHP.kerath.pgh-gis.sde
-        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.3\ArcCatalog\PNHP.{0}.pgh-gis.sde".format(getuser())
+        # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.kerath.pgh-gis.sde
+        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
         nha_core = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Core".format(workspace)
         nha_slp = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Supporting".format(workspace)
         spec_tbl = r"{}\PNHP.DBO.NHA_SpeciesTable".format(workspace)
         eoptreps = r"W:\Heritage\Heritage_Data\Biotics_datasets.gdb\eo_ptreps"
         
-        pa_county = r"Database Connections\StateLayers.Default.pgh-gis.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
-        muni = r"Database Connections\StateLayers.Default.pgh-gis.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.Municipalities"
-        quad = r"Database Connections\StateLayers.Default.pgh-gis.sde\StateLayers.DBO.Indexes\StateLayers.DBO.QUAD24K"
-        prot_land = r"Database Connections\StateLayers.Default.pgh-gis.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
+        pa_county = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
+        muni = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
+        quad = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
+        prot_land = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
         community_query = "SNAME in ('Pitch pine - heath woodland','Pitch pine - mixed hardwood woodland','Pitch pine - rhodora - scrub oak woodland','Pitch pine - scrub oak woodland','Red-cedar - pine serpentine shrubland','Rhodora - mixed heath - scrub oak shrubland','Low heath shrubland','Scrub oak shrubland','Little bluestem - pennsylvania sedge opening','Serpentine grassland','Calcareous opening/cliff','Side-oats gramma calcareous grassland','Serpentine gravel forb community','Great Lakes Region dry sandplain','Great Lakes Region sparsely vegetated beach')"
 
         # Define the workspace environment
@@ -398,14 +402,14 @@ class CreateNHAv2(object):
         #---- Select municipalities that intersect the NHA
         arcpy.SelectLayerByLocation_management("muni_lyr", "INTERSECT", "temp_nha")
         #---- Use search cursor to retrieve attributes, order by municipality name so that later the municipality lists will be populated in alphabetical order
-        cursor = arcpy.da.SearchCursor("muni_lyr", ["CountyName", "Name_Proper_Type"], sql_clause=(None, "ORDER BY CountyName, Name_Proper_Type"))
+        cursor = arcpy.da.SearchCursor("muni_lyr", ["CountyName", "MUNICIPAL1"], sql_clause=(None, "ORDER BY CountyName, MUNICIPAL1"))
         #---- Empty dictionary to store municipalities with corresponding county
         county_muni_dict = {}
         #---- Loop throough selected records in municipality feature layer
         for row in cursor:
             #---- Convert county to title case, and both unicode values to strings
             county = str(row[0]).title()
-            municipality = str(row[1])
+            municipality = str(row[1]).title()
             #---- If the county has not yet been added to the dictionary, add the county and the municipality
             if county not in county_muni_dict:
                 county_muni_dict[county] = [municipality]
