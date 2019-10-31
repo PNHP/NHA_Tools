@@ -75,7 +75,7 @@ arcpy.env.overwriteOutput = True
 ################################################################################
 
 # Dictionary of usernames and initials to use when determining NHA join ID
-user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg'}
+user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg', 'ajohnson':'alj', 'mmoore':'mem'}
 
 # List of exceptions to be used when extracting quad name, these will remain uppercase instead of being converted to title case
 exceptions = ['NE', 'NW', 'SE', 'SW', 'US']
