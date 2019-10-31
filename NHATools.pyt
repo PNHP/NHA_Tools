@@ -63,6 +63,12 @@ To Do List/Future Ideas:
 *Some multipart CPPs should be different NHAs
 '''
 
+
+# Things to check
+# * arcgis version
+# * user has direct access to the sql server
+
+
 # import modules
 import arcpy, time, datetime, sys, traceback
 from getpass import getuser
@@ -299,15 +305,15 @@ class CreateNHAv2(object):
         cpp_slp = parameters[3].valueAsText  
         exclude_cpps = parameters[4].value
         # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.kerath.pgh-gis.sde
-        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
+        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.7\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
         nha_core = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Core".format(workspace)
         nha_slp = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Supporting".format(workspace)
         spec_tbl = r"{}\PNHP.DBO.NHA_SpeciesTable".format(workspace)
         eoptreps = r"W:\Heritage\Heritage_Data\Biotics_datasets.gdb\eo_ptreps"
         
         pa_county = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
-        muni = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
-        quad = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
+        muni = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
+        quad = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
         prot_land = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
         community_query = "SNAME in ('Pitch pine - heath woodland','Pitch pine - mixed hardwood woodland','Pitch pine - rhodora - scrub oak woodland','Pitch pine - scrub oak woodland','Red-cedar - pine serpentine shrubland','Rhodora - mixed heath - scrub oak shrubland','Low heath shrubland','Scrub oak shrubland','Little bluestem - pennsylvania sedge opening','Serpentine grassland','Calcareous opening/cliff','Side-oats gramma calcareous grassland','Serpentine gravel forb community','Great Lakes Region dry sandplain','Great Lakes Region sparsely vegetated beach')"
 
