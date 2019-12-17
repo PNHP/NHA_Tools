@@ -321,6 +321,8 @@ class CreateNHAv2(object):
         eoptreps = r"W:\Heritage\Heritage_Data\Biotics_datasets.gdb\eo_ptreps"
 
         pa_county = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
+        muni = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
+        quad = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
         prot_land = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
         community_query = "SNAME in ('Pitch pine - heath woodland','Pitch pine - mixed hardwood woodland','Pitch pine - rhodora - scrub oak woodland','Pitch pine - scrub oak woodland','Red-cedar - pine serpentine shrubland','Rhodora - mixed heath - scrub oak shrubland','Low heath shrubland','Scrub oak shrubland','Little bluestem - pennsylvania sedge opening','Serpentine grassland','Calcareous opening/cliff','Side-oats gramma calcareous grassland','Serpentine gravel forb community','Great Lakes Region dry sandplain','Great Lakes Region sparsely vegetated beach')"
 
