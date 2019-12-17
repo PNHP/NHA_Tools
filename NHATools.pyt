@@ -301,6 +301,7 @@ class CreateNHAv2(object):
         exclude_cpps = parameters[4].value
         # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.kerath.pgh-gis.sde
         workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.6\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
+>>>>>>> 269bef33594e10250ee068820f1aec7b9f3b0c57
         nha_core = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Core".format(workspace)
         nha_slp = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Supporting".format(workspace)
         spec_tbl = r"{}\PNHP.DBO.NHA_SpeciesTable".format(workspace)
