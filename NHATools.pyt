@@ -63,6 +63,12 @@ To Do List/Future Ideas:
 *Some multipart CPPs should be different NHAs
 '''
 
+
+# Things to check
+# * arcgis version
+# * user has direct access to the sql server
+
+
 # import modules
 import arcpy, time, datetime, sys, traceback
 from getpass import getuser
@@ -75,7 +81,11 @@ arcpy.env.overwriteOutput = True
 ################################################################################
 
 # Dictionary of usernames and initials to use when determining NHA join ID
+<<<<<<< HEAD
 user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg', 'mmoore':'mem'}
+=======
+user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg', 'ajohnson':'alj', 'mmoore':'mem'}
+>>>>>>> 269bef33594e10250ee068820f1aec7b9f3b0c57
 
 # List of exceptions to be used when extracting quad name, these will remain uppercase instead of being converted to title case
 exceptions = ['NE', 'NW', 'SE', 'SW', 'US']
@@ -300,7 +310,10 @@ class CreateNHAv2(object):
         cpp_slp = parameters[3].valueAsText
         exclude_cpps = parameters[4].value
         # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.kerath.pgh-gis.sde
+<<<<<<< HEAD
         workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.6\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
+=======
+        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.7\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
 >>>>>>> 269bef33594e10250ee068820f1aec7b9f3b0c57
         nha_core = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Core".format(workspace)
         nha_slp = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Supporting".format(workspace)
@@ -308,8 +321,6 @@ class CreateNHAv2(object):
         eoptreps = r"W:\Heritage\Heritage_Data\Biotics_datasets.gdb\eo_ptreps"
 
         pa_county = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
-        muni = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
-        quad = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
         prot_land = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
         community_query = "SNAME in ('Pitch pine - heath woodland','Pitch pine - mixed hardwood woodland','Pitch pine - rhodora - scrub oak woodland','Pitch pine - scrub oak woodland','Red-cedar - pine serpentine shrubland','Rhodora - mixed heath - scrub oak shrubland','Low heath shrubland','Scrub oak shrubland','Little bluestem - pennsylvania sedge opening','Serpentine grassland','Calcareous opening/cliff','Side-oats gramma calcareous grassland','Serpentine gravel forb community','Great Lakes Region dry sandplain','Great Lakes Region sparsely vegetated beach')"
 
