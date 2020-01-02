@@ -46,8 +46,8 @@ def element_type(elcode):
         et = 'AF'
     elif elcode.startswith('AM'):
         et = 'AM'
-    elif elcode.startswith('ARAD'):
-        et = 'Reptile'
+    elif elcode.startswith('AR'):
+        et = 'AR'
     elif elcode.startswith('C') or elcode.startswith('H'):
         et = 'CGH'
     elif elcode.startswith('ICMAL'):
@@ -66,7 +66,7 @@ def element_type(elcode):
         et = 'IIHYM'
     elif elcode.startswith('IILEP'):
         et = 'IILEP'
-    elif elcode.startswith('IILEY') or elcode.startswith('IILEW') or elcode.startswith('IILEV'):
+    elif elcode.startswith('IILEY') or elcode.startswith('IILEW') or elcode.startswith('IILEV') or elcode.startswith('IILEU'):
         et = 'IILEY'
     elif elcode.startswith('IIODO'):
         et = 'IIODO'
@@ -191,18 +191,16 @@ class CreateNHAv3(object):
 ##        cpp_core = r"PNHP\\CPP\\CPP Core"
 ##        cpp_supporting = "CPP\\CPP Supporting"
 ##
-        nha_core = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_Core"
-        nha_supporting = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_Supporting"
-        spec_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_SpeciesTable"
+##        nha_core = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_Core"
+##        nha_supporting = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_Supporting"
+##        spec_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_SpeciesTable"
 ##
-##        nha_core = r'https:\\maps.waterlandlife.org\\arcgis\\rest\\services\\PNHP\\NHAEdit\\FeatureServer\\0'
-##        nha_supporting = r'https:\\maps.waterlandlife.org\\arcgis\\rest\\services\\PNHP\\NHAEdit\\FeatureServer\\1'
-##        spec_tbl = r''
-##        prot_lands_tbl = r''
-##        boundaries_tbl = r''
+        nha_core = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/0'
+        nha_supporting = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/1'
+        spec_tbl = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/4'
 
         eo_reps = r'W:\\Heritage\\Heritage_Data\\Biotics_datasets.gdb\\eo_reps'
-        usgs_quad = r'W:\LYRS\Indexes\QUAD 24K.lyr'
+
 
 
 
@@ -269,24 +267,13 @@ class CreateNHAv3(object):
             tiebreak = str(int(t[-6:])+1).zfill(6)
             nha_join_id = username + tiebreak
 
-        # get attributes for usgs quad and old site names
-        usgs_quad_att = get_attribute(usgs_quad,temp_nha,"NAME")
-        nha_current_lyr = arcpy.MakeFeatureLayer_management(nha_core, "nha_current_lyr", "STATUS in ('C','H')")
-        old_site_name_att = get_attribute(nha_current_lyr,temp_nha,"SITE_NAME")
-
         # test for unsaved edits - alert user to unsaved edits and end script
         try:
             # open editing session and insert new NHA Core record
-            workspace = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb"
-            edit = arcpy.da.Editor(workspace)
-            edit.startEditing()
-            edit.startOperation()
-            values = [site_name,"NHA","D",site_desc,old_site_name_att,"1306 - Conservation Planning",source_report,usgs_quad_att,nha_join_id,geom]
-            fields = ["SITE_NAME","SITE_TYPE","STATUS","BRIEF_DESC","OLD_SITE_NAME","PROJECT","SOURCE_REPORT","USGS_QUAD","NHA_JOIN_ID","SHAPE@"]
+            values = [site_name,"NHA","D",site_desc,"1306 - Conservation Planning",source_report,nha_join_id,geom]
+            fields = ["SITE_NAME","SITE_TYPE","STATUS","BRIEF_DESC","PROJECT","SOURCE_REPORT","NHA_JOIN_ID","SHAPE@"]
             with arcpy.da.InsertCursor(nha_core,fields) as cursor:
                 cursor.insertRow(values)
-            edit.stopOperation()
-            edit.stopEditing(True)
         except RuntimeError:
             arcpy.AddWarning("You have unsaved edits in your NHA layer. Please save or discard edits and try again.")
             sys.exit()
@@ -314,16 +301,10 @@ class CreateNHAv3(object):
             # test for unsaved edits - alert user to unsaved edits and end script
             try:
                 # start editing session and insert new NHA Supporting record
-                workspace = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb"
-                edit = arcpy.da.Editor(workspace)
-                edit.startEditing()
-                edit.startOperation()
                 values = [nha_join_id,"D",geom_supp]
                 fields = ["NHA_JOIN_ID","STATUS","SHAPE@"]
                 with arcpy.da.InsertCursor(nha_supporting,fields) as cursor:
                     cursor.insertRow(values)
-                edit.stopOperation()
-                edit.stopEditing(True)
             except RuntimeError:
                 arcpy.AddWarning("You have unsaved edits in your NHA layer. Please save or discard edits and try again.")
                 sys.exit()
@@ -381,7 +362,7 @@ class FillAttributes(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        nha_core.value = r'NHA Core'
+        nha_core.value = r'NHAEdit\NHA Core Habitat'
 
         arcmap = arcpy.Parameter(
             displayName = "Check box if you are using ArcMap 10.xx instead of ArcGIS Pro.",
@@ -416,11 +397,13 @@ class FillAttributes(object):
         # define paths
         muni = r'https://maps.waterlandlife.org/arcgis/rest/services/BaseLayers/Boundaries/FeatureServer/2'
         prot_lands = r'C:\\Users\\mmoore\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\StateLayers.Default.pgh-gis0.sde\\StateLayers.DBO.Protected_Lands\\StateLayers.DBO.TNC_Secured_Areas'
-        boundaries_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_PoliticalBoundaries"
-        prot_lands_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_ProtectedLands"
+        usgs_quad = r'W:\LYRS\Indexes\QUAD 24K.lyr'
+        prot_lands_tbl = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
+        boundaries_tbl = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/2'
 
-##        prot_lands_tbl = r''
-##        boundaries_tbl = r''
+##        boundaries_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_PoliticalBoundaries"
+##        prot_lands_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_ProtectedLands"
+
 
         # check for selection on nha core layer and exit if there is no selection
         desc = arcpy.Describe(nha_core)
@@ -436,6 +419,7 @@ class FillAttributes(object):
 
         # make feature layer from municipal layer
         muni_lyr = arcpy.MakeFeatureLayer_management(muni,"muni_lyr")
+        nha_current_lyr = arcpy.MakeFeatureLayer_management(nha_core, "nha_current_lyr", "STATUS in ('C','H')")
 
         # start loop to attribute each selected nha
         for nha in nha_selected:
@@ -457,29 +441,31 @@ class FillAttributes(object):
             nha_core_lyr = arcpy.MakeFeatureLayer_management(nha_core, "nha_core_lyr", sql_query)
 
 ######################################################################################################################################################
-## calculate acres for NHA Core
+## calculate acres, USGS quads, and old site names for NHA Core
 ######################################################################################################################################################
 
 
             # test for unsaved edits - alert user to unsaved edits and end script
-            try:
-                # start editing session and insert new NHA Supporting record
-                workspace = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb"
-                edit = arcpy.da.Editor(workspace)
-                edit.startEditing()
-                edit.startOperation()
-                with arcpy.da.UpdateCursor(nha_core_lyr,["ACRES","SHAPE@"]) as cursor:
-                    for row in cursor:
-                        acres = round(row[1].getArea("GEODESIC","ACRES"),3)
-                        row[0] = acres
-                        arcpy.AddMessage(nha +" Acres: "+str(acres))
-                        arcpy.AddMessage("......")
-                        cursor.updateRow(row)
-                edit.stopOperation()
-                edit.stopEditing(True)
-            except RuntimeError:
-                arcpy.AddWarning("You have unsaved edits in your NHA layer. Please save or discard edits and try again.")
-                sys.exit()
+##            try:
+                # get attributes for usgs quad and old site names
+            usgs_quad_att = get_attribute(usgs_quad,nha_core_lyr,"NAME")
+            old_site_name_att = get_attribute(nha_current_lyr,nha_core_lyr,"SITE_NAME")
+            with arcpy.da.UpdateCursor(nha_core_lyr,["ACRES","SHAPE@","USGS_QUAD","OLD_SITE_NAME"]) as cursor:
+                for row in cursor:
+                    acres = round(row[1].getArea("GEODESIC","ACRES"),3)
+                    row[0] = acres
+                    row[2] = usgs_quad_att
+                    row[3] = old_site_name_att
+                    arcpy.AddMessage(nha +" Acres: "+str(acres))
+                    arcpy.AddMessage("......")
+                    arcpy.AddMessage(nha + " USGS Quads: "+usgs_quad_att)
+                    arcpy.AddMessage("......")
+                    arcpy.AddMessage(nha + " old site names: "+old_site_name_att)
+                    arcpy.AddMessage("......")
+                    cursor.updateRow(row)
+##            except RuntimeError:
+##                arcpy.AddWarning("You have unsaved edits in your NHA layer. Please save or discard edits and try again.")
+##                sys.exit()
 
 ######################################################################################################################################################
 ## attribute boundaries table
@@ -490,7 +476,7 @@ class FillAttributes(object):
             MuniInsert = []
             with arcpy.da.SearchCursor(muni_lyr,["CountyName","FullName"]) as cursor:
                 for row in cursor:
-                    values = tuple([row[0],row[1],nha])
+                    values = tuple([row[0].title(),row[1],nha])
                     MuniInsert.append(values)
             arcpy.AddMessage(nha + " Boundaries: ")
             for insert in MuniInsert:
@@ -514,7 +500,7 @@ class FillAttributes(object):
             arcpy.AddMessage(nha+ " Protected Lands: ")
             if ProtInsert:
                 for insert in ProtInsert:
-                    with arcpy.da.InsertCursor(prot_lands_tbl,["PROTECTED_LANDS","PERCENT","NHA_JOIN_ID"]) as cursor:
+                    with arcpy.da.InsertCursor(prot_lands_tbl,["PROTECTED_LANDS","PERCENT_","NHA_JOIN_ID"]) as cursor:
                         arcpy.AddMessage(insert)
                         cursor.insertRow(insert)
             else:
