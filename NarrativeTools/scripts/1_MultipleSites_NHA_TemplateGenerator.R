@@ -24,7 +24,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHA_list <- read.csv(here("_data", "sourcefiles", "NHAs_WashCounty.csv")) #download list that includes site names and/or (preferably) NHA Join ID
+NHA_list <- read.csv(here::here("_data", "sourcefiles", "NHAs_WashCounty.csv")) # download list that includes site names and/or (preferably) NHA Join ID
 
 #if you are just running a few sites, you can select individual site by name or NHA join id:
 #selected_nhas <- arc.select(nha, where_clause="SITE_NAME='White's Woods' AND STATUS = 'NP'")
@@ -34,8 +34,7 @@ NHA_list <- read.csv(here("_data", "sourcefiles", "NHAs_WashCounty.csv")) #downl
 
 #Method A) If using site names (but this gets hung up on apostrophes)
 NHA_list <- NHA_list[order(NHA_list$Site.Name),] #order alphabetically
-Site_Name_List <- as.vector(NHA_list$Site.Name)
-Site_Name_List <- as.list(Site_Name_List)
+Site_Name_List <- as.vector(NHA_list$Site.Name) # removed the conversion to a list as I don't know what it was doing
 SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
@@ -51,14 +50,22 @@ if(file.exists(biotics_gdb)==FALSE) {
 # open the NHAs and get them
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
-dim(selected_nhas) #check how many records are returned to ensure it meets expectations
+selected_nhas <- selected_nhas[order(selected_nhas$SITE_NAME),] # order alphabetically (CT--I think this order is just for the creation of the folders is a logical way)
 
-selected_nhas <- selected_nhas[order(selected_nhas$SITE_NAME),]#order alphabetically
+# check to make sure that all the nha's were found
+if(length(setdiff(selected_nhas$SITE_NAME, Site_Name_List))==0 & length(setdiff(Site_Name_List,selected_nhas$SITE_NAME))==0){
+  print(paste("All ",length(selected_nhas$SITE_NAME)," NHAs were found in the geodatabase.", sep=""))
+} else if(length(setdiff(selected_nhas$SITE_NAME, Site_Name_List))>0 & length(setdiff(Site_Name_List,selected_nhas$SITE_NAME))==0){
+  print("There are NHAs in the site list that are not in the geodatabase.")
+} else {
+  print("Other issues with the NHA list.")
+}
 
-####
 #manual check to ensure that your original list of NHAs and the selected NHA data frame both have sites in the same order
-identical(selected_nhas$SITE_NAME, as.character(NHA_list$Site.Name))
-####
+if(isFALSE(identical(selected_nhas$SITE_NAME, as.character(Site_Name_List)))){
+  print("Sites are not in the same order between lists")
+}
+
 
 ####################################################
 ## Build the Species Table #########################
