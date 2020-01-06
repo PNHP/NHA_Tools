@@ -13,7 +13,7 @@
 ####################################################
 #Set up libraries, paths, and settings
 
-# check and load required libraries
+# check and load required libraries, note other packages are added through the path and settings file
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
   require(here)
 
@@ -29,7 +29,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHA_list <- read.csv(here("_data", "sourcefiles", "NHAs_SWCounties.csv")) #download list that includes site names and/or (preferably) NHA Join ID
+NHA_list <- read.csv(here("_data", "sourcefiles", "NHAs_WashCounty.csv")) #download list that includes site names and/or (preferably) NHA Join ID
 
 #if you are just running a few sites, you can select individual site by name or NHA join id:
 #selected_nhas <- arc.select(nha, where_clause="SITE_NAME='White's Woods' AND STATUS = 'NP'")
