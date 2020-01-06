@@ -42,8 +42,13 @@ SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),c
 #Site_NHAJoinID_List <-as.character(NHA_list$NHA.Join.ID)
 #SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
 
+# check the server path for the sde connections
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
+if(file.exists(biotics_gdb)==FALSE) {
+  print(paste("The SDE path was not found at ",serverPath,". Please identify the appropiate file", sep=""))
+}
 
+# open the NHAs and get them
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
 dim(selected_nhas) #check how many records are returned to ensure it meets expectations
