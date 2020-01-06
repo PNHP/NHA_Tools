@@ -11,6 +11,31 @@
 #
 #-------------------------------------------------------------------------------
 
+# packages
+if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
+require(arcgisbinding)
+if (!requireNamespace("RSQLite", quietly = TRUE)) install.packages("RSQLite")
+require(RSQLite)
+if (!requireNamespace("knitr", quietly = TRUE)) install.packages("knitr")
+require(knitr)
+if (!requireNamespace("xtable", quietly = TRUE)) install.packages("xtable")
+require(xtable)
+if (!requireNamespace("flextable", quietly = TRUE)) install.packages("flextable")
+require(flextable)
+if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")
+require(dplyr)
+if (!requireNamespace("dbplyr", quietly = TRUE)) install.packages("dbplyr")
+require(dbplyr)
+if (!requireNamespace("rmarkdown", quietly = TRUE)) install.packages("rmarkdown")
+require(rmarkdown)
+if (!requireNamespace("tmap", quietly = TRUE)) install.packages("tmap")
+require(tmap)
+if (!requireNamespace("OpenStreetMap", quietly = TRUE)) install.packages("OpenStreetMap")
+require(OpenStreetMap)
+if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
+require(openxlsx)
+if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
+require(sf)
 
 # options
 options(useFancyQuotes=FALSE)
@@ -20,6 +45,10 @@ arc.check_product()
 
 ## Biotics Geodatabase
 biotics_gdb <- "W:/Heritage/Heritage_Data/Biotics_datasets.gdb"
+if(file.exists(biotics_gdb)==FALSE) {
+  print(paste("The Biotics database was not found at ",biotics_gdb,". Please identify the appropiate file", sep=""))
+}
+
 
 # NHA Databases and such
 NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NHA_ToolsV3"
@@ -28,10 +57,17 @@ NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlann
 nha_databasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 nha_databasename <- "NaturalHeritageAreas.sqlite" 
 nha_databasename <- paste(nha_databasepath,nha_databasename,sep="/")
+if(file.exists(nha_databasename)==FALSE) {
+  print(paste("The NHA database was not found at ",nha_databasename,". Please identify the appropiate file", sep=""))
+}
+
 # threat recc database name
 TRdatabasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 TRdatabasename <- "nha_recs.sqlite" 
 TRdatabasename <- paste(TRdatabasepath,TRdatabasename,sep="/")
+if(file.exists(TRdatabasename)==FALSE) {
+  print(paste("The Threats and Recommendations database was not found at ",TRdatabasename,". Please identify the appropiate file", sep=""))
+}
 
 # Second, set up an ODBC connection. You only need to do this once, if you continue to connect to the db with the same name
 # 1. click magnifier (search) in lower left, type "ODBC" in search window, open "ODBC Data Sources (64 bit)"
