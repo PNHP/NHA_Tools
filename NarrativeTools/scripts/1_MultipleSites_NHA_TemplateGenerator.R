@@ -109,9 +109,15 @@ if( length(setdiff(unique(speciestable$EO_ID), selected_pointreps$EO_ID))==0 & l
 # merge the species list
 speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 
-
-
-names(speciestable)[c(15:22)] <- c("EORANK","GRANK","SRANK","SPROT","PBSSTATUS","LASTOBS","SENSITIVE","SENSITIVE_EO") #should rewrite this to be resilient to changing order of data frames
+# rename columns to what we need for this tool.  
+# colnames(speciestable)[colnames(speciestable)=="EORANK"] <- "EORANK"
+# colnames(speciestable)[colnames(speciestable)=="GRANK"] <- "GRANK"
+# colnames(speciestable)[colnames(speciestable)=="SRANK"] <- "SRANK"
+# colnames(speciestable)[colnames(speciestable)=="SPROT"] <- "SPROT"
+# colnames(speciestable)[colnames(speciestable)=="PBSSTATUS"] <- "PBSSTATUS"
+# colnames(speciestable)[colnames(speciestable)=="LASTOBS"] <- "LASTOBS"
+colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
+colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
 
 species_table_select<- split(speciestable, speciestable$column_label) #split back into a list of species tables
 
