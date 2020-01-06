@@ -86,20 +86,30 @@ species_table_select #list of species tables
 #merge species lists w/ EO information from Point Reps database
 
 #create one big data frame first of all the EOIDs across all the selected NHAs
-speciestable <- bind_rows(species_table_select, .id = "column_label")
+speciestable <- bind_rows(species_table_select, .id="column_label")
 
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) #select subset of columns from EO pointrep database
-
 #if this select command does not work (which sometimes happens to me?), try this method, which will work
 #selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'))
 #selected_pointreps <- subset(selected_pointreps, selected_pointreps$EO_ID %in% speciestable$EO_ID)
 
-dim(selected_pointreps)
+# check to make sure that all the related species were found
+unique(speciestable$EO_ID)
 
+
+if( length(setdiff(unique(speciestable$EO_ID), selected_pointreps$EO_ID))==0 & length(setdiff(selected_pointreps$EO_ID, unique(speciestable$EO_ID)))==0){
+  print(paste("All ",length(unique(speciestable$EO_ID))," associated species were found in the geodatabase.", sep=""))
+} else {
+  print("Other issues with the species list.")
+}
+
+# merge the species list
 speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
+
+
 
 names(speciestable)[c(15:22)] <- c("EORANK","GRANK","SRANK","SPROT","PBSSTATUS","LASTOBS","SENSITIVE","SENSITIVE_EO") #should rewrite this to be resilient to changing order of data frames
 
