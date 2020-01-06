@@ -17,11 +17,6 @@
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
   require(here)
 
-# if (!requireNamespace("odbc", quietly = TRUE)) install.packages("odbc")
-#   require(odbc)
-
-# note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
-
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 

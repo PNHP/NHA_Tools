@@ -36,6 +36,10 @@ if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
 require(sf)
+# if (!requireNamespace("odbc", quietly = TRUE)) install.packages("odbc")
+#   require(odbc)
+# note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
+
 
 # options
 options(useFancyQuotes=FALSE)
