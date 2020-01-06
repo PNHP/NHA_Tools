@@ -40,7 +40,6 @@ require(sf)
 #   require(odbc)
 # note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
 
-
 # options
 options(useFancyQuotes=FALSE)
 
