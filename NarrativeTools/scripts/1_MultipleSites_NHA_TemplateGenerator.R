@@ -72,7 +72,7 @@ if(isFALSE(identical(selected_nhas$SITE_NAME, as.character(Site_Name_List)))){
 
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
 nha_relatedSpecies <- arc.open(paste(serverPath,"PNHP.DBO.NHA_SpeciesTable", sep=""))
-selected_nha_relatedSpecies <- arc.select(nha_relatedSpecies) 
+selected_nha_relatedSpecies <- arc.select(nha_relatedSpecies, c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE","EO_ID","NHA_JOIN_ID")) # modified to leave out the arcgis editor tracking fields
 Site_ID_list <- as.list(unique(selected_nhas$NHA_JOIN_ID)) #added in unique for occasions where a site might be in the import list multiple times (e.g. when it crosses county lines and we want to talk about it for all intersecting counties)
 
 #open linked species tables and select based on list of selected NHAs
@@ -119,9 +119,11 @@ speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
 colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
 
-species_table_select<- split(speciestable, speciestable$column_label) #split back into a list of species tables
+# split back into a list of species tables
+species_table_select<- split(speciestable, speciestable$column_label) 
 
-namevec <- NULL #name species tables so that you can tell if they end up in a weird order
+# name species tables so that you can tell if they end up in a weird order
+namevec <- NULL 
 for (i in seq_along(species_table_select)){
   namevec[i] <- species_table_select[[i]]$NHA_JOIN_ID[1]}
 names(species_table_select) <- namevec
@@ -136,15 +138,14 @@ TRdb <- dbConnect(SQLite(), dbname=TRdatabasename) #connect to SQLite DB
 Join_ElSubID <- dbGetQuery(TRdb, paste0("SELECT ELSubID, ELCODE FROM ET"," WHERE ELCODE IN (", paste(toString(sQuote(SD_specieslist)), collapse = ", "), ");"))
 dbDisconnect(TRdb)
 
-SD_speciesTable <- lapply(seq_along(species_table_select),
-                          function(x) merge(species_table_select[[x]], Join_ElSubID, by="ELCODE"))# merge in the ELSubID until we get it fixed in the GIS layer
+SD_speciesTable <- lapply(seq_along(species_table_select), function(x) merge(species_table_select[[x]], Join_ElSubID, by="ELCODE"))# merge in the ELSubID until we get it fixed in the GIS layer
 names(SD_speciesTable) <- namevec #keep names associated with list of tables
 
 #add a column in each selected NHA species table for the image path, and assign image. 
 #Note: this uses the EO_ImSelect function, which I modified in the source script to work with a list of species tables
 for (i in 1:length(SD_speciesTable)) {
     for(j in 1:nrow(SD_speciesTable[[i]])){
-  SD_speciesTable[[i]]$Images <- EO_ImSelect(SD_speciesTable[[i]][j,])
+       SD_speciesTable[[i]]$Images <- EO_ImSelect(SD_speciesTable[[i]][j,])
     }
 }
 
@@ -176,8 +177,9 @@ for (i in 1:length(selected_nhas$NHA_JOIN_ID)){
 
 # add in the new data
 for (i in 1:length(speciesTable4db)){  
-dbAppendTable(db_nha, "nha_species", speciesTable4db[[i]])
+  dbAppendTable(db_nha, "nha_species", speciesTable4db[[i]])
 }
+
 dbDisconnect(db_nha)
 
 #################################################
