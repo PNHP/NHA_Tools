@@ -221,24 +221,12 @@ for (i in 1:length(SD_speciesTable)) {
 sigrankspecieslist <- SD_speciesTable #so if things get weird, you only have to come back to this step
 
 #remove species which are not included in thesite ranking matrices--GNR, SNR, SH/Eo Rank H, etc. 
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SNR
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SH"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SH
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$EORANK!="H"),]) #remove EOs w/ an H quality rank
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SU"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SU
-
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SNR
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SH"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SH
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$EORANK!="H"),]) #remove EOs w/ an H quality rank
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SU"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SU
 
 #Merge rounded S, G, and EO ranks into individual species tables
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], rounded_grank, by="GRANK"))
