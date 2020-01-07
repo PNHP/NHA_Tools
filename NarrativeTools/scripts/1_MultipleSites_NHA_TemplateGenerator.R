@@ -269,10 +269,10 @@ for (i in seq_along(SummedTotalScore)) {
   }
 }
 
-#manual check step, take a look if you want to see where things are mismatched--do any sites need to have ranks overriden?
+# manual check step, take a look if you want to see where things are mismatched--do any sites need to have ranks overriden?
 check <- as.data.frame(cbind(SiteRank, SummedTotalScore, G3_regional, G2_global, G1_global, namevec, selected_nhas$NHA_JOIN_ID))
 
-#Do the site ranking overrides automatically
+# Do the site ranking overrides automatically
 for (i in seq_along(SiteRank)) {
   if(G3_regional[[i]]=="TRUE") {
     SiteRank[[i]] <-"Regional"
@@ -294,6 +294,18 @@ selected_nhas$site_score <- unlist(SiteRank) #add site significance rankings to 
 selected_nhas$site_rank <- unlist(SummedTotalScore) #add site significance score to NHA data frame
 
 summary(as.factor(selected_nhas$site_score)) #manual check step: take a look at distribution of significance ranks
+
+#####
+# get additional tables
+
+
+# open the related species table and get the rows that match the NHA join ids from the selected NHAs
+nha_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
+selected_nha_ProtectedLands <- arc.select(nha_ProtectedLands, c("NHA_JOIN_ID","PROTECTED_LANDS","PERCENT_")) 
+
+# open the related species table and get the rows that match the NHA join ids from the selected NHAs
+nha_PoliticalBoundaries <- arc.open(paste(serverPath,"PNHP.DBO.NHA_PoliticalBoundaries", sep=""))
+selected_nha_PoliticalBoundaries <- arc.select(nha_PoliticalBoundaries, c("NHA_JOIN_ID","COUNTY","MUNICIPALITY")) 
 
 
 
@@ -412,6 +424,10 @@ fn <- paste(NHAdest1[i], "/", nha_foldername_list[i],"_tempmap.png",sep="")
 if (file.exists(fn)) #Delete file if it exists
   file.remove(fn)
 }
+
+
+
+
 
 ####################################################
 #output data about NHAs with completed templates to database and summary sheets
