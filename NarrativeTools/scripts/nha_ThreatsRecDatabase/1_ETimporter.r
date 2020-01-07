@@ -29,6 +29,10 @@ databasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationP
 databasename <- "nha_recs.sqlite" 
 databasename <- paste(databasepath,databasename,sep="/")
 
+
+
+
+##################################################################################################################################
 #Import current Element Tracking (ET) file into NHA database
 
 ET_path <- "P://Conservation Programs/Natural Heritage Program/Data Management/Biotics Database Areas/Element Tracking/current element lists"
@@ -124,6 +128,35 @@ ETitalics <- as.data.frame(ETitalics)
 db <- dbConnect(SQLite(), dbname=databasename) # connect to the database
 dbWriteTable(db, "SNAMEitalics", ETitalics, overwrite=TRUE) # write the table to the sqlite
 dbDisconnect(db) # disconnect the db
+
+
+#####################################################################################################################
+#  G/S rank tables
+# 2_loadSpeciesWeights.r
+
+# write complelete ET to database
+db <- dbConnect(SQLite(), dbname=databasename) # connect to the database
+
+# g and s rank matrix.
+nha_gsrankMatrix <- read.csv(here::here("_data","databases","sourcefiles","nha_gsrankMatrix.csv"), row.names=1, stringsAsFactors=FALSE)
+dbWriteTable(db, "nha_gsrankMatrix", nha_gsrankMatrix, overwrite=TRUE) # write the table to the sqlite
+
+# EO rank matrix
+nha_EORANKweights <- read.csv(here("_data","databases","sourcefiles","nha_EORANKweights.csv"), stringsAsFactors=FALSE)
+dbWriteTable(db, "nha_EORANKweights", nha_EORANKweights, overwrite=TRUE) # write the table to the sqlite
+
+# rounded ranks
+rounded_srank <- read.csv(here("_data","databases","sourcefiles","rounded_srank.csv"), stringsAsFactors=FALSE)
+dbWriteTable(db, "rounded_srank", rounded_srank, overwrite=TRUE) # write the table to the sqlite
+rounded_grank <- read.csv(here("_data","databases","sourcefiles","rounded_grank.csv"), stringsAsFactors=FALSE)
+dbWriteTable(db, "rounded_grank", rounded_grank, overwrite=TRUE) # write the table to the sqlite
+
+dbDisconnect(db) # disconnect the db
+
+
+# need to read the gs matrix as a matrix
+nha_gsrankMatrix <- as.matrix(nha_gsrankMatrix)
+
 
 
 
