@@ -117,8 +117,6 @@ speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
 colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
 
-speciestable$SENSITIVE_EO <- NULL
-
 # split back into a list of species tables
 species_table_select<- split(speciestable, speciestable$NHA_JOIN_ID) #column_label
 
