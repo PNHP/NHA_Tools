@@ -97,9 +97,6 @@ selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK
 #selected_pointreps <- subset(selected_pointreps, selected_pointreps$EO_ID %in% speciestable$EO_ID)
 
 # check to make sure that all the related species were found
-unique(speciestable$EO_ID)
-
-
 if( length(setdiff(unique(speciestable$EO_ID), selected_pointreps$EO_ID))==0 & length(setdiff(selected_pointreps$EO_ID, unique(speciestable$EO_ID)))==0){
   print(paste("All ",length(unique(speciestable$EO_ID))," associated species were found in the geodatabase.", sep=""))
 } else {
@@ -232,14 +229,9 @@ sigrankspecieslist <- lapply(seq_along(sigrankspecieslist),
 
 
 #Merge rounded S, G, and EO ranks into individual species tables
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) merge(sigrankspecieslist[[x]], rounded_grank, by="GRANK"))
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) merge(sigrankspecieslist[[x]], rounded_srank, by="SRANK"))
-
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) merge(sigrankspecieslist[[x]], nha_EORANKweights, by="EORANK"))
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], rounded_grank, by="GRANK"))
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], rounded_srank, by="SRANK"))
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], nha_EORANKweights, by="EORANK"))
 
 #Calculate rarity scores for each species within each table
 RarityScore <- function(x, matt) {
@@ -311,7 +303,6 @@ selected_nhas <- selected_nhas[match(namevec, selected_nhas$NHA_JOIN_ID),]#order
 
 #ensure that both data frames have sites in the same order
 identical(selected_nhas$NHA_JOIN_ID, namevec)
-
 
 #merge significance data into NHA table
 selected_nhas$site_score <- unlist(SiteRank) #add site significance rankings to NHA data frame
@@ -414,7 +405,6 @@ tmap_save(nha_map[[i]], filename=paste(NHAdest1[i], "/", nha_foldername_list[[i]
 
 ###################################################################
 #Write the output R markdown document for each site, all at once 
-
 for (i in 1:length(nha_filename_list)) {
   NHAdest2 <- NHAdest1[i]
   selectedNhas <- selected_nhas[i,]
@@ -431,7 +421,6 @@ rmarkdown::render(input=here::here("scripts","template_NHAREport_part1v2.Rmd"), 
 }  
 
 # delete the map, after its included in the markdown
-
 for (i in 1:length(nha_filename_list)){
 fn <- paste(NHAdest1[i], "/", nha_foldername_list[i],"_tempmap.png",sep="")
 if (file.exists(fn)) #Delete file if it exists
