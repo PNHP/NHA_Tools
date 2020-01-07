@@ -20,10 +20,10 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
-
-
 # variables to change between runs
 WorkingList <- "NHAs_WashCounty.csv"
+
+
 
 
 ####################################################
@@ -93,9 +93,9 @@ species_table_select #list of species tables
 #merge species lists w/ EO information from Point Reps database
 
 #create one big data frame first of all the EOIDs across all the selected NHAs
-speciestable <- bind_rows(species_table_select, .id="column_label")
+speciestable <- bind_rows(species_table_select) # , .id="column_label"  ### I don't think you need the id=column_lable thing as the same data is in NHAjoinID...  its breaking the sql insert
 
-SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
+SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID), collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) #select subset of columns from EO pointrep database
@@ -123,8 +123,10 @@ speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
 colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
 
+speciestable$SENSITIVE_EO <- NULL
+
 # split back into a list of species tables
-species_table_select<- split(speciestable, speciestable$column_label) 
+species_table_select<- split(speciestable, speciestable$NHA_JOIN_ID) #column_label
 
 # name species tables so that you can tell if they end up in a weird order
 namevec <- NULL 
@@ -163,15 +165,18 @@ for (i in 1:length(SD_speciesTable)) {
 ############################################
 # write species table to the SQLite database
 speciesTable4db <- SD_speciesTable
+# 
+# # this adds the appropiate NHA join id to each dataframe in the list
+# for (i in 1:length(speciesTable4db)){
+#   speciesTable4db[[i]] <- cbind(selected_nhas$NHA_JOIN_ID[i], speciesTable4db[[i]])
+# }
+# 
+# # this renames the column and converts it from a factor. Not sure why this is don as there a duplicate column in table??????????
+# for (i in 1:length(speciesTable4db)){
+#  names(speciesTable4db[[i]])[1] <- "NHA_JOIN_ID"
+#  speciesTable4db[[i]]$NHA_JOIN_ID <- as.character(speciesTable4db[[i]]$NHA_JOIN_ID) 
+# }
 
-for (i in 1:length(speciesTable4db)){
-  speciesTable4db[[i]] <- cbind(selected_nhas$NHA_JOIN_ID[i], speciesTable4db[[i]])
-}
-
-for (i in 1:length(speciesTable4db)){
- names(speciesTable4db[[i]])[1] <- "NHA_JOIN_ID"
- speciesTable4db[[i]]$NHA_JOIN_ID <- as.character(speciesTable4db[[i]]$NHA_JOIN_ID) 
-}
 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 # delete existing threats and recs for this site if they exist
