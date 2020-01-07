@@ -114,12 +114,6 @@ if( length(setdiff(unique(speciestable$EO_ID), selected_pointreps$EO_ID))==0 & l
 speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 
 # rename columns to what we need for this tool.  
-# colnames(speciestable)[colnames(speciestable)=="EORANK"] <- "EORANK"
-# colnames(speciestable)[colnames(speciestable)=="GRANK"] <- "GRANK"
-# colnames(speciestable)[colnames(speciestable)=="SRANK"] <- "SRANK"
-# colnames(speciestable)[colnames(speciestable)=="SPROT"] <- "SPROT"
-# colnames(speciestable)[colnames(speciestable)=="PBSSTATUS"] <- "PBSSTATUS"
-# colnames(speciestable)[colnames(speciestable)=="LASTOBS"] <- "LASTOBS"
 colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
 colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
 
@@ -165,18 +159,6 @@ for (i in 1:length(SD_speciesTable)) {
 ############################################
 # write species table to the SQLite database
 speciesTable4db <- SD_speciesTable
-# 
-# # this adds the appropiate NHA join id to each dataframe in the list
-# for (i in 1:length(speciesTable4db)){
-#   speciesTable4db[[i]] <- cbind(selected_nhas$NHA_JOIN_ID[i], speciesTable4db[[i]])
-# }
-# 
-# # this renames the column and converts it from a factor. Not sure why this is don as there a duplicate column in table??????????
-# for (i in 1:length(speciesTable4db)){
-#  names(speciesTable4db[[i]])[1] <- "NHA_JOIN_ID"
-#  speciesTable4db[[i]]$NHA_JOIN_ID <- as.character(speciesTable4db[[i]]$NHA_JOIN_ID) 
-# }
-
 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 # delete existing threats and recs for this site if they exist
@@ -250,25 +232,18 @@ sigrankspecieslist <- Map(cbind, sigrankspecieslist, RarityScore=res) #bind rari
 names(sigrankspecieslist) <- namevec #reassign the names
 
 #Adjust site significance rankings based on presence of G1, G2, and G3 EOs
-
 #create flags for sites with a G3 species (which should automatically be at least regional)
-G3_regional <- lapply(seq_along(sigrankspecieslist),
-                      function(x) "G3" %in% sigrankspecieslist[[x]]$GRANK_rounded)
-
+G3_regional <- lapply(seq_along(sigrankspecieslist), function(x) "G3" %in% sigrankspecieslist[[x]]$GRANK_rounded)
 #create flags for sites with a G1 or G2 species (which should automatically be a global site)
-G1_global <- lapply(seq_along(sigrankspecieslist),
-                      function(x) "G1" %in% sigrankspecieslist[[x]]$GRANK_rounded)
-G2_global <- lapply(seq_along(sigrankspecieslist),
-                    function(x) "G2" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+G1_global <- lapply(seq_along(sigrankspecieslist), function(x) "G1" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+G2_global <- lapply(seq_along(sigrankspecieslist), function(x) "G2" %in% sigrankspecieslist[[x]]$GRANK_rounded)
 
 #Calculate scores for each site, aggregating across all species and assign significance rank category. Skip any remaining NA values in the rarity scores      
-TotalScore  <- lapply(seq_along(sigrankspecieslist), 
-                      function(x) sigrankspecieslist[[x]]$RarityScore[!is.na(sigrankspecieslist[[x]]$RarityScore)] * sigrankspecieslist[[x]]$Weight) # calculate the total score for each species
+TotalScore  <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]]$RarityScore[!is.na(sigrankspecieslist[[x]]$RarityScore)] * sigrankspecieslist[[x]]$Weight) # calculate the total score for each species
 SummedTotalScore <- lapply(TotalScore, sum) 
 SummedTotalScore <- lapply(SummedTotalScore, as.numeric)
 
 SiteRank <- list() #create empty list object to write into
-
 for (i in seq_along(SummedTotalScore)) {
   if(SummedTotalScore[[i]]==0|is.na(SummedTotalScore[[i]])){
     SiteRank[[i]] <- "Local"
@@ -287,7 +262,6 @@ for (i in seq_along(SummedTotalScore)) {
 check <- as.data.frame(cbind(SiteRank, SummedTotalScore, G3_regional, G2_global, G1_global, namevec, selected_nhas$NHA_JOIN_ID))
 
 #Do the site ranking overrides automatically
-
 for (i in seq_along(SiteRank)) {
   if(G3_regional[[i]]=="TRUE") {
     SiteRank[[i]] <-"Regional"
@@ -311,7 +285,8 @@ selected_nhas$site_rank <- unlist(SummedTotalScore) #add site significance score
 summary(as.factor(selected_nhas$site_score)) #manual check step: take a look at distribution of significance ranks
 
 
-#########################################################
+
+###############################################################################################################################
 #Build pieces needed for each site report
 
 #generate list of folder paths and file names for selected NHAs
