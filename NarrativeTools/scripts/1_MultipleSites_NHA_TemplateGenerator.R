@@ -20,11 +20,17 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
+
+
+# variables to change between runs
+WorkingList <- "NHAs_WashCounty.csv"
+
+
 ####################################################
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHA_list <- read.csv(here::here("_data", "sourcefiles", "apoth.csv")) # download list that includes site names and/or (preferably) NHA Join ID
+NHA_list <- read.csv(here::here("_data", "sourcefiles", WorkingList)) # download list that includes site names and/or (preferably) NHA Join ID
 
 #if you are just running a few sites, you can select individual site by name or NHA join id:
 #selected_nhas <- arc.select(nha, where_clause="SITE_NAME='White's Woods' AND STATUS = 'NP'")
@@ -35,7 +41,7 @@ NHA_list <- read.csv(here::here("_data", "sourcefiles", "apoth.csv")) # download
 #Method A) If using site names (but this gets hung up on apostrophes)
 NHA_list <- NHA_list[order(NHA_list$Site.Name),] #order alphabetically
 Site_Name_List <- as.vector(NHA_list$Site.Name) # removed the conversion to a list as I don't know what it was doing
-###Site_Name_List <- str_replace(Site_Name_List, "'", "''") # possible begining of the solution for apothephes, but not working yet
+###Site_Name_List <- str_replace(Site_Name_List, "'", "''") # possible begining of the solution for apostrophes, but not working yet
 SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
