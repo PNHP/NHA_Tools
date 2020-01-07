@@ -186,10 +186,23 @@ for (i in 1:length(eoid_list)){
 ptreps_selected[[i]] <- arc.select(ptreps, fields=c("EO_ID", "SNAME", "EO_DATA", "GEN_DESC","MGMT_COM","GENERL_COM"), where_clause=paste("EO_ID IN (", eoid_list[[i]], ")",sep="") )
 }
 
+
+
 ################################################
 # calculate the site significance rank based on the species present at the site 
 
-source(here::here("scripts","nha_ThreatsRecDatabase","2_loadSpeciesWeights.r"))
+#Connect to database and merge ElSubID into species tables
+TRdb <- dbConnect(SQLite(), dbname=TRdatabasename) #connect to SQLite DB
+nha_gsrankMatrix <- dbGetQuery(TRdb, paste0("SELECT * FROM nha_gsrankMatrix;"))
+row.names(nha_gsrankMatrix) <- nha_gsrankMatrix$X
+nha_gsrankMatrix$X <- NULL
+nha_gsrankMatrix <- as.matrix(nha_gsrankMatrix) # need to read the gs matrix as a matrix
+nha_EORANKweights <- dbGetQuery(TRdb, paste0("SELECT * FROM nha_EORANKweights;"))
+rounded_srank <- dbGetQuery(TRdb, paste0("SELECT * FROM rounded_srank;"))
+rounded_grank <- dbGetQuery(TRdb, paste0("SELECT * FROM rounded_grank;"))
+dbDisconnect(TRdb)
+
+
 
 #check whether there are multiple EOs in the species table for the same species, and only keep one record for each species, the most recently observed entry
 for (i in 1:length(SD_speciesTable)) {

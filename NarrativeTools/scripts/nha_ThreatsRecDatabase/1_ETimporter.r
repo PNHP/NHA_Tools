@@ -138,7 +138,7 @@ dbDisconnect(db) # disconnect the db
 db <- dbConnect(SQLite(), dbname=databasename) # connect to the database
 
 # g and s rank matrix.
-nha_gsrankMatrix <- read.csv(here::here("_data","databases","sourcefiles","nha_gsrankMatrix.csv"), row.names=1, stringsAsFactors=FALSE)
+nha_gsrankMatrix <- read.csv(here::here("_data","databases","sourcefiles","nha_gsrankMatrix.csv"), stringsAsFactors=FALSE) #row.names=1,  
 dbWriteTable(db, "nha_gsrankMatrix", nha_gsrankMatrix, overwrite=TRUE) # write the table to the sqlite
 
 # EO rank matrix
@@ -154,8 +154,7 @@ dbWriteTable(db, "rounded_grank", rounded_grank, overwrite=TRUE) # write the tab
 dbDisconnect(db) # disconnect the db
 
 
-# need to read the gs matrix as a matrix
-nha_gsrankMatrix <- as.matrix(nha_gsrankMatrix)
+
 
 
 
