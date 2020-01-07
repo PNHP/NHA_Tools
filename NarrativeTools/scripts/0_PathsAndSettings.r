@@ -16,6 +16,8 @@ if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgis
 require(arcgisbinding)
 if (!requireNamespace("RSQLite", quietly = TRUE)) install.packages("RSQLite")
 require(RSQLite)
+if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
+require(stringr)
 if (!requireNamespace("knitr", quietly = TRUE)) install.packages("knitr")
 require(knitr)
 if (!requireNamespace("xtable", quietly = TRUE)) install.packages("xtable")
