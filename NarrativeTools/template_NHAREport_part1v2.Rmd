@@ -1,0 +1,297 @@
+---
+output: word_document
+---
+
+# `r paste(as.character(selectedNhas$SITE_NAME), "NHA")` 
+Site significance rank: **`r paste(as.character(SiteRank1))`**  
+
+NHA Join ID: **`r paste(as.character(selectedNhas$NHA_JOIN_ID))`**    
+
+
+<br><br><br><br>
+
+# Instructions  
+
+This template will collect the written content for this NHA and allow us to transfer all information into a formatted report. Please fill in all boxes as completely as possible, using the information from Biotics, our species-specific threats and recommendations database, and our NHA geodatabases, as well as your own personal expertise. **Please do not delete any of the tags** (which look like this: |TAG|), as those demarcate the beginning and ending of each content section. Please make sure to check automated sections, such as the species table and location information, for accuracy. Make notes of any issues in the form of Word comments. Also, please be sure to upload any pictures you have associated with this site into the NHA report picture folder: `r paste(NHAdest2,"photos", sep="/")`.  
+
+<br><br><br><br>
+  
+# Overview of NHA Report Status for this Site  
+Please highlight or otherwise indicate the answers to the following questions upon completion of this site report; add details if necessary to your responses, using Word comments:  
+
+* Is the underlying spatial information complete and correct for this site?    **yes    no**    
+* Is the species table complete and correct for this site?    **yes    no**  
+* Did you have enough information to complete a comprehensive threats and conservation recommendations section for this site?    **yes    no**  
+* Is this NHA report content complete and ready to be formatted and published?    **yes    no**  
+  
+***
+  
+  
+# Site Description
+
+Site Description - this should be about a one paragraph description of the site describing its location, size, major habitats, or other descriptive information about the site.  General species info can be placed here (e.g. *"The wetlands at this site provide high quality habitat for a number of species of dragonflies."*).  
+<br><br><br><br>
+Paragraphs can be added to supply more detail about each species or group of species at this NHA, if you want. If information is added, try to keep it general and not have a lot of detail about each specific taxon as it will help to keep the sites as current as possible without a lot of ongoing editing-remember, we are going to rely on the factsheets for that purpose.  For example, it would be good to say something like "The dragonflies at this site depend on clean water to breed" as that statement would likely be true even if we added or subtracted species to the list.
+
+The brief description from the NHA geodatabase for this site reads: **`r selectedNhas$BRIEF_DESC`** 
+
+The following old NHA sites overlap with the current NHA: `r selectedNhas$OLD_SITE_NAME`
+
+You can access each of these old site accounts on the P drive, in the following locations:
+```{r print site path 1, echo=FALSE, results='asis'}
+OldNames <- gsub(", ", ",",selectedNhas$OLD_SITE_NAME) #remove spaces after comma
+OldNames <- strsplit(OldNames, split=",") #split comma-separated list of old site names into individual elements
+OldNames <- unlist(OldNames)
+
+N <- length(OldNames)
+OldNames_path <- list()
+
+N <- length(OldNames)
+OldNames_path <- list()
+
+for (i in 1:N) {
+  temp <- paste0(c("P:\\\\Conservation Programs\\\\Natural Heritage Program\\\\ConservationPlanning\\\\NaturalHeritageAreas\\\\SiteDescriptions\\\\=",selectedNhas$COUNTY[i]," CNHI site descriptions\\\\", OldNames[i],".pdf"))
+  
+  OldNames_path[[paste0("OldNames",i)]] <- temp
+}
+
+x <- NULL
+for (i in 1:N) {
+  x[i]  <- paste0(unlist(OldNames_path[i]), sep="", collapse="")
+}
+
+if(!is.na(OldNames[1])){
+  cat(x[1])
+}
+
+```
+  
+<br><br><br><br>
+```{r print site path 2, echo=FALSE, results='asis'}
+if (N >= 2) {
+  cat(x[2])  
+}  
+```
+  
+<br><br><br><br>
+```{r print site path 3, echo=FALSE, results='asis'}
+if (N >= 3) {
+  cat(x[3])  
+}
+```
+  
+<br><br><br><br>
+
+```{r print site path 4, echo=FALSE, results='asis'}
+if (N >= 4) {
+  cat(x[4])  
+}  
+```
+  
+<br><br><br><br>
+```{r print site path 5, echo=FALSE, results='asis'}
+if (N >= 5) {
+  cat(x[5])  
+}  
+```
+  
+<br><br><br><br>  
+If this NHA occurs in Butler or Washington County, find those site inventories online here:
+[Butler](http://www.naturalheritage.state.pa.us/CNAI_PDFs/Butler_CNHI_WEB_2011.pdf)  
+[Washington](http://www.naturalheritage.state.pa.us/CNAI_PDFs/Washington%20County%20NHI%201994%20WEB.pdf)  
+
+<br><br><br><br>  
+
+**Enter your site description text in the space between these lines:**
+
+***  
+|DESC_B|  
+  
+*enter text here, between these tags. Please do not delete the tags!! *
+
+|DESC_E|  
+
+***
+
+<br><br><br><br>
+
+Please check the species table below for accuracy. Make a note of any issues, using Word comments.
+
+```{r species table, echo=FALSE}
+## Build the Species Table #########################
+
+SD_speciesTablePrint <- speciesTable[,-which(names(speciesTable) %in% c("ELCODE","EO_ID","ELSubID"))]
+SD_speciesTablePrint$SNAME <- paste(SD_speciesTablePrint$SCOMNAME," (",SD_speciesTablePrint$SNAME,")", sep="")
+SD_speciesTablePrint$SCOMNAME <- NULL
+
+row.names(SD_speciesTablePrint) <- speciesTable$SNAME
+
+
+
+#Print species table for site
+STable <- flextable(SD_speciesTablePrint)
+STable <- fontsize(STable, part="all", size=7)
+STable <- italic(STable, j= ~ SNAME, italic=TRUE)
+STable <- rotate(STable, rotation = "tbrl", part = "header", align = "center")
+STable <- align(STable, align = "center", part = "body")
+STable <- height(STable, height = 1, part = "header")
+STable
+```
+
+<br><br><br><br>
+
+## Information from Biotics
+
+See output below from Biotics, in association with all the EOs at this site. Biotics fields reported include `r names(ptrepsSelected)`. Use this to inform both the site description and the threats and conservation recommendations section.  
+To learn more about each EO, follow the links provided below to the Biotics page for each EO at this site (you may have to copy and paste the links into your browser, once logged into Biotics, to get them to work):  
+
+`r LinksSelect`  
+
+<br><br><br><br>
+
+```{r print Biotics info, echo=FALSE}
+
+SD_eodata <- ptrepsSelected
+SD_eodatap <- c(SD_eodata, sep="--")
+do.call(paste, SD_eodatap)
+
+```
+
+<br><br><br><br>
+
+## EO-Specific Threats and Conservation Recommendation Info
+
+Included below is species-specific information on general conservation threats and recommendations, to be used to complete the threats and recommendations section of the NHA report. This includes:  
+
+<br><br><br><br>
+
+1.  A summary table with the number of EOs that fall into each of the conservation threats/recommendations categories at the site. This table is meant to help you quickly summarize for yourself the types of issues that the species present at this site face, for the threats and conservation recommendations summary paragraph.   
+
+2. The text for each species-specific threat and recommendation available in the database. Copy and paste those which are relevant at this site into conservation threats and recommendations bullets. Citations are tagged within the text using the format "\\cite{CITATION CODE}", please do not delete these if they are incorporated into the threat/rec bullets.
+
+
+``` {r EO Threats Database, echo=FALSE}
+
+#join tables and report threats and recs for selected species
+Sel_TR <- ELCODETR %>% 
+  select(SNAME, CategoryName, Threats, Recs) %>% collect()
+  
+#summarize by category of threats/recs and number of species present at site which they apply to
+
+Cat_Count <- Sel_TR %>% add_count(CategoryName) %>% select(CategoryName, n)
+ThreatCatTable <- flextable(head(Cat_Count))
+ThreatCatTable <- autofit(ThreatCatTable)
+ThreatCatTable
+
+do.call(paste, Sel_TR)
+
+```
+
+<br><br><br><br>
+
+# Threats and Conservation Recommendations
+
+This area should include, first, a short, one paragraph description of the overall threats and conservation recommendations for the NHA. This paragraph could include an overview of historic impacts, a general statement about the level of site protection, existing management plans, and known site conservation issues. Incorporate information specific to the site overall, as well as to the individual EOs.
+
+<br><br><br><br>
+
+**Enter your threats and conservation recommendations summary paragraph in the space between these lines:**
+
+***  
+|THRRECP_B|  
+
+*enter text here, between these tags. Please do not delete the tags!!*
+  
+|THRRECP_E|   
+
+***  
+
+<br><br><br><br>
+
+Secondly, this section will contain a bulleted list of known conservation issues at this site, and what needs to be done to address them. Use the pre-generated EO-associated conservation threats and recommendations available above as a starting point. Be as specific as you possibly can--for example, if an EO is generally known to be susceptible to invasive species and there is information in Biotics about particular invasive species known to be present at this site, incorporate the specific information into the pre-written invasive species bullet. For example:  
+
+* *Aggressive non-native plant species are a particular threat to species is calcareous habitats. Invasive species known to be present at this site include xxxx, xxxx, xxxx, and xxxx. Monitor for invasive plant species and remove them prior to becoming dominant at this site, if possible. Target pioneer populations of invasive plants for immediate and continued removal.*  
+
+If you add any information that is supported by an additional reference, please include the full citation as a Word comment so that it can be added into the automatically generated reference list.
+
+<br><br><br><br>
+
+**Enter your specific threats and conservation recommendations bullets in the space between these lines. Please use the tagging format supplied below, adding additional tagged bullets as necessary, sequentially, until you have completed all the bullets you need:**
+
+***  
+|BULL_B| *bullet text, between these tags, Please do not delete these tags!!* |BULL_E| 
+
+|BULL_B| *bullet text, between these tags, Please do not delete these tags!!* |BULL_E|   
+
+|BULL_B| *bullet text, between these tags, Please do not delete these tags!!* |BULL_E|  
+
+*add as many additional tagged bullets as needed, or remove unused bullets if you have fewer than 3 items*  
+
+
+***  
+
+<br><br><br><br>
+
+# Location  
+Please indicate whether the information below is correct. Use Word comments to flag any issues.  
+
+**Municipalities:** `r selectedNhas$Muni`  
+**USGS quads:** `r selectedNhas$USGS_QUAD`  
+**Previous CNHI reference:** `r selectedNhas$OLD_SITE_NAME`  
+**Associated NHAs:** `r selectedNhas$ASSOC_NHA`   
+**Overlapping Protected Lands:** `r selectedNhas$PROTECTED_LANDS`  
+**Acreage:** `r signif(selectedNhas$Acres, digits=0)` acres
+
+Please cite this Natural Heritage Area as:  
+Pennsylvania Natural Heritage Program. `r format(Sys.Date(), "%Y")`. `r as.character(selectedNhas$SITE_NAME)` NHA. Created on `r format(Sys.Date(), "%d %b %Y")`. Available at: http://www.naturalheritage.state.pa.us/CNHI.aspx
+
+<br><br><br><br>
+
+
+# Map  
+
+![Core habitat boundaries of `r selectedNhas$SITE_NAME` NHA](`r paste(NHAdest2, "/", nhaFoldername,"_tempmap.png",sep="")`)
+
+
+# Photos    
+
+Do you have pictures of either the site, or the species present at the site? If so, **upload them to the NHA report folder and enter accompanying information, below, between the lines.** Add up to 3 images per site. Please upload them in order of importance, with the first image corresponding to the "cover" image for the NHA, preferably an image of the site in general, if available. Please delete any unused photo sections, if you have less than 3 photos:
+
+***
+**Photo one**  
+
+1. Photographer Name and affiliation (e.g. Pete Woods, PNHP): |P1N_B| *enter name here.*  |P1N_E|
+2. Photo caption: |P1C_B| *enter short description of photo here* |P1C_E|
+3. Photo file name: |P1F_B| *enter name of photo file uploaded to folder here, including format (eg.jpg, .png).* |P1F_E|
+  
+***
+
+<br><br><br><br>
+
+
+***
+ 
+**Photo two**
+
+
+1. Photographer Name and affiliation (e.g. Pete Woods, PNHP): |P2N_B| *enter name here.*  |P2N_E|
+2. Photo caption: |P2C_B| *enter short description of photo here* |P2C_E|
+3. Photo file name: |P2F_B| *enter name of photo file uploaded to folder here, including format (eg.jpg, .png).* |P2F_E|
+  
+
+***
+
+<br><br><br><br>
+
+
+***
+ 
+**Photo three**  
+
+1. Photographer Name and affiliation (e.g. Pete Woods, PNHP): |P3N_B| *enter name here.*  |P3N_E|
+2. Photo caption: |P3C_B| *enter short description of photo here* |P3C_E|
+3. Photo file name: |P3F_B| *enter name of photo file uploaded to folder here, including format (eg.jpg, .png).* |P3F_E|   
+  
+
+***
+

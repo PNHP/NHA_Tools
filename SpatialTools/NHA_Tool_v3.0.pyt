@@ -396,7 +396,7 @@ class FillAttributes(object):
 
         # define paths
         muni = r'https://maps.waterlandlife.org/arcgis/rest/services/BaseLayers/Boundaries/FeatureServer/2'
-        prot_lands = r'C:\\Users\\mmoore\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\StateLayers.Default.pgh-gis0.sde\\StateLayers.DBO.Protected_Lands\\StateLayers.DBO.TNC_Secured_Areas'
+        prot_lands = r'C:\\Users\\ctracey\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\StateLayers.Default.pgh-gis0.sde\\StateLayers.DBO.Protected_Lands\\StateLayers.DBO.TNC_Secured_Areas'
         usgs_quad = r'W:\LYRS\Indexes\QUAD 24K.lyr'
         prot_lands_tbl = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
         boundaries_tbl = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/2'
