@@ -1,0 +1,91 @@
+%This knitr document is called by the knit2pdf ....
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{array}
+\usepackage{xcolor}
+
+\geometry{letterpaper, top=0.45in, bottom=0.75in, left=0.75in, right=0.75in}
+\pagestyle{fancy} \fancyhf{} \renewcommand\headrulewidth{0pt} %strip default header/footer stuff
+
+\begin{document}
+
+\catcode`\_=11
+
+% Header
+\noindent
+\large{\Sexpr{as.character(nha_siteName)}}\\
+
+\medskip
+
+% Site Description
+\noindent
+[Site Description – this should be about a one paragraph description of the site describing its location, size, major habitats, or other descriptive information about the site.  General species info can be placed here (e.g. “The wetlands at this site provide high quality habitat for a number of species of dragonflies.”), but try to avoid specific talk about individual species.]
+\medskip
+
+% Species Table
+\begin{table}[h]
+\small
+\centering
+\begin{tabular}{p{3in}cccccc}      %{m{2.8cm}m{5cm}P{2cm}m{5.7cm}}
+\hline
+Species or Natural Community Name &  & Global & State & PA Legal Status & LastSeen	& Quality \\
+\hline
+<<label=longtable, echo=FALSE, results='asis'>>=
+for(i in 1:nrow(SD_speciesTable)){
+  cat(paste0(SD_speciesTable$SCOMNAME[i]," (\\textit{",SD_speciesTable$SNAME[i],"}) ","&", SD_speciesTable$ELEMENT_TYPE[i], "&", SD_speciesTable$G_RANK[i], "&", SD_speciesTable$S_RANK[i], "&", paste0(SD_speciesTable$S_PROTECTI[i]," (",SD_speciesTable$PBSSTATUS[i],")"), "&", SD_speciesTable$LAST_OBS_D[i], "&", SD_speciesTable$BASIC_EO_R[i],"\\\\" ) )
+}
+@
+\\ \hline                      
+\end{tabular}
+\end{table}
+
+\small
+\color{red}
+% Sample Data
+<<label=sampledata, echo=FALSE, results='asis'>>=
+cat("\\noindent")
+for(j in 1:nrow(SD_eodata)){
+  cat(paste("\\textbf{",SD_eodata$SNAME[j],"}"," EOID:",SD_eodata$EO_ID[j],"\\\\"))
+  cat(paste("\\underline{EO Data:}",SD_eodata$EO_DATA[j],"\\\\",sep=" "))
+  cat(paste("\\underline{General Description:}",SD_eodata$GEN_DESC[j],"\\\\",sep=" "))
+  cat(paste("\\underline{Management Comments:}",SD_eodata$MGMT_COM[j],"\\\\",sep=" "))
+  cat(paste("\\underline{General Comments:}",SD_eodata$GENERL_COM[j],"\\\\",sep=" "))
+  cat("\\\\")
+}
+
+@
+\color{black}
+\normalsize
+% Conservation Recomendations
+
+
+\bigskip
+% Location and Additional Infomation
+\noindent\textbf{\underline{Location}}\\
+\smallskip
+\textbf{Municipalities:} \Sexpr{selected_nha$Muni} \\
+\textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
+\textbf{Previous CNHI reference:} \Sexpr{selected_nha$OLD_SITE_NAME} \\
+\textbf{Associated NHAs:} \Sexpr{selected_nha$ASSOC_NHA} \\ 
+\textbf{Overlapping Protected Lands:} \Sexpr{selected_nha$PROTECTED_LANDS} \\
+
+% Recommended Citation
+\setlength{\fboxsep}{5pt}
+\fbox{
+\begin{minipage}[t]{0.90\linewidth}%
+Please cite this Natural Heritage Area as: \\
+Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_siteName)} NHA. . Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: http://www.naturalheritage.state.pa.us/CNHI.aspx 
+\end{minipage}
+}
+
+% References
+\noindent\textbf{\underline{References}}\\
+
+
+
+
+
+
+\end{document}

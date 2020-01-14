@@ -10,7 +10,7 @@ Updated:     11Dec2017
 Updates:
 6/8/2017
 NHA Version 2 Tool
-- allow the path of the Supporting Landscapes to be set via a parameter. 
+- allow the path of the Supporting Landscapes to be set via a parameter.
 - tried to delete the v1 tool - no long relevant
 7/24/2014
 NHA Version 1 Tool
@@ -55,13 +55,19 @@ working. Now using the input feature layer instead of the data source (full path
 11/29/2017
 -Updated connections to pgh-gis0. Updated changed file names for input sources: Quad24k, PaMunicipalities
 12/11/2017
--Updated PaMunicipalities field to 'MUNICIPAL1', replacing 'Name_Proper_Type'in search cursor and added code for title case formatting. Request submitted to Brad Georgic to update values to include muni type. 
+-Updated PaMunicipalities field to 'MUNICIPAL1', replacing 'Name_Proper_Type'in search cursor and added code for title case formatting. Request submitted to Brad Georgic to update values to include muni type.
 
 To Do List/Future Ideas:
 *Batch tool that will work on counties/multiple counties
 *Fill in donut holes? Maybe just for single NHA tool, not batch
 *Some multipart CPPs should be different NHAs
 '''
+
+
+# Things to check
+# * arcgis version
+# * user has direct access to the sql server
+
 
 # import modules
 import arcpy, time, datetime, sys, traceback
@@ -75,7 +81,11 @@ arcpy.env.overwriteOutput = True
 ################################################################################
 
 # Dictionary of usernames and initials to use when determining NHA join ID
+<<<<<<< HEAD
+user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg', 'mmoore':'mem'}
+=======
 user_dict = {'kerath':'kje', 'ctracey':'ct', 'sschuette':'ss', 'pwoods':'pw', 'dyeany':'dly', 'bgeorgic':'bjg', 'ajohnson':'alj', 'mmoore':'mem'}
+>>>>>>> 269bef33594e10250ee068820f1aec7b9f3b0c57
 
 # List of exceptions to be used when extracting quad name, these will remain uppercase instead of being converted to title case
 exceptions = ['NE', 'NW', 'SE', 'SW', 'US']
@@ -128,6 +138,7 @@ def get_attribute(in_fc, select_fc, field):
         else:
             pass
     return attributes
+    del srows
 
 # Function to shorten code when entering parameters
 def parameter(displayName, name, datatype='GPFeatureLayer', defaultValue=None, parameterType='Required', direction='Input', multiValue=False):
@@ -296,18 +307,22 @@ class CreateNHAv2(object):
         site_name = parameters[0].valueAsText
         src_report = parameters[1].valueAsText
         cpp_core = parameters[2].valueAsText
-        cpp_slp = parameters[3].valueAsText  
+        cpp_slp = parameters[3].valueAsText
         exclude_cpps = parameters[4].value
         # Example workspace: C:\Users\kerath\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\PNHP.kerath.pgh-gis.sde
+<<<<<<< HEAD
+        workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.6\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
+=======
         workspace = r"C:\Users\{0}\AppData\Roaming\ESRI\Desktop10.7\ArcCatalog\PNHP.{0}.pgh-gis0.sde".format(getuser())
+>>>>>>> 269bef33594e10250ee068820f1aec7b9f3b0c57
         nha_core = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Core".format(workspace)
         nha_slp = r"{}\PNHP.DBO.NHA\PNHP.DBO.NHA_Supporting".format(workspace)
         spec_tbl = r"{}\PNHP.DBO.NHA_SpeciesTable".format(workspace)
         eoptreps = r"W:\Heritage\Heritage_Data\Biotics_datasets.gdb\eo_ptreps"
-        
+
         pa_county = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.County"
-        muni = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
-        quad = r"Database Connections\StateLayers.Default.PGH-GIS0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
+        muni = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Boundaries_Political\StateLayers.DBO.PaMunicipalities"
+        quad = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Index\StateLayers.DBO.QUAD24K"
         prot_land = r"Database Connections\StateLayers.Default.pgh-gis0.sde\StateLayers.DBO.Protected_Lands\StateLayers.DBO.TNC_Secured_Areas"
         community_query = "SNAME in ('Pitch pine - heath woodland','Pitch pine - mixed hardwood woodland','Pitch pine - rhodora - scrub oak woodland','Pitch pine - scrub oak woodland','Red-cedar - pine serpentine shrubland','Rhodora - mixed heath - scrub oak shrubland','Low heath shrubland','Scrub oak shrubland','Little bluestem - pennsylvania sedge opening','Serpentine grassland','Calcareous opening/cliff','Side-oats gramma calcareous grassland','Serpentine gravel forb community','Great Lakes Region dry sandplain','Great Lakes Region sparsely vegetated beach')"
 
@@ -363,6 +378,7 @@ class CreateNHAv2(object):
             # If CPP status is not 'n' or 'p', include the CPP
             else:
                 eoids.append(eoid)
+        del srows
 
         # Create EO ID query to use in make feature layer operations
         if len(eoids) > 1:
@@ -387,6 +403,7 @@ class CreateNHAv2(object):
         srows = arcpy.da.SearchCursor("temp_nha", "SHAPE@")
         for srow in srows:
             geom = srow[0]
+        del srows
 
         # Use get_attribute function defined at top of script to get attributes from counties, USGS quads, and protected lands
         counties = get_attribute(pa_county, "temp_nha", "COUNTY_NAM")
@@ -486,31 +503,32 @@ class CreateNHAv2(object):
         arcpy.AddMessage("\nAdding new record(s) to species table at {0}".format(datetime.datetime.now().strftime("%H:%M:%S")))
         ########################################################################
         # Add new record to the species table for each EO ID in the EO ID list
+        NeedInsert = []
         for eoid in eoids:
             # Use search cursor to get attributes from eo ptreps
-            srows = arcpy.da.SearchCursor(eoptreps, ["SNAME", "SCOMNAME", "ELCODE", "GRANK", "SRANK", "SPROT", "PBSSTATUS", "LASTOBS", "EORANK", "SENSITV_SP"], '"EO_ID" = {}'.format(eoid))
+            with arcpy.da.SearchCursor(eoptreps, ["SNAME", "SCOMNAME", "ELCODE", "GRANK", "SRANK", "SPROT", "PBSSTATUS", "LASTOBS", "EORANK", "SENSITV_SP"], '"EO_ID" = {}'.format(eoid)) as srows:
+                for srow in srows:
+                    # Write message to dialog box with species information
+                    arcpy.AddMessage("EO ID: {0}\nSpecies: {1}".format(eoid, srow[0]))
+                    # Determine element type
+                    el_type = element_type(srow[2])
+                    arcpy.AddMessage("Element Type: {0}".format(el_type))
+                    # Add attributes in search cursor to value list for insert cursor
+                    value_list = []
+                    # For a number n in the range 0-9
+                    for n in range(0,10):
+                        value_list.append(srow[n])
+                    # Append NHA Join ID, EO ID, and Element Type to value list
+                    value_list.append(nha_id)
+                    value_list.append(eoid)
+                    value_list.append(el_type)
+                    NeedInsert.append(value_list)
 
-            for srow in srows:
-                # Write message to dialog box with species information
-                arcpy.AddMessage("EO ID: {0}\nSpecies: {1}".format(eoid, srow[0]))
-                # Determine element type
-                el_type = element_type(srow[2])
-                arcpy.AddMessage("Element Type: {0}".format(el_type))
-                # Add attributes in search cursor to value list for insert cursor
-                value_list = []
-                # For a number n in the range 0-9
-                for n in range(0,10):
-                    value_list.append(srow[n])
-                # Append NHA Join ID, EO ID, and Element Type to value list
-                value_list.append(nha_id)
-                value_list.append(eoid)
-                value_list.append(el_type)
-
-            # Use insert cursor to add new record to species table
-            cursor = arcpy.da.InsertCursor(spec_tbl, ["SNAME", "SCOMNAME", "ELCODE", "G_RANK", "S_RANK", "S_PROTECTI", "PBSSTATUS", "LAST_OBS_D", "BASIC_EO_R", "SENSITIVE_", "NHA_JOIN_ID", "EO_ID", "ELEMENT_TYPE"])
-            cursor.insertRow(value_list)
-            # Delete cursor object
-            del cursor
+        # Use insert cursor to add new record to species table
+        cursor = arcpy.da.InsertCursor(spec_tbl, ["SNAME", "SCOMNAME", "ELCODE", "G_RANK", "S_RANK", "S_PROTECTI", "PBSSTATUS", "LAST_OBS_D", "BASIC_EO_R", "SENSITIVE_", "NHA_JOIN_ID", "EO_ID", "ELEMENT_TYPE"])
+        cursor.insertRow(NeedInsert)
+        # Delete cursor object
+        del cursor
 
         ########################################################################
         arcpy.AddMessage("\nUpdating NHA Supporting at {0}".format(datetime.datetime.now().strftime("%H:%M:%S")))
