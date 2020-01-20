@@ -10,14 +10,13 @@
 # To Do List/Future ideas:
 #
 #-------------------------------------------------------------------------------
+#Set up libraries, paths, and settings
 
-# packages
+# check and load required libraries
 if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
 require(arcgisbinding)
 if (!requireNamespace("RSQLite", quietly = TRUE)) install.packages("RSQLite")
 require(RSQLite)
-if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
-require(stringr)
 if (!requireNamespace("knitr", quietly = TRUE)) install.packages("knitr")
 require(knitr)
 if (!requireNamespace("xtable", quietly = TRUE)) install.packages("xtable")
@@ -38,9 +37,6 @@ if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
 require(sf)
-# if (!requireNamespace("odbc", quietly = TRUE)) install.packages("odbc")
-#   require(odbc)
-# note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
 
 # options
 options(useFancyQuotes=FALSE)
@@ -50,10 +46,6 @@ arc.check_product()
 
 ## Biotics Geodatabase
 biotics_gdb <- "W:/Heritage/Heritage_Data/Biotics_datasets.gdb"
-if(file.exists(biotics_gdb)==FALSE) {
-  print(paste("The Biotics database was not found at ",biotics_gdb,". Please identify the appropiate file", sep=""))
-}
-
 
 # NHA Databases and such
 NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NHA_ToolsV3"
@@ -62,17 +54,10 @@ NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlann
 nha_databasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 nha_databasename <- "NaturalHeritageAreas.sqlite" 
 nha_databasename <- paste(nha_databasepath,nha_databasename,sep="/")
-if(file.exists(nha_databasename)==FALSE) {
-  print(paste("The NHA database was not found at ",nha_databasename,". Please identify the appropiate file", sep=""))
-}
-
 # threat recc database name
 TRdatabasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 TRdatabasename <- "nha_recs.sqlite" 
 TRdatabasename <- paste(TRdatabasepath,TRdatabasename,sep="/")
-if(file.exists(TRdatabasename)==FALSE) {
-  print(paste("The Threats and Recommendations database was not found at ",TRdatabasename,". Please identify the appropiate file", sep=""))
-}
 
 # Second, set up an ODBC connection. You only need to do this once, if you continue to connect to the db with the same name
 # 1. click magnifier (search) in lower left, type "ODBC" in search window, open "ODBC Data Sources (64 bit)"
@@ -127,33 +112,30 @@ deletepdfjunk <- function(pdf_filename){
 
 #Function to assign images to each species in table, based on element type; modified to work through a loop of multiple species tables
 EO_ImSelect <- function(x) {
-  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='A', "Amphibians.png", 
-         ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='B', "Birds.png", 
-                ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='C', "Communities.png",
-                       ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='F', "Fish.png",
-                              ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IA', "Odonates.png",
-                                     ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='ID', "Odonates.png",
-                                            ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IB', "Butterflies.png",
-                                                   ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IM', "Moths.png",
-                                                          ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IT', "TigerBeetles.png",
-                                                                 ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='M', "Mammals.png",
-                                                                        ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE == 'U', "Mussels.png",
-                                                                               ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE == 'MU', "Mussels.png",
-                                                                                      ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE == 'P', "Plants.png", "Snails.png")
-                                                                               ))))))))))))
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AAAA', "Salamanders.png", 
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AAAB', "Frogs.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AB', "Birds.png", 
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='CGH', "Communities.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AF', "Fish.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AR', "Reptile.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='ICMAL', "Crayfish.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IICOL', "OtherInvert.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IIEPH', "OtherInvert.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IIHYM', "Bees.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IIORT', "Grasshoppers.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IIPLE', "Stoneflies.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IITRI', "Caddisflies.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='ILARA', "Spiders.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IZSPN', "Sponges.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='N', "NonvascularPlants.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IMGAS', "Snails.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IIODO', "Odonates.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IILEP', "Butterflies.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IILEY', "Moths.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='IICOL02', "TigerBeetles.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE=='AM', "Mammals.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE == 'IMBIV', "Mussels.png",
+  ifelse(SD_speciesTable[[i]]$ELEMENT_TYPE == 'P', "Plants.png", "Other.png")
+                                                                              )))))))))))))))))))))))
 } 
 
-#Function to go back through and further subset EOs into finer taxa groupings
-EO_ImFix <- function(x){
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[SENSITIVE=="Y"] <- "Sensitive.png") #substitute image for sensitive species, as necessary (this does not, however, account for sensitive data by request)
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[SENSITIVE_EO=="Y"] <- "Sensitive.png") #substitute image for sensitive occurrences (e.g. landowner concerns), as necessary
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IZSPN")] <- "Sponges.png") #subset out freshwater sponges
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IICOL")] <- "TigerBeetles.png") #subset out beetles
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IITRI")] <- "Caddisflies.png") #subset out caddisflies + stoneflies (?)
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IIEPH")] <- "OtherInverts.png") #subset out stoneflies/mayflies
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IIPLE")] <- "OtherInverts.png") #subset out stoneflies/mayflies
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IIDIP")] <- "Craneflies.png") #subset out craneflies
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "NBHEP")] <- "Liverworts.png") #subset out liverworts
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "NLT")] <- "Mosses.png") #subset out mosses
-SD_speciesTable[[i]] <- within(SD_speciesTable[[i]], Images[startsWith(ELCODE, "IIME")] <- "earwigscorpionfly.png") #subset out earwig scorpionflies
-}
