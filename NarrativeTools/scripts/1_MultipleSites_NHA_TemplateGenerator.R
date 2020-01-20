@@ -13,74 +13,85 @@
 ####################################################
 #Set up libraries, paths, and settings
 
-# check and load required libraries, note other packages are added through the path and settings file
+# check and load required libraries
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-  require(here)
+require(here)
 
-# load in the paths and settings file
+
+# if (!requireNamespace("odbc", quietly = TRUE)) install.packages("odbc")
+#   require(odbc)
+# note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
+
+# load in the paths and settings file (which contains the rest of the libraries needed)
 source(here::here("scripts", "0_PathsAndSettings.r"))
-
-# variables to change between runs
-WorkingList <- "NHAs_WashCounty.csv"
-
-
-
 
 ####################################################
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHA_list <- read.csv(here::here("_data", "sourcefiles", WorkingList)) # download list that includes site names and/or (preferably) NHA Join ID
+NHAlist_file <- ("GreeneCounty_FranklinTwnship.csv")
+NHA_list <- read.csv(here("_data", "sourcefiles", NHAlist_file)) #download list that includes site names and/or (preferably) NHA Join ID
 
+serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
+nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 #if you are just running a few sites, you can select individual site by name or NHA join id:
-#selected_nhas <- arc.select(nha, where_clause="SITE_NAME='White's Woods' AND STATUS = 'NP'")
-#selected_nhas <- arc.select(nha, where_clause="NHA_JOIN_ID IN('alj82942')") 
+#selected_nhas <- arc.select(nha, where_clause="SITE_NAME='Buffalo Creek South' AND STATUS = 'NP'")
+#selected_nhas <- arc.select(nha, where_clause="NHA_JOIN_ID IN('alj86800')") 
+#Site_Name_List <- as.vector(selected_nhas$SITE_NAME)
+#Site_Name_List <- as.list(Site_Name_List)
 
 #Select larger number of sites
-
 #Method A) If using site names (but this gets hung up on apostrophes)
 NHA_list <- NHA_list[order(NHA_list$Site.Name),] #order alphabetically
-Site_Name_List <- as.vector(NHA_list$Site.Name) # removed the conversion to a list as I don't know what it was doing
-###Site_Name_List <- str_replace(Site_Name_List, "'", "''") # possible begining of the solution for apostrophes, but not working yet
+Site_Name_List <- as.vector(NHA_list$Site.Name)
+Site_Name_List <- as.list(Site_Name_List)
 SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
 #Site_NHAJoinID_List <-as.character(NHA_list$NHA.Join.ID)
 #SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
 
-# check the server path for the sde connections
-serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
-if(file.exists(biotics_gdb)==FALSE) {
-  print(paste("The SDE path was not found at ",serverPath,". Please identify the appropiate file", sep=""))
-}
-
-# open the NHAs and get them
-nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
-selected_nhas <- selected_nhas[order(selected_nhas$SITE_NAME),] # order alphabetically (CT--I think this order is just for the creation of the folders is a logical way)
+dim(selected_nhas) #check how many records are returned to ensure it meets expectations
 
-# check to make sure that all the nha's were found
-if(length(setdiff(selected_nhas$SITE_NAME, Site_Name_List))==0 & length(setdiff(Site_Name_List,selected_nhas$SITE_NAME))==0){
-  print(paste("All ",length(selected_nhas$SITE_NAME)," NHAs were found in the geodatabase.", sep=""))
-} else if(length(setdiff(selected_nhas$SITE_NAME, Site_Name_List))>0 & length(setdiff(Site_Name_List,selected_nhas$SITE_NAME))==0){
-  print("There are NHAs in the site list that are not in the geodatabase.")
-} else {
-  print("Other issues with the NHA list.")
-}
+selected_nhas <- selected_nhas[order(selected_nhas$SITE_NAME),]#order alphabetically
 
+####
 #manual check to ensure that your original list of NHAs and the selected NHA data frame both have sites in the same order
-if(isFALSE(identical(selected_nhas$SITE_NAME, as.character(Site_Name_List)))){
-  print("Sites are not in the same order between lists")
+identical(selected_nhas$SITE_NAME, as.character(NHA_list$Site.Name))
+####
+
+Site_ID_list <- as.list(unique(selected_nhas$NHA_JOIN_ID)) #create list of join IDs for pulling out related table information. added in unique for occasions where a site might be in the import list multiple times (e.g. when it crosses county lines and we want to talk about it for all intersecting counties)
+
+####################################################
+## Pull in protected lands information #############
+nha_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
+selected_nha_ProtectedLands <- arc.select(nha_ProtectedLands) 
+
+protected_lands_list <- list()
+for (i in 1:length(Site_ID_list)) {
+  protected_lands_list[[i]] <- selected_nha_ProtectedLands[which(selected_nha_ProtectedLands$NHA_JOIN_ID==Site_ID_list[i]),]
 }
 
+protected_lands_list
+####################################################
+## Pull in county/municipality info    #############
+nha_PoliticalBoundaries <- arc.open(paste(serverPath,"PNHP.DBO.NHA_PoliticalBoundaries", sep=""))
+selected_nha_PoliticalBoundaries <- arc.select(nha_PoliticalBoundaries) 
 
+
+PoliticalBoundaries_list <- list()
+for (i in 1:length(Site_ID_list)) {
+  PoliticalBoundaries_list[[i]] <- selected_nha_PoliticalBoundaries[which(selected_nha_PoliticalBoundaries$NHA_JOIN_ID==Site_ID_list[i]),]
+}
+
+PoliticalBoundaries_list
 ####################################################
 ## Build the Species Table #########################
 
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
 nha_relatedSpecies <- arc.open(paste(serverPath,"PNHP.DBO.NHA_SpeciesTable", sep=""))
-selected_nha_relatedSpecies <- arc.select(nha_relatedSpecies, c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE","EO_ID","NHA_JOIN_ID")) # modified to leave out the arcgis editor tracking fields
-Site_ID_list <- as.list(unique(selected_nhas$NHA_JOIN_ID)) #added in unique for occasions where a site might be in the import list multiple times (e.g. when it crosses county lines and we want to talk about it for all intersecting counties)
+selected_nha_relatedSpecies <- arc.select(nha_relatedSpecies) 
 
 #open linked species tables and select based on list of selected NHAs
 species_table_select <- list()
@@ -93,35 +104,27 @@ species_table_select #list of species tables
 #merge species lists w/ EO information from Point Reps database
 
 #create one big data frame first of all the EOIDs across all the selected NHAs
-speciestable <- bind_rows(species_table_select) # , .id="column_label"  ### I don't think you need the id=column_lable thing as the same data is in NHAjoinID...  its breaking the sql insert
+speciestable <- bind_rows(species_table_select, .id = "column_label")
 
-SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID), collapse=", "), ")") #don't use quotes around numbers
+SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) #select subset of columns from EO pointrep database
+
 #if this select command does not work (which sometimes happens to me?), try this method, which will work
 #selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'))
 #selected_pointreps <- subset(selected_pointreps, selected_pointreps$EO_ID %in% speciestable$EO_ID)
 
-# check to make sure that all the related species were found
-if( length(setdiff(unique(speciestable$EO_ID), selected_pointreps$EO_ID))==0 & length(setdiff(selected_pointreps$EO_ID, unique(speciestable$EO_ID)))==0){
-  print(paste("All ",length(unique(speciestable$EO_ID))," associated species were found in the geodatabase.", sep=""))
-} else {
-  print("Other issues with the species list.")
-}
+dim(selected_pointreps)
 
-# merge the species list
 speciestable <- merge(speciestable,selected_pointreps, by="EO_ID")
 
-# rename columns to what we need for this tool.  
-colnames(speciestable)[colnames(speciestable)=="SENSITV_SP"] <- "SENSITIVE"
-colnames(speciestable)[colnames(speciestable)=="SENSITV_EO"] <- "SENSITIVE_EO"
+names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
+names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
-# split back into a list of species tables
-species_table_select<- split(speciestable, speciestable$NHA_JOIN_ID) #column_label
+species_table_select<- split(speciestable, speciestable$column_label) #split back into a list of species tables
 
-# name species tables so that you can tell if they end up in a weird order
-namevec <- NULL 
+namevec <- NULL #name species tables so that you can tell if they end up in a weird order
 for (i in seq_along(species_table_select)){
   namevec[i] <- species_table_select[[i]]$NHA_JOIN_ID[1]}
 names(species_table_select) <- namevec
@@ -136,40 +139,27 @@ TRdb <- dbConnect(SQLite(), dbname=TRdatabasename) #connect to SQLite DB
 Join_ElSubID <- dbGetQuery(TRdb, paste0("SELECT ELSubID, ELCODE FROM ET"," WHERE ELCODE IN (", paste(toString(sQuote(SD_specieslist)), collapse = ", "), ");"))
 dbDisconnect(TRdb)
 
-SD_speciesTable <- lapply(seq_along(species_table_select), function(x) merge(species_table_select[[x]], Join_ElSubID, by="ELCODE"))# merge in the ELSubID until we get it fixed in the GIS layer
+SD_speciesTable <- lapply(seq_along(species_table_select),
+                          function(x) merge(species_table_select[[x]], Join_ElSubID, by="ELCODE"))# merge in the ELSubID until we get it fixed in the GIS layer
 names(SD_speciesTable) <- namevec #keep names associated with list of tables
 
 #add a column in each selected NHA species table for the image path, and assign image. 
 #Note: this uses the EO_ImSelect function, which I modified in the source script to work with a list of species tables
 for (i in 1:length(SD_speciesTable)) {
     for(j in 1:nrow(SD_speciesTable[[i]])){
-       SD_speciesTable[[i]]$Images <- EO_ImSelect(SD_speciesTable[[i]][j,])
+  SD_speciesTable[[i]]$Images <- EO_ImSelect(SD_speciesTable[[i]][j,])
     }
 }
 
-# modify image assignments to account for finer groupings of the inverts--this part is not working right, come back to later
-#for (i in 1:length(SD_speciesTable)) {
-#  for(j in 1:nrow(SD_speciesTable[[i]])){
-#    SD_speciesTable[[i]]$Images <- EO_ImFix(SD_speciesTable[[i]][j,])
-#  }
-#}
-
-############################################
-# write species table to the SQLite database
-speciesTable4db <- SD_speciesTable
-
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-# delete existing threats and recs for this site if they exist
-for (i in 1:length(selected_nhas$NHA_JOIN_ID)){
-  dbExecute(db_nha, paste("DELETE FROM nha_species WHERE NHA_JOIN_ID = ", sQuote(selected_nhas$NHA_JOIN_ID[i]), sep=""))
-}
-
-# add in the new data
-for (i in 1:length(speciesTable4db)){  
-  dbAppendTable(db_nha, "nha_species", speciesTable4db[[i]])
-}
-
-dbDisconnect(db_nha)
+#override images if the species is sensitive or if the EO data is sensitive
+for (i in 1:length(SD_speciesTable)) {
+  for(j in 1:nrow(SD_speciesTable[[i]])){
+    if(SD_speciesTable[[i]][j,]$SENSITIVE=="Y"){
+      SD_speciesTable[[i]][j,]$Images <- "Sensitive.png"
+      } else if(SD_speciesTable[[i]][j,]$SENSITIVE_EO=="Y"){
+        SD_speciesTable[[i]][j,]$Images <- "Sensitive.png"
+      }
+    }}
 
 #################################################
 ### Pull out info from Biotics for each site
@@ -186,23 +176,16 @@ for (i in 1:length(eoid_list)){
 ptreps_selected[[i]] <- arc.select(ptreps, fields=c("EO_ID", "SNAME", "EO_DATA", "GEN_DESC","MGMT_COM","GENERL_COM"), where_clause=paste("EO_ID IN (", eoid_list[[i]], ")",sep="") )
 }
 
-
-
 ################################################
 # calculate the site significance rank based on the species present at the site 
-
-#Connect to database and merge ElSubID into species tables
-TRdb <- dbConnect(SQLite(), dbname=TRdatabasename) #connect to SQLite DB
-nha_gsrankMatrix <- dbGetQuery(TRdb, paste0("SELECT * FROM nha_gsrankMatrix;"))
+db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
+nha_gsrankMatrix <- dbReadTable(db_nha, "nha_gsrankMatrix")
 row.names(nha_gsrankMatrix) <- nha_gsrankMatrix$X
-nha_gsrankMatrix$X <- NULL
-nha_gsrankMatrix <- as.matrix(nha_gsrankMatrix) # need to read the gs matrix as a matrix
-nha_EORANKweights <- dbGetQuery(TRdb, paste0("SELECT * FROM nha_EORANKweights;"))
-rounded_srank <- dbGetQuery(TRdb, paste0("SELECT * FROM rounded_srank;"))
-rounded_grank <- dbGetQuery(TRdb, paste0("SELECT * FROM rounded_grank;"))
-dbDisconnect(TRdb)
+nha_gsrankMatrix <- as.matrix(nha_gsrankMatrix)
 
-
+nha_EORANKweights <- dbReadTable(db_nha, "nha_EORANKweights")
+rounded_srank <- dbReadTable(db_nha, "rounded_srank")
+rounded_grank <- dbReadTable(db_nha, "rounded_grank")
 
 #check whether there are multiple EOs in the species table for the same species, and only keep one record for each species, the most recently observed entry
 for (i in 1:length(SD_speciesTable)) {
@@ -214,17 +197,34 @@ for (i in 1:length(SD_speciesTable)) {
 sigrankspecieslist <- SD_speciesTable #so if things get weird, you only have to come back to this step
 
 #remove species which are not included in thesite ranking matrices--GNR, SNR, SH/Eo Rank H, etc. 
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SNR
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SH"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SH
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$EORANK!="H"),]) #remove EOs w/ an H quality rank
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SU"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SU
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SNR
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SH"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SH
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$EORANK!="H"),]) #remove EOs w/ an H quality rank
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SU"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SU
+
 
 #Merge rounded S, G, and EO ranks into individual species tables
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], rounded_grank, by="GRANK"))
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], rounded_srank, by="SRANK"))
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), function(x) merge(sigrankspecieslist[[x]], nha_EORANKweights, by="EORANK"))
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) merge(sigrankspecieslist[[x]], rounded_grank, by="GRANK"))
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) merge(sigrankspecieslist[[x]], rounded_srank, by="SRANK"))
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) merge(sigrankspecieslist[[x]], nha_EORANKweights, by="EORANK"))
 
 #Calculate rarity scores for each species within each table
 RarityScore <- function(x, matt) {
@@ -242,19 +242,30 @@ res <- lapply(sigrankspecieslist, RarityScore) #calculate rarity score for each 
 sigrankspecieslist <- Map(cbind, sigrankspecieslist, RarityScore=res) #bind rarity score into each species table
 names(sigrankspecieslist) <- namevec #reassign the names
 
+for (i in 1:seq_along(sigrankspecieslist)) {
+    as.numeric(sigrankspecieslist[[i]]$RarityScore)
+} #for some reason this was being coded as a factor by R...
+
 #Adjust site significance rankings based on presence of G1, G2, and G3 EOs
+
 #create flags for sites with a G3 species (which should automatically be at least regional)
-G3_regional <- lapply(seq_along(sigrankspecieslist), function(x) "G3" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+G3_regional <- lapply(seq_along(sigrankspecieslist),
+                      function(x) "G3" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+
 #create flags for sites with a G1 or G2 species (which should automatically be a global site)
-G1_global <- lapply(seq_along(sigrankspecieslist), function(x) "G1" %in% sigrankspecieslist[[x]]$GRANK_rounded)
-G2_global <- lapply(seq_along(sigrankspecieslist), function(x) "G2" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+G1_global <- lapply(seq_along(sigrankspecieslist),
+                      function(x) "G1" %in% sigrankspecieslist[[x]]$GRANK_rounded)
+G2_global <- lapply(seq_along(sigrankspecieslist),
+                    function(x) "G2" %in% sigrankspecieslist[[x]]$GRANK_rounded)
 
 #Calculate scores for each site, aggregating across all species and assign significance rank category. Skip any remaining NA values in the rarity scores      
-TotalScore  <- lapply(seq_along(sigrankspecieslist), function(x) sigrankspecieslist[[x]]$RarityScore[!is.na(sigrankspecieslist[[x]]$RarityScore)] * sigrankspecieslist[[x]]$Weight) # calculate the total score for each species
+TotalScore  <- lapply(seq_along(sigrankspecieslist), 
+                      function(x) sigrankspecieslist[[x]]$RarityScore[!is.na(sigrankspecieslist[[x]]$RarityScore)] * sigrankspecieslist[[x]]$Weight) # calculate the total score for each species
 SummedTotalScore <- lapply(TotalScore, sum) 
 SummedTotalScore <- lapply(SummedTotalScore, as.numeric)
 
 SiteRank <- list() #create empty list object to write into
+
 for (i in seq_along(SummedTotalScore)) {
   if(SummedTotalScore[[i]]==0|is.na(SummedTotalScore[[i]])){
     SiteRank[[i]] <- "Local"
@@ -269,10 +280,11 @@ for (i in seq_along(SummedTotalScore)) {
   }
 }
 
-# manual check step, take a look if you want to see where things are mismatched--do any sites need to have ranks overriden?
+#manual check step, take a look if you want to see where things are mismatched--do any sites need to have ranks overriden?
 check <- as.data.frame(cbind(SiteRank, SummedTotalScore, G3_regional, G2_global, G1_global, namevec, selected_nhas$NHA_JOIN_ID))
 
-# Do the site ranking overrides automatically
+#Do the site ranking overrides automatically
+
 for (i in seq_along(SiteRank)) {
   if(G3_regional[[i]]=="TRUE") {
     SiteRank[[i]] <-"Regional"
@@ -289,27 +301,15 @@ selected_nhas <- selected_nhas[match(namevec, selected_nhas$NHA_JOIN_ID),]#order
 #ensure that both data frames have sites in the same order
 identical(selected_nhas$NHA_JOIN_ID, namevec)
 
+
 #merge significance data into NHA table
 selected_nhas$site_score <- unlist(SiteRank) #add site significance rankings to NHA data frame
 selected_nhas$site_rank <- unlist(SummedTotalScore) #add site significance score to NHA data frame
 
 summary(as.factor(selected_nhas$site_score)) #manual check step: take a look at distribution of significance ranks
 
-#####
-# get additional tables
 
-
-# open the related species table and get the rows that match the NHA join ids from the selected NHAs
-nha_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
-selected_nha_ProtectedLands <- arc.select(nha_ProtectedLands, c("NHA_JOIN_ID","PROTECTED_LANDS","PERCENT_")) 
-
-# open the related species table and get the rows that match the NHA join ids from the selected NHAs
-nha_PoliticalBoundaries <- arc.open(paste(serverPath,"PNHP.DBO.NHA_PoliticalBoundaries", sep=""))
-selected_nha_PoliticalBoundaries <- arc.select(nha_PoliticalBoundaries, c("NHA_JOIN_ID","COUNTY","MUNICIPALITY")) 
-
-
-
-###############################################################################################################################
+#########################################################
 #Build pieces needed for each site report
 
 #generate list of folder paths and file names for selected NHAs
@@ -403,6 +403,7 @@ tmap_save(nha_map[[i]], filename=paste(NHAdest1[i], "/", nha_foldername_list[[i]
 
 ###################################################################
 #Write the output R markdown document for each site, all at once 
+
 for (i in 1:length(nha_filename_list)) {
   NHAdest2 <- NHAdest1[i]
   selectedNhas <- selected_nhas[i,]
@@ -412,22 +413,20 @@ for (i in 1:length(nha_filename_list)) {
   nhaFoldername <- nha_foldername_list[[i]]
   LinksSelect <- Links[[i]]
   SiteRank1 <- SiteRank[[i]]
-
+  PoliticalBoundaries <- PoliticalBoundaries_list[[i]]
+  ProtectedLands <- protected_lands_list[[i]]
 rmarkdown::render(input=here::here("scripts","template_NHAREport_part1v2.Rmd"), output_format="word_document", 
                   output_file=nha_filename_list[[i]],
                   output_dir=NHAdest1[i])
 }  
 
 # delete the map, after its included in the markdown
+
 for (i in 1:length(nha_filename_list)){
 fn <- paste(NHAdest1[i], "/", nha_foldername_list[i],"_tempmap.png",sep="")
 if (file.exists(fn)) #Delete file if it exists
   file.remove(fn)
 }
-
-
-
-
 
 ####################################################
 #output data about NHAs with completed templates to database and summary sheets
@@ -435,14 +434,10 @@ if (file.exists(fn)) #Delete file if it exists
 # insert the NHA data into a sqlite database
 nha_data <- NULL
 
-nha_data <- selected_nhas[,c("SITE_NAME","SITE_TYPE","NHA_JOIN_ID","site_rank","site_score","BRIEF_DESC","COUNTY","Muni","USGS_QUAD","ASSOC_NHA","PROTECTED_LANDS")]
-nha_data$nha_filename <- unlist(nha_filename_list)
-nha_data$nha_folderpath <- NHAdest1
-nha_data$nha_foldername <- unlist(nha_foldername_list)
-
+nha_data <- cbind(selected_nhas[,c("SITE_NAME","NHA_JOIN_ID","site_score")], as.character(Sys.Date()))
+names(nha_data)[4] <- "date_run"
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-
-dbAppendTable(db_nha, "nha_main", nha_data)
+dbAppendTable(db_nha, "nha_runrecord", nha_data)
 dbDisconnect(db_nha)
 
 #Create record of NHA creation for organizing writing and editing tasks
@@ -489,6 +484,10 @@ EO_sumtable <- as.data.frame(cbind(nEOs, PlantEO_percent,MusselEO_percent,Insect
 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename)
 nha_data$Template_Created <- as.character(Sys.Date()) 
+nha_data$nha_filename <- unlist(nha_filename_list)
+
+nha_data$nha_folderpath <- NHAdest1
+nha_data$nha_foldername <- unlist(nha_foldername_list)
 nha_sum <- nha_data[,c("NHA_JOIN_ID","SITE_NAME","COUNTY","nha_folderpath", "site_score")]
 nha_sum <- cbind(nha_sum, EO_sumtable)
 dbAppendTable(db_nha, "nha_sitesummary", nha_sum) 
