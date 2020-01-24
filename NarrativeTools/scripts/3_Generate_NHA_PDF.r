@@ -15,53 +15,41 @@
 # check and load required libraries  
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
   require(here)
-if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
-  require(arcgisbinding)
-if (!requireNamespace("RSQLite", quietly = TRUE)) install.packages("RSQLite")
-  require(RSQLite)
-if (!requireNamespace("knitr", quietly = TRUE)) install.packages("knitr")
-  require(knitr)
-if (!requireNamespace("xtable", quietly = TRUE)) install.packages("xtable")
-  require(xtable)
-if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")
-  require(dplyr)
-if (!requireNamespace("DBI", quietly = TRUE)) install.packages("DBI")
-  require(DBI)
-if (!requireNamespace("dbplyr", quietly = TRUE)) install.packages("dbplyr")
-  require(dbplyr)
-if (!requireNamespace("tinytex", quietly = TRUE)) install.packages("tinytex")
-  require(tinytex)
-if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
-  require(stringr)
-if (!requireNamespace("english", quietly = TRUE)) install.packages("english")
-  require(english)
 
 # load in the paths and settings file
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-# File path for completed Word documents
-nha_name <- "Hogback Barrens"
+nha_name <- "Allegheny River Pool #6"
+nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
-# query the database for the site information
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_data <- dbGetQuery(db_nha, paste("SELECT * FROM nha_main WHERE SITE_NAME = " , sQuote(nha_name), sep="") )
-dbDisconnect(db_nha)
-
-nha_foldername <- foldername(nha_data$SITE_NAME ) # this now uses a user-defined function
+# access geodatabase to pull site info 
+serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
+nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
+selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_name, "AND STATUS = 'NP'"))
 
 # replace NA in 'Location' data with specific text 
-if(is.na(nha_data$PROTECTED_LANDS)){
+
+## Pull in protected lands information #############
+nha_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
+selected_nha_ProtectedLands <- arc.select(nha_ProtectedLands) 
+protected_lands <- selected_nha_ProtectedLands[which(selected_nha_ProtectedLands$NHA_JOIN_ID==selected_nha$SITE_NAME),]
+
+if(nrow(protected_lands)==0){
   nha_data$PROTECTED_LANDS <- "This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements."
 } else {
-  nha_data$PROTECTED_LANDS <- nha_data$PROTECTED_LANDS
+  nha_data$PROTECTED_LANDS <- paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')
 }
 
 
 # species table
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-  NHAspecies <- dbGetQuery(db_nha, paste("SELECT * from nha_species WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
+# open the related species table and get the rows that match the NHA join ids from the selected NHAs
+nha_relatedSpecies <- arc.open(paste(serverPath,"PNHP.DBO.NHA_SpeciesTable", sep=""))
+selected_nha_relatedSpecies <- arc.select(nha_relatedSpecies) 
+
+#open linked species tables and select based on list of selected NHAs
+species_table_select <- selected_nha_relatedSpecies[which(selected_nha_relatedSpecies$NHA_JOIN_ID==selected_nha$SITE_NAME),]
 
 # create paragraph about species ranks
 rounded_srank <- read.csv(here::here("_data","databases","sourcefiles","rounded_srank.csv"), stringsAsFactors=FALSE)

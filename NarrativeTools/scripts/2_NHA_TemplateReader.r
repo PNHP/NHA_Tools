@@ -1,38 +1,19 @@
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
   require(here)
-if (!requireNamespace("readtext", quietly = TRUE)) install.packages("readtext")
-  require(readtext)
-if (!requireNamespace("qdapRegex", quietly = TRUE)) install.packages("qdapRegex")
-  require(qdapRegex)
-if (!requireNamespace("textreadr", quietly = TRUE)) install.packages("textreadr")
-  require(textreadr)
-if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
-  require(arcgisbinding)
-if (!requireNamespace("RSQLite", quietly = TRUE)) install.packages("RSQLite")
-  require(RSQLite)
-if (!requireNamespace("plyr", quietly = TRUE)) install.packages("plyr")
-  require(plyr)
-if (!requireNamespace("dbplyr", quietly = TRUE)) install.packages("dbplyr")
-  require(dbplyr)
-if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
-  require(stringr)
-
-
 
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
-nha_name <- "Cherry Run at Cochrans Mills"
+nha_name <- "Allegheny River Pool #6"
+nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
-# query the database for the site information
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_data <- dbGetQuery(db_nha, paste("SELECT * FROM nha_main WHERE SITE_NAME = " , sQuote(nha_name), sep="") )
-dbDisconnect(db_nha)
-
-nha_siteName <- nha_data$SITE_NAME  
-nha_foldername <- foldername(nha_siteName) # this now uses a user-defined function
+# access geodatabase to pull site info 
+serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
+nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
+selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "AND STATUS = 'NP'"))
 
 # find the NHA word file template that we want to use
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
@@ -50,11 +31,23 @@ text1 <- as.character(text1)
 text1 <- gsub("\r?\n|\r", " ", text1)
 rm(text)
 
-###############################################################################################################
-# Extract individual elements of report, process, and add to NHA database #####################################
+#########################################################################
+#Create an NHA data table to extract site information into piece by piece
 
-# NHA written description information #########################################################################
-Description <- rm_between(text1, '|DESC_B|', '|DESC_E|', fixed=TRUE, extract=TRUE)[[1]]
+nha_data <- as.data.frame(matrix(nrow=1, ncol=0))
+nha_data$NHA_JOIN_ID <- selected_nha$NHA_JOIN_ID
+nha_data$SITE_NAME <- selected_nha$SITE_NAME
+nha_data$Description <- rm_between(text1, '|DESC_B|', '|DESC_E|', fixed=TRUE, extract=TRUE)[[1]]
+nha_data$ThreatRecP <- rm_between(text1, '|THRRECP_B|', '|THRRECP_E|', fixed=TRUE, extract=TRUE)[[1]]
+
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+# delete existing threats and recs for this site if they exist
+dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+# add in the new data
+dbAppendTable(db_nha, "nha_siteaccount", nha_data)
+dbDisconnect(db_nha)
+###############################################################################################################
+
 # bold and italic species names
 # db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 #   NHAspecies <- dbGetQuery(db_nha, paste("SELECT * from nha_species WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep="") )
@@ -71,32 +64,25 @@ Description <- rm_between(text1, '|DESC_B|', '|DESC_E|', fixed=TRUE, extract=TRU
 
 # add the above to the database
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-  dbSendStatement(db_nha, paste("UPDATE nha_siteaccount SET Description = ", sQuote(Description), " WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+  dbSendStatement(db_nha, paste("UPDATE nha_siteaccount SET Description = ", sQuote(Description), " WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
 dbDisconnect(db_nha)
 
-# Threats and Recommendations #################################################################################
-
-# Introductory paragraph for the Threats and Recommendations Section
-ThreatRecP <- rm_between(text1, '|THRRECP_B|', '|THRRECP_E|', fixed=TRUE, extract=TRUE)[[1]] 
-# add the above to the database
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-dbSendStatement(db_nha, paste("UPDATE nha_main SET ThreatsAndRecomendations = ", sQuote(ThreatRecP), " WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-dbDisconnect(db_nha)
+# Threats and Recommendations Bullets ##########################################################
 
 # Extract all the threat/rec bullets into a list and convert to a dataframe
 TRB <- rm_between(text1, '|BULL_B|', '|BULL_E|', fixed=TRUE, extract=TRUE)
 TRB <- ldply(TRB)
 TRB <- as.data.frame(t(TRB))
 TRB <- cbind(nha_data$NHA_JOIN_ID,TRB)
-names(TRB) <- c("NHA_JOIN_ID","ThreatRec")
+names(TRB) <- c("NHA_JOIN_ID","TRB")
 TRB$NHA_JOIN_ID <- as.character(TRB$NHA_JOIN_ID)
-TRB$ThreatRec <- as.character(TRB$ThreatRec)
+TRB$TRB <- as.character(TRB$TRB)
 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 # delete existing threats and recs for this site if they exist
-dbExecute(db_nha, paste("DELETE FROM nha_ThreatRec WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+dbExecute(db_nha, paste("DELETE FROM nha_TRbullets WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
 # add in the new data
-dbAppendTable(db_nha, "nha_ThreatRec", TRB)
+dbAppendTable(db_nha, "nha_TRbullets", TRB)
 dbDisconnect(db_nha)
 
 # References ###################################################################################################
@@ -115,7 +101,7 @@ References$RefCode <- as.character(References$RefCode)
 References$Reference <- as.character(References$Reference)
 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-# delete existing threats and recs for this site if they exist
+# delete existing references for this site if they exist
 dbExecute(db_nha, paste("DELETE FROM nha_References WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
 # add in the new data
 dbAppendTable(db_nha, "nha_References", References)

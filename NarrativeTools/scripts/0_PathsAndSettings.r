@@ -37,7 +37,24 @@ if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
 require(sf)
-
+if (!requireNamespace("readtext", quietly = TRUE)) install.packages("readtext")
+require(readtext)
+if (!requireNamespace("qdapRegex", quietly = TRUE)) install.packages("qdapRegex")
+require(qdapRegex)
+if (!requireNamespace("textreadr", quietly = TRUE)) install.packages("textreadr")
+require(textreadr)
+if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
+require(arcgisbinding)
+if (!requireNamespace("plyr", quietly = TRUE)) install.packages("plyr")
+require(plyr)
+if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
+require(stringr)
+if (!requireNamespace("DBI", quietly = TRUE)) install.packages("DBI")
+require(DBI)
+if (!requireNamespace("tinytex", quietly = TRUE)) install.packages("tinytex")
+require(tinytex)
+if (!requireNamespace("english", quietly = TRUE)) install.packages("english")
+require(english)
 # options
 options(useFancyQuotes=FALSE)
 
@@ -82,7 +99,7 @@ rnw_template <- "template_Formatted_NHA_PDF.rnw"
 
 # function to create the folder name
 foldername <- function(x){
-  nha_foldername <- gsub(" ", "", nha_siteName, fixed=TRUE)
+  nha_foldername <- gsub(" ", "", nha_name, fixed=TRUE)
   nha_foldername <- gsub("#", "", nha_foldername, fixed=TRUE)
   nha_foldername <- gsub("''", "", nha_foldername, fixed=TRUE)
 }
