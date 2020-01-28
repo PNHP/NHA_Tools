@@ -151,6 +151,3 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbExecute(db_nha, paste("DELETE FROM nha_photos WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep="")) # delete existing threats and recs for this site if they exist
 dbAppendTable(db_nha, "nha_photos", AddPhotos) # add in the new data
 dbDisconnect(db_nha)
-
-
-
