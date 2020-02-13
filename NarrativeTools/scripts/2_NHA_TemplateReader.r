@@ -63,9 +63,9 @@ dbDisconnect(db_nha)
 
 
 # add the above to the database
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-  dbSendStatement(db_nha, paste("UPDATE nha_siteaccount SET Description = ", sQuote(Description), " WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
-dbDisconnect(db_nha)
+#db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+ # dbSendStatement(db_nha, paste("UPDATE nha_siteaccount SET Description = ", sQuote(Description), " WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
+#dbDisconnect(db_nha)
 
 # Threats and Recommendations Bullets ##########################################################
 

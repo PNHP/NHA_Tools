@@ -57,7 +57,7 @@
 % % image
 \begin{wrapfigure}[13]{R}{0.5\textwidth}
   \centering
-  \includegraphics[0.5\textwidth]{\Sexpr{nha_photos$P1F}}
+  \includegraphics[0.5\textwidth]{nha_photos$P1F}
   \captionsetup{labelformat=empty, justification=centerlast}
   <<label=captionfunction, echo=FALSE, results='asis'>>=
   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{", nha_photos$P1N,"}", sep=" "))
@@ -95,9 +95,10 @@ The species tracked by PNHP present at this NHA include:
      \hline
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
-     TaxOrder <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
+     #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
+     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV", "P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
      speciestable$OrderVec <- speciestable$ELEMENT_TYPE
-     speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"] <- "S")    
+     speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
      speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
      speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
      
@@ -215,9 +216,9 @@ capfun3 <- as.character(paste(nha_photos$P3C, "\\textcolor{gray}{", nha_photos$P
 if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
   photos <- paste0("\\\\")
 } else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
-    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
+    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p2_path}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
   } else {
-    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
+    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
   }
 cat(photos)
 @

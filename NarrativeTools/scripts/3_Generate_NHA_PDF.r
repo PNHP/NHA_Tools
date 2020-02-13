@@ -41,7 +41,7 @@ selected_nha_ProtectedLands <- arc.select(nha_ProtectedLands)
 protected_lands <- selected_nha_ProtectedLands[which(selected_nha_ProtectedLands$NHA_JOIN_ID==selected_nha$NHA_JOIN_ID),]
 
 if(nrow(protected_lands)==0){
-  nha_data$PROTECTED_LANDS <- "This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements."
+  nha_data$PROTECTED_LANDS <- paste("This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements.")
 } else {
   nha_data$PROTECTED_LANDS <- paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')
 }
