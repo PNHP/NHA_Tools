@@ -55,12 +55,11 @@
 \medskip \\
 
 % % image
-\begin{wrapfigure}[13]{R}{0.5\textwidth}
-  \centering
-  \includegraphics[0.5\textwidth]{nha_photos$P1F}
-  \captionsetup{labelformat=empty, justification=centerlast}
+\begin{wrapfigure}{R}{0.5\textwidth} % [13]
+  \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %  
+  \captionsetup{labelformat=empty, justification=raggedright}
   <<label=captionfunction, echo=FALSE, results='asis'>>=
-  capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{", nha_photos$P1N,"}", sep=" "))
+  capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
   @
   \caption{\Sexpr{capfun}}
 \end{wrapfigure}
@@ -205,23 +204,29 @@ for(t in 1:nrow(nha_threats)){
 
 
 
-
-
 <<Conditional23Pics, echo=F, results='asis'>>=
 ## embed images 2 and 3, if they exist in photo database
-
 capfun2 <- as.character(paste(nha_photos$P2C, "\\textcolor{gray}{", nha_photos$P2N,"}", sep=" "))
 capfun3 <- as.character(paste(nha_photos$P3C, "\\textcolor{gray}{", nha_photos$P3N,"}", sep=" "))
-
-if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
-  photos <- paste0("\\\\")
-} else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
-    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p2_path}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
-  } else {
-    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
-  }
-cat(photos)
 @
+
+%# if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
+%#   photos <- paste0("\\\\")
+%# } else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
+%#     photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
+%#   } else {
+%#     photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
+%#   }
+%# cat(photos)
+%# @
+% 
+\begin{figure}[h!]
+\centering
+\includegraphics[height=15cm,keepaspectratio,]{\Sexpr{nha_photos$P2F}}
+\captionsetup{labelformat=empty, justification=raggedright}
+\caption{\Sexpr{capfun2}}
+\end{figure}
+
 
 \bigskip
 % the next line moves the recommended citation to the bottom of the page
