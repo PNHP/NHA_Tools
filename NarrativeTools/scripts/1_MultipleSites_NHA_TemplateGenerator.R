@@ -29,8 +29,8 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHAlist_file <- ("GreeneCounty_FranklinTwnship.csv")
-NHA_list <- read.csv(here("_data", "sourcefiles", NHAlist_file)) #download list that includes site names and/or (preferably) NHA Join ID
+NHAlist_file <- ("AlreadyRun.csv")
+NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -42,14 +42,14 @@ nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 
 #Select larger number of sites
 #Method A) If using site names (but this gets hung up on apostrophes)
-NHA_list <- NHA_list[order(NHA_list$Site.Name),] #order alphabetically
-Site_Name_List <- as.vector(NHA_list$Site.Name)
+NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
+Site_Name_List <- as.vector(NHA_list$SITE_NAME)
 Site_Name_List <- as.list(Site_Name_List)
 SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
-#Site_NHAJoinID_List <-as.character(NHA_list$NHA.Join.ID)
-#SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
+Site_NHAJoinID_List <-as.character(NHA_list$NHA_join_ID)
+SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
 dim(selected_nhas) #check how many records are returned to ensure it meets expectations
@@ -58,7 +58,7 @@ selected_nhas <- selected_nhas[order(selected_nhas$SITE_NAME),]#order alphabetic
 
 ####
 #manual check to ensure that your original list of NHAs and the selected NHA data frame both have sites in the same order
-identical(selected_nhas$SITE_NAME, as.character(NHA_list$Site.Name))
+identical(selected_nhas$SITE_NAME, as.character(NHA_list$SITE_NAME))
 ####
 
 Site_ID_list <- as.list(unique(selected_nhas$NHA_JOIN_ID)) #create list of join IDs for pulling out related table information. added in unique for occasions where a site might be in the import list multiple times (e.g. when it crosses county lines and we want to talk about it for all intersecting counties)
@@ -242,9 +242,9 @@ res <- lapply(sigrankspecieslist, RarityScore) #calculate rarity score for each 
 sigrankspecieslist <- Map(cbind, sigrankspecieslist, RarityScore=res) #bind rarity score into each species table
 names(sigrankspecieslist) <- namevec #reassign the names
 
-for (i in 1:seq_along(sigrankspecieslist)) {
-    as.numeric(sigrankspecieslist[[i]]$RarityScore)
-} #for some reason this was being coded as a factor by R...
+for(i in 1:length(sigrankspecieslist)){
+  sigrankspecieslist[[i]]$RarityScore <-as.numeric(sigrankspecieslist[[i]]$RarityScore)
+}
 
 #Adjust site significance rankings based on presence of G1, G2, and G3 EOs
 
