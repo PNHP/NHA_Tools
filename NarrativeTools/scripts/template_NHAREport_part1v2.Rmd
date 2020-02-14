@@ -37,64 +37,9 @@ The brief description from the NHA geodatabase for this site reads: **`r selecte
 
 The following old NHA sites overlap with the current NHA: `r selectedNhas$OLD_SITE_NAME`
 
-You can access each of these old site accounts on the P drive, in the following locations:
-```{r print site path 1, echo=FALSE, results='asis'}
-OldNames <- gsub(", ", ",",selectedNhas$OLD_SITE_NAME) #remove spaces after comma
-OldNames <- strsplit(OldNames, split=",") #split comma-separated list of old site names into individual elements
-OldNames <- unlist(OldNames)
+You can access each of these old site accounts on the P drive, sorted into folders by county:
+[Site description folders]("P:\\\\Conservation Programs\\\\Natural Heritage Program\\\\ConservationPlanning\\\\NaturalHeritageAreas\\\\SiteDescriptions")
 
-N <- length(OldNames)
-OldNames_path <- list()
-
-N <- length(OldNames)
-OldNames_path <- list()
-
-for (i in 1:N) {
-  temp <- paste0(c("P:\\\\Conservation Programs\\\\Natural Heritage Program\\\\ConservationPlanning\\\\NaturalHeritageAreas\\\\SiteDescriptions\\\\=",selectedNhas$COUNTY[i]," CNHI site descriptions\\\\", OldNames[i],".pdf"))
-  
-  OldNames_path[[paste0("OldNames",i)]] <- temp
-}
-
-x <- NULL
-for (i in 1:N) {
-  x[i]  <- paste0(unlist(OldNames_path[i]), sep="", collapse="")
-}
-
-if(!is.na(OldNames[1])){
-  cat(x[1])
-}
-
-```
-  
-<br><br><br><br>
-```{r print site path 2, echo=FALSE, results='asis'}
-if (N >= 2) {
-  cat(x[2])  
-}  
-```
-  
-<br><br><br><br>
-```{r print site path 3, echo=FALSE, results='asis'}
-if (N >= 3) {
-  cat(x[3])  
-}
-```
-  
-<br><br><br><br>
-
-```{r print site path 4, echo=FALSE, results='asis'}
-if (N >= 4) {
-  cat(x[4])  
-}  
-```
-  
-<br><br><br><br>
-```{r print site path 5, echo=FALSE, results='asis'}
-if (N >= 5) {
-  cat(x[5])  
-}  
-```
-  
 <br><br><br><br>  
 If this NHA occurs in Butler or Washington County, find those site inventories online here:
 [Butler](http://www.naturalheritage.state.pa.us/CNAI_PDFs/Butler_CNHI_WEB_2011.pdf)  
@@ -120,7 +65,7 @@ Please check the species table below for accuracy. Make a note of any issues, us
 ```{r species table, echo=FALSE}
 ## Build the Species Table #########################
 
-SD_speciesTablePrint <- speciesTable[,-which(names(speciesTable) %in% c("ELCODE","EO_ID","ELSubID"))]
+SD_speciesTablePrint <- speciesTable[,-which(names(speciesTable) %in% c("ELCODE","EO_ID","ELSubID","column_label","last_edited_user", "OBJECTID","ELSUBID","ELEMENT_TYPE","NHA_JOIN_ID","GlobalID","created_user","created_date","last-edited_user","last_edited_date"))]
 SD_speciesTablePrint$SNAME <- paste(SD_speciesTablePrint$SCOMNAME," (",SD_speciesTablePrint$SNAME,")", sep="")
 SD_speciesTablePrint$SCOMNAME <- NULL
 
@@ -234,12 +179,32 @@ If you add any information that is supported by an additional reference, please 
 
 # Location  
 Please indicate whether the information below is correct. Use Word comments to flag any issues.  
+``` {r format protected lands and political boundaries lists, echo=FALSE}
 
-**Municipalities:** `r selectedNhas$Muni`  
+#join tables and report threats and recs for selected species
+
+PBs <- split(PoliticalBoundaries, PoliticalBoundaries$COUNTY)
+
+munil <- list()
+
+for(i in 1:length(PBs)){
+munil[[i]] <- unique(PBs[[i]]$MUNICIPALITY)  
+}
+
+printCounty <- list()
+for (i in 1:length(PBs)){
+printCounty[[i]]  <- paste0(PBs[[i]]$COUNTY[1], " County",": ", paste(munil[[i]], collapse=', '))  
+}
+
+
+```
+
+**Municipalities:** `r paste(printCounty, collapse='; ')`  
 **USGS quads:** `r selectedNhas$USGS_QUAD`  
 **Previous CNHI reference:** `r selectedNhas$OLD_SITE_NAME`  
 **Associated NHAs:** `r selectedNhas$ASSOC_NHA`   
-**Overlapping Protected Lands:** `r selectedNhas$PROTECTED_LANDS`  
+**Overlapping Protected Lands:** `r paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')`    
+**Percent of NHA Protected:** `r sum(ProtectedLands$PERCENT_)`%        
 **Acreage:** `r signif(selectedNhas$Acres, digits=0)` acres
 
 Please cite this Natural Heritage Area as:  

@@ -51,13 +51,13 @@
 % Header
 \noindent
 \textbf{\LARGE{\Sexpr{paste(as.character(nha_data$SITE_NAME),"NHA",sep=" ")}}}\\
-\large Significance Rank: {\Sexpr{nha_data$SITE_RANK}}\
+\large Significance Rank: {\Sexpr{nha_siterank}}\
 \medskip \\
 
 % % image
 \begin{wrapfigure}[13]{R}{0.5\textwidth}
   \centering
-  \includegraphics[0.5\textwidth]{\Sexpr{nha_photos$P1F}}
+  \includegraphics[0.5\textwidth]{nha_photos$P1F}
   \captionsetup{labelformat=empty, justification=centerlast}
   <<label=captionfunction, echo=FALSE, results='asis'>>=
   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{", nha_photos$P1N,"}", sep=" "))
@@ -95,58 +95,59 @@ The species tracked by PNHP present at this NHA include:
      \hline
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
-     TaxOrder <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
-     NHAspecies$OrderVec <- NHAspecies$ELEMENT_TYPE
-     NHAspecies <- within(NHAspecies, OrderVec[SENSITIVE =="Y"] <- "S")    
-     NHAspecies$OrderVec <- factor(NHAspecies$OrderVec, levels=TaxOrder)
-     NHAspecies <- NHAspecies[order(NHAspecies$OrderVec, NHAspecies$SNAME),]
+     #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
+     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV", "P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+     speciestable$OrderVec <- speciestable$ELEMENT_TYPE
+     speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
+     speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
+     speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
      
      #Recode Sensitive Species names
-     NHAspecies$SNAME_or <- NHAspecies$SNAME
-     SSct <- length(NHAspecies$SENSITIVE[NHAspecies$SENSITIVE == "Y"])
+     speciestable$SNAME_or <- speciestable$SNAME
+     SSct <- length(speciestable$SENSITIVE[speciestable$SENSITIVE == "Y"])
      SSOCid <- toupper(letters[1:SSct])
      j=0 #set the indexing for the sensitive species 
-     for(i in 1:nrow(NHAspecies)){ 
+     for(i in 1:nrow(speciestable)){ 
        # replace common name if blank
-       if(is.na(NHAspecies$SCOMNAME[i])){
-         NHAspecies$SCOMNAME[i] <- "No Name Available"
+       if(is.na(speciestable$SCOMNAME[i])){
+         speciestable$SCOMNAME[i] <- "No Name Available"
        } 
        # remove double names for sensitive species of concern
-       if(NHAspecies$SENSITIVE[i]=="Y"){
+       if(speciestable$SENSITIVE[i]=="Y"){
          j <- j + 1 # add one the sensitive species id
          speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
        } else {
-         speciesstring <- paste0(NHAspecies$SCOMNAME[i]," (\\textit{",NHAspecies$SNAME[i],"}) ")
+         speciesstring <- paste0(speciestable$SCOMNAME[i]," (\\textit{",speciestable$SNAME[i],"}) ")
        }
        # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
-       if(NHAspecies$SCOMNAME[i]==NHAspecies$SNAME[i] & NHAspecies$SENSITIVE[i]!="Y"){
-         speciesstring <- paste0(NHAspecies$SCOMNAME[i])
+       if(speciestable$SCOMNAME[i]==speciestable$SNAME[i] & speciestable$SENSITIVE[i]!="Y"){
+         speciesstring <- paste0(speciestable$SCOMNAME[i])
        } 
        # replace the state status 'NA'
-       if(is.na(NHAspecies$SPROT[i])){
-         NHAspecies$SPROT[i] <- "--"
+       if(is.na(speciestable$SPROT[i])){
+         speciestable$SPROT[i] <- "--"
        } 
-       if(is.na(NHAspecies$PBSSTATUS[i])){
-         NHAspecies$PBSSTATUS[i] <- "--"
+       if(is.na(speciestable$PBSSTATUS[i])){
+         speciestable$PBSSTATUS[i] <- "--"
        }      
        # mask information for sensitive species
-       if(NHAspecies$SENSITIVE[i]=="Y") {
-         NHAspecies$SPROT[i] <- "--"
-         NHAspecies$PBSSTATUS[i] <- "--"
-         NHAspecies$GRANK[i] <- "--"
-         NHAspecies$SRANK[i] <- "--"
+       if(speciestable$SENSITIVE[i]=="Y") {
+         speciestable$SPROT[i] <- "--"
+         speciestable$PBSSTATUS[i] <- "--"
+         speciestable$GRANK[i] <- "--"
+         speciestable$SRANK[i] <- "--"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",NHAspecies$Images[i],"}","&",NHAspecies$GRANK[i], "&", NHAspecies$SRANK[i],"&", paste0(NHAspecies$SPROT[i]," (",NHAspecies$PBSSTATUS[i],")"), "&", NHAspecies$LASTOBS[i],"&", NHAspecies$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$Images[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
 <<Sensitivedb, echo=FALSE, results="hide">>=     
      # add coded sensitive species into "decoder" database table
-     NHAspecies$SNAME[NHAspecies$SENSITIVE =="Y"] = paste("Sensitive Species of Concern",SSOCid)
-     NHAspecies$SCODE <- NHAspecies$SNAME
-     NHAspecies$SNAME <- NHAspecies$SNAME_or
-     SensT <- NHAspecies[NHAspecies$SENSITIVE=="Y",]
+     speciestable$SNAME[speciestable$SENSITIVE =="Y"] = paste("Sensitive Species of Concern",SSOCid)
+     speciestable$SCODE <- speciestable$SNAME
+     speciestable$SNAME <- speciestable$SNAME_or
+     SensT <- speciestable[speciestable$SENSITIVE=="Y",]
      SensT <- SensT[c("NHA_JOIN_ID","EO_ID","ELCODE","SCODE","SNAME","SCOMNAME")]
      db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
     # delete existing information for this site if it exists
@@ -161,7 +162,7 @@ The species tracked by PNHP present at this NHA include:
     \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
     \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
-     SensitiveFNote <- ifelse(any(NHAspecies$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
+     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
      @
     \Sexpr{paste(SensitiveFNote)}
     \end{footnotesize}
@@ -189,12 +190,12 @@ for(t in 1:nrow(nha_threats)){
 \pagebreak[1]
 \noindent\textbf{\underline{Location}}\\\\
 \smallskip
-\textbf{Municipalities:} \Sexpr{nha_data$Muni} \\
-\textbf{USGS quads:} \Sexpr{nha_data$USGS_QUAD} \\
-\textbf{Previous CNHI reference:} \Sexpr{nha_data$OLD_SITE_NAME} \\
-\textbf{Associated NHAs:} \Sexpr{nha_data$ASSOC_NHA} \\ 
+\textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
+\textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
+\textbf{Previous CNHI reference:} \Sexpr{selected_nha$OLD_SITE_NAME} \\
+\textbf{Associated NHAs:} \Sexpr{selected_nha$ASSOC_NHA} \\ 
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
-\textbf{Acreage:} \Sexpr{signif(selected_nha$Acres, digits=0)} acres \\  
+\textbf{Acreage:} \Sexpr{signif(selected_nha$ACRES, digits=0)} acres \\  
   
 %%% References %%% 
 \noindent\textbf{\underline{References}}\\
@@ -215,9 +216,9 @@ capfun3 <- as.character(paste(nha_photos$P3C, "\\textcolor{gray}{", nha_photos$P
 if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
   photos <- paste0("\\\\")
 } else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
-    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
+    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p2_path}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
   } else {
-    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
+    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
   }
 cat(photos)
 @
