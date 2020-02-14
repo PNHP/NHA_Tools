@@ -64,11 +64,11 @@ for (i in 1:length(PBs)){
 
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
-# delete existing site account info from this site, prior to overwriting with new info
-dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-# add in the new data
-dbAppendTable(db_nha, "nha_data", nha_siteaccount)
-dbDisconnect(db_nha)
+# # delete existing site account info from this site, prior to overwriting with new info
+# dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+# # add in the new data
+# dbAppendTable(db_nha, "nha_data", nha_siteaccount)
+# dbDisconnect(db_nha)
 
 # species table
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
