@@ -92,6 +92,9 @@ NHAdest <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanni
 # RNW file to use
 rnw_template <- "template_Formatted_NHA_PDF.rnw"
 
+# taxaicon lookup
+taxaicon <- data.frame(c("Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png"),c("AAAA","","AB","","","","AM","","AF","","","","","IMBIV","","","P","","","",""), stringsAsFactors = FALSE)
+names(taxaicon) <- c("icon","ELEMENT_TYPE")
 
 ###########################################################################################################################
 # FUNCTIONS

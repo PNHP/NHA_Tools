@@ -88,6 +88,8 @@ speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
+speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
+
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
 

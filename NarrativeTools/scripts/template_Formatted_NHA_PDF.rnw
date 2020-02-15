@@ -95,7 +95,7 @@ The species tracked by PNHP present at this NHA include:
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
      #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
-     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV", "P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
      speciestable$OrderVec <- speciestable$ELEMENT_TYPE
      speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
      speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
@@ -135,9 +135,10 @@ The species tracked by PNHP present at this NHA include:
          speciestable$PBSSTATUS[i] <- "--"
          speciestable$GRANK[i] <- "--"
          speciestable$SRANK[i] <- "--"
+         speciestable$icon[i] <- "Sensitive.png"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$Images[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
