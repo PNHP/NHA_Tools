@@ -41,7 +41,7 @@
 }
 \rfoot{
  \small  
- \textcolor{gray}{page  \thepage   of  \pageref*{LastPage}}
+ \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
 }
 
 \begin{document}

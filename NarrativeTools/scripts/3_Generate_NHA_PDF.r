@@ -189,5 +189,5 @@ for(j in 1:nrow(nha_threats)){
 setwd(paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"))
 pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
-#deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
+deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
