@@ -88,6 +88,7 @@ speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
+# merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
 
 # create paragraph about species ranks
@@ -188,5 +189,5 @@ for(j in 1:nrow(nha_threats)){
 setwd(paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"))
 pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
-deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
+#deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd

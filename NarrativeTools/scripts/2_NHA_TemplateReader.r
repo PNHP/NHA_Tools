@@ -29,7 +29,7 @@ text <- readtext(NHAdest1, format=TRUE)
 text1 <- text[2]
 text1 <- as.character(text1)
 #text1 <- gsub("\r?\n|\r", " ", text1)  #ORIGINAL line
-text1 <- gsub("\n", "\\\\\\\\", text1)
+text1 <- gsub("\n", "\\\\\\\\ \\\\par\\\\noindent ", text1)
 
 
 rm(text)
@@ -154,4 +154,3 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbExecute(db_nha, paste("DELETE FROM nha_photos WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep="")) # delete existing threats and recs for this site if they exist
 dbAppendTable(db_nha, "nha_photos", AddPhotos) # add in the new data
 dbDisconnect(db_nha)
-
