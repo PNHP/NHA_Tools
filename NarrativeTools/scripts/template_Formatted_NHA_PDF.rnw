@@ -90,7 +90,7 @@ The species tracked by PNHP present at this NHA include:
    \centering
     \begin{tabular}{p{3in}cccccc}
      \hline
-     \textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{LastSeen}	& \textbf{Quality}\tnote{2} \\
+     \textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
      \hline
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
