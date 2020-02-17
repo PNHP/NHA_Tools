@@ -19,7 +19,7 @@ selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "A
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
 NHA_file
 # select the file number from the list below
-n <- 1
+n <- 2
 NHA_file <- NHA_file[n]
 # create the path to the whole file!
 NHAdest1 <- paste(NHAdest,"DraftSiteAccounts", nha_foldername, NHA_file, sep="/")
@@ -154,3 +154,4 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbExecute(db_nha, paste("DELETE FROM nha_photos WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep="")) # delete existing threats and recs for this site if they exist
 dbAppendTable(db_nha, "nha_photos", AddPhotos) # add in the new data
 dbDisconnect(db_nha)
+

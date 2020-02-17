@@ -6,7 +6,7 @@
 \usepackage[margin=10pt,font=small]{caption}
 \usepackage{geometry}
 \usepackage{xcolor}
-%\usepackage{tabularx}
+\usepackage{longtable,booktabs,threeparttablex}
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -16,7 +16,7 @@
 \addbibresource{../../citations/PNHP_refs.bib}
 \usepackage{enumitem}
 \setlist{nolistsep}
-\usepackage{threeparttable}
+%\usepackage{threeparttable}
 \usepackage{lastpage}
 \usepackage{fancyhdr} %for headers,footers
 %\usepackage{float}
@@ -84,14 +84,38 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
 The species tracked by PNHP present at this NHA include:
 \medskip
 % Species Table
-\begin{table}[h]
- \begin{threeparttable}[b]
-  \small
-   \centering
-    \begin{tabular}{p{3in}cccccc}
-     \hline
-     \textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
-     \hline
+\begin{ThreePartTable}
+\renewcommand\TPTminimum{\textwidth}
+%% Arrange for "longtable" to take up full width of text block
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\setlength\tabcolsep{0pt}
+
+\begin{TableNotes}
+    \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
+    \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
+    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
+     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
+     @
+    \Sexpr{paste(SensitiveFNote)}
+\end{TableNotes}
+
+\begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
+\toprule
+\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
+%Country & N obs  & Total years & No degree & High school & Some college,+ & smth\tnote{a} & smth\tnote{b} \\
+%& & of education & & & & prestige score & income score \\ 
+\midrule
+\endhead
+
+\midrule[\heavyrulewidth]
+\multicolumn{7}{r}{\textit{continued}}\\
+\endfoot  
+
+\midrule[\heavyrulewidth]
+\insertTableNotes  % tell LaTeX where to insert the table-related notes
+\endlastfoot
+
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
      #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
@@ -155,19 +179,112 @@ The species tracked by PNHP present at this NHA include:
      dbAppendTable(db_nha, "nha_sensitivespeciesdecoder", SensT) # add in the new data
     dbDisconnect(db_nha) #disconnect
 @
-    \hline                      
-    \end{tabular}
-    \begin{footnotesize}
-    \begin{tablenotes}
-    \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
-    \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
-    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
-     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
-     @
-    \Sexpr{paste(SensitiveFNote)}
-    \end{footnotesize}
-  \end{threeparttable}  
- \end{table}  
+
+
+
+%Albania & 16 & 12.1 & 9 & 31 & 59 & 48.4 & 32.1 \\
+%&  & (2.8) & (30) & (47) & (50) & (11.9) & (10.1) \\
+%\addlinespace
+%Norway & 229 & 12.2 & 8 & 28 & 65 & 47.0 & 31.0 \\
+
+\end{longtable}   
+\end{ThreePartTable}
+
+
+
+
+
+
+
+
+
+
+
+% OLD TABLE
+% \begin{table}[H]
+%  \begin{threeparttable}[b]
+%   \small
+%    \centering
+%     \begin{tabular}{p{3in}cccccc}
+%      \hline
+%      \textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
+%      \hline
+%      <<label=speciestable, echo=FALSE, results='asis'>>=
+%      #Sort species table first taxonomically, and then alphabetically by SName
+%      #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
+%      TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+%      speciestable$OrderVec <- speciestable$ELEMENT_TYPE
+%      speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
+%      speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
+%      speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
+%      
+%      #Recode Sensitive Species names
+%      speciestable$SNAME_or <- speciestable$SNAME
+%      SSct <- length(speciestable$SENSITIVE[speciestable$SENSITIVE == "Y"])
+%      SSOCid <- toupper(letters[1:SSct])
+%      j=0 #set the indexing for the sensitive species 
+%      for(i in 1:nrow(speciestable)){ 
+%        # replace common name if blank
+%        if(is.na(speciestable$SCOMNAME[i])){
+%          speciestable$SCOMNAME[i] <- "No Name Available"
+%        } 
+%        # remove double names for sensitive species of concern
+%        if(speciestable$SENSITIVE[i]=="Y"){
+%          j <- j + 1 # add one the sensitive species id
+%          speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
+%        } else {
+%          speciesstring <- paste0(speciestable$SCOMNAME[i]," (\\textit{",speciestable$SNAME[i],"}) ")
+%        }
+%        # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
+%        if(speciestable$SCOMNAME[i]==speciestable$SNAME[i] & speciestable$SENSITIVE[i]!="Y"){
+%          speciesstring <- paste0(speciestable$SCOMNAME[i])
+%        } 
+%        # replace the state status 'NA'
+%        if(is.na(speciestable$SPROT[i])){
+%          speciestable$SPROT[i] <- "--"
+%        } 
+%        if(is.na(speciestable$PBSSTATUS[i])){
+%          speciestable$PBSSTATUS[i] <- "--"
+%        }      
+%        # mask information for sensitive species
+%        if(speciestable$SENSITIVE[i]=="Y") {
+%          speciestable$SPROT[i] <- "--"
+%          speciestable$PBSSTATUS[i] <- "--"
+%          speciestable$GRANK[i] <- "--"
+%          speciestable$SRANK[i] <- "--"
+%          speciestable$icon[i] <- "Sensitive.png"
+%        }
+%        # concatenate and make the table row
+%        cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
+%      }
+% @       
+% 
+% <<Sensitivedb, echo=FALSE, results="hide">>=     
+%      # add coded sensitive species into "decoder" database table
+%      speciestable$SNAME[speciestable$SENSITIVE =="Y"] = paste("Sensitive Species of Concern",SSOCid)
+%      speciestable$SCODE <- speciestable$SNAME
+%      speciestable$SNAME <- speciestable$SNAME_or
+%      SensT <- speciestable[speciestable$SENSITIVE=="Y",]
+%      SensT <- SensT[c("NHA_JOIN_ID","EO_ID","ELCODE","SCODE","SNAME","SCOMNAME")]
+%      db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+%     # delete existing information for this site if it exists
+%     dbExecute(db_nha, paste("DELETE FROM nha_sensitivespeciesdecoder WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+%      dbAppendTable(db_nha, "nha_sensitivespeciesdecoder", SensT) # add in the new data
+%     dbDisconnect(db_nha) #disconnect
+% @
+%     \hline                      
+%     \end{tabular}
+%     \begin{footnotesize}
+%     \begin{tablenotes}
+%     \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
+%     \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
+%     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
+%      SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
+%      @
+%     \Sexpr{paste(SensitiveFNote)}
+%     \end{footnotesize}
+%   \end{threeparttable}  
+%  \end{table}  
 
 %%% Threats and Species Recommendations %%%
 \medskip
