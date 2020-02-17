@@ -134,10 +134,6 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-# p1_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P1F, sep="/")
-# p2_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P2F, sep="/")
-# p3_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P3F, sep="/")
-
 #site rank
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
