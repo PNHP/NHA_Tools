@@ -6,7 +6,7 @@
 \usepackage[margin=10pt,font=small]{caption}
 \usepackage{geometry}
 \usepackage{xcolor}
-%\usepackage{tabularx}
+\usepackage{longtable,booktabs,threeparttablex}
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -16,7 +16,7 @@
 \addbibresource{../../citations/PNHP_refs.bib}
 \usepackage{enumitem}
 \setlist{nolistsep}
-\usepackage{threeparttable}
+%\usepackage{threeparttable}
 \usepackage{lastpage}
 \usepackage{fancyhdr} %for headers,footers
 %\usepackage{float}
@@ -41,7 +41,7 @@
 }
 \rfoot{
  \small  
- \textcolor{gray}{page  \thepage   of  \pageref*{LastPage}}
+ \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
 }
 
 \begin{document}
@@ -55,12 +55,11 @@
 \medskip \\
 
 % % image
-\begin{wrapfigure}[13]{R}{0.5\textwidth}
-  \centering
-  \includegraphics[0.5\textwidth]{nha_photos$P1F}
-  \captionsetup{labelformat=empty, justification=centerlast}
+\begin{wrapfigure}{R}{0.5\textwidth} % [13]
+  \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %  
+  \captionsetup{labelformat=empty, justification=raggedright}
   <<label=captionfunction, echo=FALSE, results='asis'>>=
-  capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{", nha_photos$P1N,"}", sep=" "))
+  capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
   @
   \caption{\Sexpr{capfun}}
 \end{wrapfigure}
@@ -74,29 +73,53 @@
 This site has been rated as \Sexpr{nha_data$SITE_RANK} significant due 
 % calculates what text to say
 <<label=sigparagraph, echo=FALSE, results='asis'>>=
-if(nha_data$SITE_RANK=="Global" & spCount_GImperiled>0) {
+if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
   cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the commonwealth."))
-} else if(nha_data$SITE_RANK=="Regional" & spCount_GVulnerable>0) {
+} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0) {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
-}  else if(nha_data$SITE_RANK=="State" & spCount_GSecure>0) {
+}  else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occuring at the edge of the their range or loss of habitat.")
 }
 @
 The species tracked by PNHP present at this NHA include:
 \medskip
 % Species Table
-\begin{table}[h]
- \begin{threeparttable}[b]
-  \small
-   \centering
-    \begin{tabular}{p{3in}cccccc}
-     \hline
-     \textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{LastSeen}	& \textbf{Quality}\tnote{2} \\
-     \hline
+\begin{ThreePartTable}
+\renewcommand\TPTminimum{\textwidth}
+%% Arrange for "longtable" to take up full width of text block
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\setlength\tabcolsep{0pt}
+
+\begin{TableNotes}
+    \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
+    \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
+    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
+     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
+     @
+    \Sexpr{paste(SensitiveFNote)}
+\end{TableNotes}
+
+\begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
+\toprule
+\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
+%Country & N obs  & Total years & No degree & High school & Some college,+ & smth\tnote{a} & smth\tnote{b} \\
+%& & of education & & & & prestige score & income score \\ 
+\midrule
+\endhead
+
+\midrule[\heavyrulewidth]
+\multicolumn{7}{r}{\textit{table continued on next page}}\\
+\endfoot  
+
+\midrule[\heavyrulewidth]
+\insertTableNotes  % tell LaTeX where to insert the table-related notes
+\endlastfoot
+
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
      #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
-     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV", "P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
      speciestable$OrderVec <- speciestable$ELEMENT_TYPE
      speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
      speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
@@ -136,9 +159,10 @@ The species tracked by PNHP present at this NHA include:
          speciestable$PBSSTATUS[i] <- "--"
          speciestable$GRANK[i] <- "--"
          speciestable$SRANK[i] <- "--"
+         speciestable$icon[i] <- "Sensitive.png"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$Images[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
@@ -155,31 +179,20 @@ The species tracked by PNHP present at this NHA include:
      dbAppendTable(db_nha, "nha_sensitivespeciesdecoder", SensT) # add in the new data
     dbDisconnect(db_nha) #disconnect
 @
-    \hline                      
-    \end{tabular}
-    \begin{footnotesize}
-    \begin{tablenotes}
-    \item [1] See the PNHP website (\href{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}{http://www.naturalheritage.state.pa.us/RankStatusDef.aspx}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
-    \item [2] See NatureServe website (\href{http://www.natureserve.org/explorer/eorankguide.htm}{http://www.natureserve.org/explorer/eorankguide.htm}) for an explanation of quality ranks.
-    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
-     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
-     @
-    \Sexpr{paste(SensitiveFNote)}
-    \end{footnotesize}
-  \end{threeparttable}  
- \end{table}  
+\end{longtable}   
+\end{ThreePartTable}
+
 
 %%% Threats and Species Recommendations %%%
 \medskip
 \noindent
 \textbf{\underline{Threats and Species Recommendations}}\\\\
 \normalsize 
-\noindent
-\Sexpr{as.character(nha_data$ThreatsAndRecomendations)} Specific threats and stresses to the elements present at this site, as well as conservation actions, include:
+\noindent \Sexpr{as.character(nha_data$ThreatRecP)} Specific threats and stresses to the elements present at this site, as well as conservation actions, include:  
 \begin{itemize}
 <<echo=FALSE, results='asis'>>=
 for(t in 1:nrow(nha_threats)){
-  cat(paste0("\\item ",as.character(nha_threats$ThreatRec[t])))
+  cat(paste0("\\item ",as.character(nha_threats$TRB[t])))
 }
 @
 \end{itemize}
@@ -199,28 +212,46 @@ for(t in 1:nrow(nha_threats)){
   
 %%% References %%% 
 \noindent\textbf{\underline{References}}\\
+
+% % image
+\begin{wrapfigure}{R}{0.5\textwidth} % [13]
+  \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P2F}} %  
+  \captionsetup{labelformat=empty, justification=raggedright}
+  <<label=captionfunction2, echo=FALSE, results='asis'>>=
+  capfun2 <- as.character(paste(nha_photos$P2C, "\\textcolor{gray}{","Photo: ", nha_photos$P2N,"}\\\\", sep=" "))
+  @
+  \caption{\Sexpr{capfun2}}
+\end{wrapfigure}
+
+
 %\bibliographystyle{plain}
 \printbibliography[heading=none]
 
 
 
 
-
-
-<<Conditional23Pics, echo=F, results='asis'>>=
-## embed images 2 and 3, if they exist in photo database
-
-capfun2 <- as.character(paste(nha_photos$P2C, "\\textcolor{gray}{", nha_photos$P2N,"}", sep=" "))
-capfun3 <- as.character(paste(nha_photos$P3C, "\\textcolor{gray}{", nha_photos$P3N,"}", sep=" "))
-
-if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
-  photos <- paste0("\\\\")
-} else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
-    photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p2_path}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
-  } else {
-    photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
-  }
-cat(photos)
+% <<Conditional23Pics, echo=F, results='asis'>>=
+% ## embed images 2 and 3, if they exist in photo database
+% capfun2 <- as.character(paste(nha_photos$P2C, "\\textcolor{gray}{", nha_photos$P2N,"}", sep=" "))
+% capfun3 <- as.character(paste(nha_photos$P3C, "\\textcolor{gray}{", nha_photos$P3N,"}", sep=" "))
+% @
+% 
+% %# if(is.na(nha_photos$P2F) & is.na(nha_photos$P3F)) {
+% %#   photos <- paste0("\\\\")
+% %# } else if(is.na(nha_photos$P3F) & !is.na(nha_photos$P2F)){
+% %#     photos <- paste0("\\begin{figure}[h!] \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P2F}} \\captionsetup{labelformat=empty, justification=centerlast} \\caption{\\Sexpr{capfun2}} \\end{figure}")
+% %#   } else {
+% %#     photos <- paste0("\\begin{figure}[h!] \\centering \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{p3_path}} \\subcaption{\\Sexpr{capfun2}}\\label{fig:1a} \\end{subfigure} \\hspace{1 cm} \\begin{subfigure}[b]{0.4\\linewidth} \\centering \\includegraphics[width=\\linewidth]{\\Sexpr{nha_photos$P3F}} \\subcaption{\\Sexpr{capfun3}}\\label{fig:1b} \\end{subfigure} \\end{figure}")
+% %#   }
+% %# cat(photos)
+% %# @
+% % 
+% \begin{figure}[h!]
+% \centering
+% \includegraphics[height=15cm,keepaspectratio,]{\Sexpr{nha_photos$P2F}}
+% \captionsetup{labelformat=empty, justification=raggedright}
+% \caption{\Sexpr{capfun2}}
+% \end{figure}
 @
 
 \bigskip
