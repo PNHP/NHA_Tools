@@ -64,11 +64,11 @@ for (i in 1:length(PBs)){
 
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
-# delete existing site account info from this site, prior to overwriting with new info
-dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-# add in the new data
-dbAppendTable(db_nha, "nha_data", nha_siteaccount)
-dbDisconnect(db_nha)
+# # delete existing site account info from this site, prior to overwriting with new info
+# dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+# # add in the new data
+# dbAppendTable(db_nha, "nha_data", nha_siteaccount)
+# dbDisconnect(db_nha)
 
 # species table
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
@@ -87,6 +87,9 @@ speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
+
+# merge the species table with the taxonomic icons
+speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
 
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
@@ -126,7 +129,7 @@ dbDisconnect(db_nha)
 # writeLines(c(nha_References$Reference), fileConn)
 # close(fileConn)
 
-# picture
+# pictures
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
@@ -136,21 +139,39 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-p1_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P1F, sep="/")
-p2_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P2F, sep="/")
-p3_path <- paste(NHAdest, "DraftSiteAccounts", nha_foldername, "photos", nha_photos$P3F, sep="/")
 
-## Process the species names within the site description text
-namesitalic <- speciestable[which(speciestable$ELEMENT_TYPE!="C"),]$SNAME
-namesitalic <- namesitalic[!is.na(namesitalic)]
-vecnames <- namesitalic 
-namesitalic <- paste0("\\\\textit{",namesitalic,"}")                                                                                                                                              
-names(namesitalic) <- vecnames
-rm(vecnames)
-for(i in 1:length(namesitalic)){
-  nha_data$Description <- str_replace_all(nha_data$Description, namesitalic[i])
+####################################################################################
+# format various blocks of text to be formatted in terms of italics and bold font
+#         Note that  Etitalics vector is now loaded in paths and settings
+
+# italicize all SNAMEs in the descriptive text. 
+for(j in 1:length(ETitalics)){
+  nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
+}
+# italicize all SNAMEs in the threats and recommendations text. 
+for(j in 1:nrow(nha_threats)){
+  nha_threats$TRB[j] <- str_replace_all(nha_threats$TRB[j], ETitalics)
+}
+# italicize in photo captions
+if(!is.na(nha_photos$P1C)) {
+  nha_photos$P1C <- str_replace_all(nha_photos$P1C, ETitalics)
+} else {
+  print("No Photo 1 caption, moving on...")
+}
+if(!is.na(nha_photos$P2C)) {
+  nha_photos$P2C <- str_replace_all(nha_photos$P2C, ETitalics)
+} else {
+  print("No Photo 2 caption, moving on...")
+}
+if(!is.na(nha_photos$P3C)) {
+  nha_photos$P2C <- str_replace_all(nha_photos$P3C, ETitalics)
+} else {
+  print("No Photo 3 caption, moving on...")
 }
 
+
+
+# bold tracked species names
 namesbold <- speciestable$SCOMNAME
 namesbold <- namesbold[!is.na(namesbold)]
 vecnames <- namesbold 
@@ -163,22 +184,9 @@ for(i in 1:length(namesbold)){
 
 
 
-# italicize other species names in threats and stressors and brief description
-db <- dbConnect(SQLite(), dbname=TRdatabasename) # connect to the database
-ETitalics <- dbGetQuery(db, paste("SELECT * FROM SNAMEitalics") )
-dbDisconnect(db) # disconnect the db
-ETitalics <- ETitalics$ETitalics
-vecnames <- ETitalics 
-ETitalics <- paste0("\\\\textit{",ETitalics,"}") 
-names(ETitalics) <- vecnames
-rm(vecnames)
-#italicize the stuff
-for(j in 1:length(ETitalics)){
-  nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
-}
-for(j in 1:nrow(nha_threats)){
-  nha_threats$ThreatRec[j] <- str_replace_all(nha_threats$ThreatRec[j], ETitalics)
-}
+
+# escape hashtags
+#nha_data$SITE_NAME <- str_replace(nha_data$SITE_NAME, "#", "/#")
 
 
 ##############################################################################################################
@@ -187,4 +195,4 @@ setwd(paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"))
 pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
-setwd(here::here()) # return to the main wd 
+setwd(here::here()) # return to the main wd
