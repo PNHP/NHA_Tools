@@ -31,12 +31,10 @@ text1 <- as.character(text1)
 #text1 <- gsub("\r?\n|\r", " ", text1)  #ORIGINAL line
 text1 <- gsub("\n", "\\\\\\\\ \\\\par\\\\noindent ", text1)
 
-
 rm(text)
 
 #########################################################################
 #Create an NHA data table to extract site information into piece by piece
-
 nha_data <- as.data.frame(matrix(nrow=1, ncol=0))
 nha_data$NHA_JOIN_ID <- selected_nha$NHA_JOIN_ID
 nha_data$SITE_NAME <- selected_nha$SITE_NAME
@@ -49,6 +47,8 @@ dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuo
 # add in the new data
 dbAppendTable(db_nha, "nha_siteaccount", nha_data)
 dbDisconnect(db_nha)
+
+rm(selected_nha)
 ###############################################################################################################
 
 # bold and italic species names
@@ -70,8 +70,8 @@ dbDisconnect(db_nha)
  # dbSendStatement(db_nha, paste("UPDATE nha_siteaccount SET Description = ", sQuote(Description), " WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
 #dbDisconnect(db_nha)
 
+################################################################################################
 # Threats and Recommendations Bullets ##########################################################
-
 # Extract all the threat/rec bullets into a list and convert to a dataframe
 TRB <- rm_between(text1, '|BULL_B|', '|BULL_E|', fixed=TRUE, extract=TRUE)
 TRB <- ldply(TRB)
@@ -87,6 +87,8 @@ dbExecute(db_nha, paste("DELETE FROM nha_TRbullets WHERE NHA_JOIN_ID = ", sQuote
 # add in the new data
 dbAppendTable(db_nha, "nha_TRbullets", TRB)
 dbDisconnect(db_nha)
+
+rm(TRB)
 
 # References ###################################################################################################
 References <- rm_between(text1, '|REF_B|', '|REF_E|', fixed=TRUE, extract=TRUE)[[1]]
