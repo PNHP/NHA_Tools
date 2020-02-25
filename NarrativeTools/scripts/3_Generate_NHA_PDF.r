@@ -121,14 +121,6 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbDisconnect(db_nha)
 #nha_threats$ThreatRec <- gsub("&", "and", nha_threats$ThreatRec)
 
-# References
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_References <- dbGetQuery(db_nha, paste("SELECT * FROM nha_References WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
-# fileConn<-file(paste(NHAdest, "DraftSiteAccounts", nha_foldername, "ref.bib", sep="/"))
-# writeLines(c(nha_References$Reference), fileConn)
-# close(fileConn)
-
 # pictures
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
