@@ -193,7 +193,7 @@ The species tracked by PNHP present at this NHA include:
 \begin{itemize}
 <<echo=FALSE, results='asis'>>=
 for(t in 1:nrow(nha_threats)){
-  cat(paste0("\\item ",as.character(nha_threats$TRB[t])))
+  cat(paste0("\\item ",nha_threats$TRB[t]))#as.character()
 }
 @
 \end{itemize}
