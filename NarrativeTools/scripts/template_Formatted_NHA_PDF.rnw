@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc} %\UseRawInputEncoding
 \usepackage{fontspec}
 \setmainfont{Gill Sans MT}
+\pdfmapfile{=pdftex35.map} %I think this fixes some MikTex font reading issues
 \usepackage[margin=10pt,font=small]{caption}
 \usepackage{geometry}
 \usepackage{xcolor}
