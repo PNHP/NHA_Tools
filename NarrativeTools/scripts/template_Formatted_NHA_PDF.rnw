@@ -13,14 +13,14 @@
 \usepackage{graphicx}
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
-\addbibresource{../../citations/PNHP_refs.bib}
+%\addbibresource{../../citations/PNHP_refs.bib}
+\addbibresource{pnhp_refs.bib}
+%\addbibresource{P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/citationspnhp_refs}
 \usepackage{enumitem}
 \setlist{nolistsep}
-%\usepackage{threeparttable}
 \usepackage{lastpage}
 \usepackage{fancyhdr} %for headers,footers
-%\usepackage{float}
-% \usepackage{wrapfig}
+% \usepackage{float}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -213,6 +213,14 @@ for(t in 1:nrow(nha_threats)){
 %%% References %%% 
 \noindent\textbf{\underline{References}}\\
 
+
+
+%\bibliographystyle{plain}
+\printbibliography[heading=none]
+
+
+
+%%%%%%%%%%%%%%%%%%
 % % image
 \begin{wrapfigure}{R}{0.5\textwidth} % [13]
   \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P2F}} %  
@@ -222,10 +230,6 @@ for(t in 1:nrow(nha_threats)){
   @
   \caption{\Sexpr{capfun2}}
 \end{wrapfigure}
-
-
-%\bibliographystyle{plain}
-\printbibliography[heading=none]
 
 
 
