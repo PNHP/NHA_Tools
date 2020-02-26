@@ -20,7 +20,7 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Allegheny River Pool #6"
+nha_name <- "Allegheny River Pool #6" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 

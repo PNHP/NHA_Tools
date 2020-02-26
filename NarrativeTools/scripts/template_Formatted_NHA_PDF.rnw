@@ -11,6 +11,8 @@
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{url}
+\urlstyle{same}
 \usepackage{graphicx}
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
