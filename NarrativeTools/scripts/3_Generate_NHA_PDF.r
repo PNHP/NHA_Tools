@@ -46,7 +46,7 @@ protected_lands <- selected_nha_ProtectedLands[which(selected_nha_ProtectedLands
 if(nrow(protected_lands)==0){
   nha_data$PROTECTED_LANDS <- paste("This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements.")
 } else {
-  nha_data$PROTECTED_LANDS <- paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')
+  nha_data$PROTECTED_LANDS <- paste(protected_lands$PROTECTED_LANDS, collapse=', ')
 }
 
 ## Pull in political boundaries information #############
@@ -68,10 +68,10 @@ for (i in 1:length(PBs)){
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
 # # delete existing site account info from this site, prior to overwriting with new info
-# dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-# # add in the new data
-# dbAppendTable(db_nha, "nha_data", nha_siteaccount)
-# dbDisconnect(db_nha)
+ dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+# add in the new data
+dbAppendTable(db_nha, "nha_siteaccount", nha_data)
+dbDisconnect(db_nha)
 
 # species table
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
@@ -84,7 +84,7 @@ species_table_select <- selected_nha_relatedSpecies[which(selected_nha_relatedSp
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(species_table_select$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
-selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
+selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
 
 speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 
