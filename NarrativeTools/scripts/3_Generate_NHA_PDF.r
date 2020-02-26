@@ -24,6 +24,9 @@ nha_name <- "Allegheny River Pool #6"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
+nha_nameLatex <- gsub("#","\\\\#", nha_name)
+
+
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -183,5 +186,5 @@ for(i in 1:length(namesbold)){
 setwd(paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"))
 pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
-#deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
+deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd

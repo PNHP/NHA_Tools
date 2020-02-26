@@ -37,7 +37,7 @@
 %add footers
 \lfoot{
  \small   %small font. The double slashes is newline in fancyhdr
- \textcolor{gray}{\Sexpr{paste(as.character(nha_data$SITE_NAME), "Natural Heritage Area", sep=" ")} }
+ \textcolor{gray}{\Sexpr{paste(as.character(nha_nameLatex), "Natural Heritage Area", sep=" ")} }
 }
 \rfoot{
  \small  
@@ -50,7 +50,7 @@
 
 % Header
 \noindent
-\textbf{\LARGE{\Sexpr{paste(as.character(nha_data$SITE_NAME),"NHA",sep=" ")}}}\\
+\textbf{\LARGE{\Sexpr{paste(as.character(nha_nameLatex),"NHA",sep=" ")}}}\\
 \large Significance Rank: {\Sexpr{nha_siterank}}\
 \medskip \\
 
