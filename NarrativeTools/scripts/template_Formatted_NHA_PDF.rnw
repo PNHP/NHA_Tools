@@ -13,8 +13,8 @@
 \usepackage{graphicx}
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
-%\addbibresource{../../citations/PNHP_refs.bib}
-\addbibresource{pnhp_refs.bib}
+\addbibresource{../../citations/PNHP_refs.bib}
+%\addbibresource{pnhp_refs.bib}
 %\addbibresource{P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/citationspnhp_refs}
 \usepackage{enumitem}
 \setlist{nolistsep}
