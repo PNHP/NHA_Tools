@@ -164,8 +164,6 @@ if(!is.na(nha_photos$P3C)) {
   print("No Photo 3 caption, moving on...")
 }
 
-
-
 # bold tracked species names
 namesbold <- speciestable$SCOMNAME
 namesbold <- namesbold[!is.na(namesbold)]
@@ -176,9 +174,6 @@ rm(vecnames)
 for(i in 1:length(namesbold)){
   nha_data$Description <- str_replace_all(nha_data$Description, namesbold[i])
 }
-
-# escape hashtags
-#nha_data$SITE_NAME <- str_replace(nha_data$SITE_NAME, "#", "/#")
 
 
 ##############################################################################################################
