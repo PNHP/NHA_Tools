@@ -84,7 +84,7 @@ species_table_select <- selected_nha_relatedSpecies[which(selected_nha_relatedSp
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(species_table_select$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
-selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
+selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
 
 speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 
@@ -134,11 +134,7 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-
-####################################################################################
-# format various blocks of text to be formatted in terms of italics and bold font
-#         Note that  Etitalics vector is now loaded in paths and settings
-
+## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
 for(j in 1:length(ETitalics)){
   nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
@@ -174,7 +170,6 @@ rm(vecnames)
 for(i in 1:length(namesbold)){
   nha_data$Description <- str_replace_all(nha_data$Description, namesbold[i])
 }
-
 
 ##############################################################################################################
 ## Write the output document for the site ###############

@@ -186,7 +186,7 @@ The species tracked by PNHP present at this NHA include:
 %%% Threats and Species Recommendations %%%
 \medskip
 \noindent
-\textbf{\underline{Threats and Species Recommendations}}\\
+\textbf{\underline{Threats and Species Recommendations}}\\\\
 \normalsize 
 \noindent \Sexpr{as.character(nha_data$ThreatRecP)} Specific threats and stresses to the elements present at this site, as well as conservation actions, include:  
 \begin{itemize}
