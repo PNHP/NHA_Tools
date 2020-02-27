@@ -96,6 +96,10 @@ rnw_template <- "template_Formatted_NHA_PDF.rnw"
 taxaicon <- data.frame(c("Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png"),c("AAAA","","AB","","","","AM","","AF","","","","","IMBIV","","","P","","","",""), stringsAsFactors = FALSE)
 names(taxaicon) <- c("icon","ELEMENT_TYPE")
 
+# urls for the template
+url_PNHPrank <- "http://www.naturalheritage.state.pa.us/RankStatusDef.aspx"
+url_NSrank <- "http://www.natureserve.org/explorer/eorankguide.htm"
+
 
 # load italicized names from database to italicize other species names in threats and stressors and description
 db <- dbConnect(SQLite(), dbname=TRdatabasename) # connect to the database
