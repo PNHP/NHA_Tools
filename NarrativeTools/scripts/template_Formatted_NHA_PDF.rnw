@@ -54,7 +54,7 @@
 % Header
 \noindent
 \textbf{\LARGE{\Sexpr{paste(as.character(nha_nameLatex),"NHA",sep=" ")}}}\\
-\large Significance Rank: {\Sexpr{nha_siterank}}\
+\large A site of \underline{\Sexpr{nha_siterank} Significance} \
 \medskip \\
 
 % % image
