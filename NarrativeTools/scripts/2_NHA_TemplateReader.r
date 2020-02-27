@@ -90,30 +90,8 @@ dbDisconnect(db_nha)
 
 rm(TRB)
 
-# References ###################################################################################################
-References <- rm_between(text1, '|REF_B|', '|REF_E|', fixed=TRUE, extract=TRUE)[[1]]
-References <- ldply(References)
-References <- as.data.frame(References)
 
-RefCodes <- rm_between(text1, '|REFCODE_B|', '|REFCODE_E|', fixed=TRUE, extract=TRUE)[[1]]
-RefCodes <- ldply(RefCodes)
-RefCodes <- as.data.frame(RefCodes)
-
-References <- cbind(nha_data$NHA_JOIN_ID, RefCodes, References)
-names(References) <- c("NHA_JOIN_ID","RefCode","Reference")
-References$NHA_JOIN_ID <- as.character(References$NHA_JOIN_ID)
-References$RefCode <- as.character(References$RefCode)
-References$Reference <- as.character(References$Reference)
-
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-# delete existing references for this site if they exist
-dbExecute(db_nha, paste("DELETE FROM nha_References WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-# add in the new data
-dbAppendTable(db_nha, "nha_References", References)
-dbDisconnect(db_nha)
-
-
-
+##################
 DateTime <- Sys.time()
 #round(DateTime, unit="day") # to pull out just date--use to select and append vs overwrite lines
 
