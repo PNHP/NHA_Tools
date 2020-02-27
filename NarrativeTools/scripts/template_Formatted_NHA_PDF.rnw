@@ -40,7 +40,7 @@
 %add footers
 \lfoot{
  \small   %small font. The double slashes is newline in fancyhdr
- \textcolor{gray}{\Sexpr{paste(as.character(nha_nameLatex), "Natural Heritage Area", sep=" ")} }
+ \textcolor{gray}{\Sexpr{paste(as.character(nha_nameLatex), "Natural Heritage Area", sep=" ")}\\Pennsylvania Natural Heritage Program }
 }
 \rfoot{
  \small  
@@ -232,7 +232,7 @@ for(t in 1:nrow(nha_threats)){
 \begin{minipage}[c]{0.75\linewidth}
 
 \textit{Please cite this Natural Heritage Area as:} \\
-Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_data$SITE_NAME)} NHA. . Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: http://www.naturalheritage.state.pa.us/CNHI.aspx 
+Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. . Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
 
 \end{minipage}
 }

@@ -99,7 +99,7 @@ names(taxaicon) <- c("icon","ELEMENT_TYPE")
 # urls for the template
 url_PNHPrank <- "http://www.naturalheritage.state.pa.us/RankStatusDef.aspx"
 url_NSrank <- "http://www.natureserve.org/explorer/eorankguide.htm"
-
+url_NHApage <- "http://www.naturalheritage.state.pa.us/CNHI.aspx"
 
 # load italicized names from database to italicize other species names in threats and stressors and description
 db <- dbConnect(SQLite(), dbname=TRdatabasename) # connect to the database
