@@ -11,6 +11,7 @@
 
 import arcpy,os,sys,string
 from getpass import getuser
+import sqlite3 as lite
 
 arcpy.env.overwriteOutput = True
 
@@ -101,7 +102,7 @@ class Toolbox(object):
         self.label = "NHA Tools v3"
         self.alias = "NHA Tools v3"
         self.canRunInBackground = False
-        self.tools = [CreateNHAv3,FillAttributes]
+        self.tools = [CreateNHAv3,FillAttributes,SiteRankFill]
 
 ######################################################################################################################################################
 ## Begin create NHA tool - this tool creates the core and supporting NHAs and fills their initial attributes
@@ -514,3 +515,71 @@ class FillAttributes(object):
 
 ######################################################################################################################################################
 ######################################################################################################################################################
+
+######################################################################################################################################################
+## Begin Site Rank Fill Tool
+######################################################################################################################################################
+
+class SiteRankFill(object):
+    def __init__(self):
+        """Define the tool (tool name is the name of the class)."""
+        self.label = "3 Site Rank Fill Tool - Version 1"
+        self.description = ""
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        nha_core = arcpy.Parameter(
+            displayName = "Selected NHA Core Layer",
+            name = "nha_core",
+            datatype = "GPFeatureLayer",
+            parameterType = "Required",
+            direction = "Input")
+        nha_core.value = r'NHAEdit\NHA Core Habitat'
+
+        params = [nha_core]
+        return params
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, params):
+        return
+
+    def updateMessages(self, params):
+        return
+
+    def execute(self, params, messages):
+        nha_core = params[0].valueAsText
+        db = r'P:\Conservation Programs\Natural Heritage Program\ConservationPlanning\NaturalHeritageAreas\_NHA\z_Databases\NaturalHeritageAreas.sqlite'
+
+        con = lite.connect(db)
+
+        with con:
+            cur = con.cursor()
+
+        dictionary = {}
+        cur.execute('select NHA_JOIN_ID,site_score from nha_runrecord')
+        result = cur.fetchall()
+        for NHA_JOIN_ID,site_score in result:
+           dictionary[NHA_JOIN_ID] = site_score
+
+        with arcpy.da.UpdateCursor(nha_core,["NHA_JOIN_ID","SIG_RANK"]) as cursor:
+            for row in cursor:
+                for k,v in dictionary.items():
+                    if k==row[0]:
+                        if v == "Global":
+                            row[1]="G"
+                            cursor.updateRow(row)
+                        elif v == "Regional":
+                            row[1]="R"
+                            cursor.updateRow(row)
+                        elif v == "State":
+                            row[1]="S"
+                            cursor.updateRow(row)
+                        elif v == "Local":
+                            row[1]="L"
+                            cursor.updateRow(row)
+                        else:
+                            pass
+                    else:
+                        pass

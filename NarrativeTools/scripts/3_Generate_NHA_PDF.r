@@ -20,9 +20,12 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Allegheny River Pool #6"
+nha_name <- "Allegheny River Pool #6" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
+
+nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
+
 
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
@@ -121,14 +124,6 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbDisconnect(db_nha)
 #nha_threats$ThreatRec <- gsub("&", "and", nha_threats$ThreatRec)
 
-# References
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_References <- dbGetQuery(db_nha, paste("SELECT * FROM nha_References WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
-# fileConn<-file(paste(NHAdest, "DraftSiteAccounts", nha_foldername, "ref.bib", sep="/"))
-# writeLines(c(nha_References$Reference), fileConn)
-# close(fileConn)
-
 # pictures
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
@@ -139,11 +134,7 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-
-####################################################################################
-# format various blocks of text to be formatted in terms of italics and bold font
-#         Note that  Etitalics vector is now loaded in paths and settings
-
+## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
 for(j in 1:length(ETitalics)){
   nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
@@ -169,11 +160,14 @@ if(!is.na(nha_photos$P3C)) {
   print("No Photo 3 caption, moving on...")
 }
 
-
-
 # bold tracked species names
 namesbold <- speciestable$SCOMNAME
 namesbold <- namesbold[!is.na(namesbold)]
+namesbold_lower <- tolower(namesbold)
+namesbold_first <- namesbold_lower
+substr(namesbold_first, 1, 1) <- toupper(substr(namesbold_first, 1, 1))
+namesbold <- c(namesbold, namesbold_first, namesbold_lower)
+
 vecnames <- namesbold 
 namesbold <- paste0("\\\\textbf{",namesbold,"}") 
 names(namesbold) <- vecnames
@@ -182,17 +176,10 @@ for(i in 1:length(namesbold)){
   nha_data$Description <- str_replace_all(nha_data$Description, namesbold[i])
 }
 
-
-
-
-# escape hashtags
-#nha_data$SITE_NAME <- str_replace(nha_data$SITE_NAME, "#", "/#")
-
-
 ##############################################################################################################
 ## Write the output document for the site ###############
 setwd(paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"))
 pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
-#deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
+deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
