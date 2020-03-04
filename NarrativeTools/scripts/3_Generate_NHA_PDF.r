@@ -20,9 +20,12 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Allegheny River Pool #6"
+nha_name <- "Allegheny River Pool #6" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
+
+nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
+
 
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
@@ -43,7 +46,7 @@ protected_lands <- selected_nha_ProtectedLands[which(selected_nha_ProtectedLands
 if(nrow(protected_lands)==0){
   nha_data$PROTECTED_LANDS <- paste("This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements.")
 } else {
-  nha_data$PROTECTED_LANDS <- paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')
+  nha_data$PROTECTED_LANDS <- paste(protected_lands$PROTECTED_LANDS, collapse=', ')
 }
 
 ## Pull in political boundaries information #############
@@ -65,10 +68,10 @@ for (i in 1:length(PBs)){
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
 # # delete existing site account info from this site, prior to overwriting with new info
-# dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
-# # add in the new data
-# dbAppendTable(db_nha, "nha_data", nha_siteaccount)
-# dbDisconnect(db_nha)
+ dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+# add in the new data
+dbAppendTable(db_nha, "nha_siteaccount", nha_data)
+dbDisconnect(db_nha)
 
 # species table
 # open the related species table and get the rows that match the NHA join ids from the selected NHAs
@@ -81,7 +84,7 @@ species_table_select <- selected_nha_relatedSpecies[which(selected_nha_relatedSp
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(species_table_select$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
-selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
+selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) 
 
 speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 
@@ -121,14 +124,6 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 dbDisconnect(db_nha)
 #nha_threats$ThreatRec <- gsub("&", "and", nha_threats$ThreatRec)
 
-# References
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_References <- dbGetQuery(db_nha, paste("SELECT * FROM nha_References WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
-# fileConn<-file(paste(NHAdest, "DraftSiteAccounts", nha_foldername, "ref.bib", sep="/"))
-# writeLines(c(nha_References$Reference), fileConn)
-# close(fileConn)
-
 # pictures
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
@@ -139,11 +134,7 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-
-####################################################################################
-# format various blocks of text to be formatted in terms of italics and bold font
-#         Note that  Etitalics vector is now loaded in paths and settings
-
+## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
 for(j in 1:length(ETitalics)){
   nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
@@ -169,11 +160,14 @@ if(!is.na(nha_photos$P3C)) {
   print("No Photo 3 caption, moving on...")
 }
 
-
-
 # bold tracked species names
 namesbold <- speciestable$SCOMNAME
 namesbold <- namesbold[!is.na(namesbold)]
+namesbold_lower <- tolower(namesbold)
+namesbold_first <- namesbold_lower
+substr(namesbold_first, 1, 1) <- toupper(substr(namesbold_first, 1, 1))
+namesbold <- c(namesbold, namesbold_first, namesbold_lower)
+
 vecnames <- namesbold 
 namesbold <- paste0("\\\\textbf{",namesbold,"}") 
 names(namesbold) <- vecnames
@@ -181,13 +175,6 @@ rm(vecnames)
 for(i in 1:length(namesbold)){
   nha_data$Description <- str_replace_all(nha_data$Description, namesbold[i])
 }
-
-
-
-
-# escape hashtags
-#nha_data$SITE_NAME <- str_replace(nha_data$SITE_NAME, "#", "/#")
-
 
 ##############################################################################################################
 ## Write the output document for the site ###############
