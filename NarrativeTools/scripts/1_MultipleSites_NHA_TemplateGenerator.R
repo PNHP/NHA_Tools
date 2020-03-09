@@ -31,6 +31,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 #Load list of NHAs that you wish to generate site reports for
 NHAlist_file <- ("AlreadyRun.csv")
 NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
+#NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -48,7 +49,7 @@ Site_Name_List <- as.list(Site_Name_List)
 SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
-Site_NHAJoinID_List <-as.character(NHA_list$NHA_join_ID)
+Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
 SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
@@ -86,6 +87,13 @@ for (i in 1:length(Site_ID_list)) {
 }
 
 PoliticalBoundaries_list
+
+#check to see if political boundaries have been generated for these NHAs
+# nrowPB <- list()
+# for (i in 1:length(PoliticalBoundaries_list)){
+#   nrowPB[[i]] <- nrow(PoliticalBoundaries_list[[i]])
+# }
+# nrowPB
 ####################################################
 ## Build the Species Table #########################
 
@@ -105,11 +113,16 @@ species_table_select #list of species tables
 
 #create one big data frame first of all the EOIDs across all the selected NHAs
 speciestable <- bind_rows(species_table_select, .id = "column_label")
+speciestable[which(speciestable$EO_ID==10936),]
+speciestable[52,]
 
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
+#check if you get an error, in case there is missing data for anything cbind(speciestable$EO_ID, speciestable$NHA_JOIN_ID) speciestable$EO_ID[181] <- 24075
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
-selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps) #select subset of columns from EO pointrep database
+selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK','GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps)
+
+#select subset of columns from EO pointrep database
 
 #if this select command does not work (which sometimes happens to me?), try this method, which will work
 #selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS', 'SENSITV_SP', 'SENSITV_EO'))
@@ -161,6 +174,16 @@ for (i in 1:length(SD_speciesTable)) {
       }
     }}
 
+#patch fix for now--change the Grank of goldenseal and ginseng so that it doesn't break the rank calculator
+
+for (i in 1:length(SD_speciesTable)) {
+  for(j in 1:nrow(SD_speciesTable[[i]])){
+    if(SD_speciesTable[[i]][j,]$ELCODE=="PDARA09010"){
+      SD_speciesTable[[i]][j,]$GRANK <- "G4"
+    } else if (SD_speciesTable[[i]][j,]$ELCODE=="PDRAN0F010"){
+      SD_speciesTable[[i]][j,]$GRANK <- "G4" }
+  }}
+
 #################################################
 ### Pull out info from Biotics for each site
 
@@ -196,12 +219,16 @@ for (i in 1:length(SD_speciesTable)) {
 
 sigrankspecieslist <- SD_speciesTable #so if things get weird, you only have to come back to this step
 
+
 #remove species which are not included in thesite ranking matrices--GNR, SNR, SH/Eo Rank H, etc. 
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
                              function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
 
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
                              function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
+
+sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GU"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GU
 
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
                              function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$SRANK!="SNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are SNR
@@ -225,6 +252,7 @@ sigrankspecieslist <- lapply(seq_along(sigrankspecieslist),
 
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
                              function(x) merge(sigrankspecieslist[[x]], nha_EORANKweights, by="EORANK"))
+
 
 #Calculate rarity scores for each species within each table
 RarityScore <- function(x, matt) {
