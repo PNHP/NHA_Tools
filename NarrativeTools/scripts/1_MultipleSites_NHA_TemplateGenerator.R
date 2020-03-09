@@ -30,8 +30,8 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 
 #Load list of NHAs that you wish to generate site reports for
 NHAlist_file <- ("AlreadyRun.csv")
-NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
-#NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
+#NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
+NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -43,13 +43,14 @@ nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 
 #Select larger number of sites
 #Method A) If using site names (but this gets hung up on apostrophes)
-NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-Site_Name_List <- as.vector(NHA_list$SITE_NAME)
-Site_Name_List <- as.list(Site_Name_List)
-SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
+# NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
+# Site_Name_List <- as.vector(NHA_list$SITE_NAME)
+# Site_Name_List <- as.list(Site_Name_List)
+# SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 
 #Method B) Or use NHA join ID 
 Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
+NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
 SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
@@ -403,16 +404,14 @@ ELCODE_TR[[i]] <- ElementTR[[i]] %>%
 
 #convert geometry to simple features for the map
 slnha <- list()
-nha_sf_list <- list()
 
 nha_sf_list <- arc.data2sf(selected_nhas)
 
-a <- st_area(nha_sf_list) #calculate area
-a <- a*0.000247105 #convert m2 to acres
-selected_nhas$Acres <- as.numeric(a)
+nha_sf_listPro <- st_transform(nha_sf_list, 4326)
 
-mtype <- 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
-basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type=mtype, ext=1.5, use.colortable=FALSE))
+
+mtype <- 'hhttp://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
+basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type="esri", ext=1.5, use.colortable=FALSE))
 
 # plot the maps
 nha_map <- list()

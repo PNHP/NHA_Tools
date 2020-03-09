@@ -11,6 +11,10 @@
 #-------------------------------------------------------------------------------
 #Build SQL queries for NHA database to ask the questions you want answered
 
+
+# load in the paths and settings file (which contains the rest of the libraries needed)
+source(here::here("scripts", "0_PathsAndSettings.r"))
+
 #Q: what sites are completed, not published in SW (and thus ready for NHA templates to be generated?)
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
