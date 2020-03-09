@@ -406,10 +406,6 @@ slnha <- list()
 
 nha_sf_list <- arc.data2sf(selected_nhas)
 
-a <- st_area(nha_sf_list) #calculate area
-a <- a*0.000247105 #convert m2 to acres
-selected_nhas$Acres <- as.numeric(a)
-
 mtype <- 'hhttp://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
 basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type="mtype", ext=1.5, use.colortable=FALSE))
 
