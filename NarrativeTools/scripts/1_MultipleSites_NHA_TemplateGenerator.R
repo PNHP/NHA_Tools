@@ -35,23 +35,30 @@ NHA_list <- Notemplates #list of NHAs to run templates for, generated from query
 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
-#if you are just running a few sites, you can select individual site by name or NHA join id:
-#selected_nhas <- arc.select(nha, where_clause="SITE_NAME='Buffalo Creek South' AND STATUS = 'NP'")
-#selected_nhas <- arc.select(nha, where_clause="NHA_JOIN_ID IN('alj86800')") 
-#Site_Name_List <- as.vector(selected_nhas$SITE_NAME)
-#Site_Name_List <- as.list(Site_Name_List)
 
-#Select larger number of sites
-#Method A) If using site names (but this gets hung up on apostrophes)
-# NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-# Site_Name_List <- as.vector(NHA_list$SITE_NAME)
-# Site_Name_List <- as.list(Site_Name_List)
-# SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
+print("Enter a number to select a method of selecting NHAs:")
+print("- 1: select a single site by name")
+print("- 2: select a large number of sites by name")
+print("- 3: select a large number of sites by NHA join id")
+# default to "3"
+n <- 3
 
-#Method B) Or use NHA join ID 
-Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
-NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')")
+if(n==1){ #if you are just running a few sites, you can select individual site by name or NHA join id:
+  selected_nhas <- arc.select(nha, where_clause="SITE_NAME='Buffalo Creek South' AND STATUS = 'NP'")
+  #selected_nhas <- arc.select(nha, where_clause="NHA_JOIN_ID IN('alj86800')") 
+  Site_Name_List <- as.vector(selected_nhas$SITE_NAME)
+  Site_Name_List <- as.list(Site_Name_List)
+}else if(n==2){ #Select larger number of sites
+  #Method A) If using site names (but this gets hung up on apostrophes)
+  # NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
+  # Site_Name_List <- as.vector(NHA_list$SITE_NAME)
+  # Site_Name_List <- as.list(Site_Name_List)
+  # SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
+}else if(n==3){ #Method B) Or use NHA join ID 
+  Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
+  NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
+  SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')") 
+}
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
 dim(selected_nhas) #check how many records are returned to ensure it meets expectations
