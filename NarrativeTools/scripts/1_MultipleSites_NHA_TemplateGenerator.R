@@ -36,6 +36,7 @@ NHA_list <- Notemplates #list of NHAs to run templates for, generated from query
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 
+# choose the sites you want to work with
 print("Enter a number to select a method of selecting NHAs:")
 print("- 1: select a single site by name")
 print("- 2: select a large number of sites by name")
