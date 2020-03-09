@@ -181,25 +181,25 @@ If you add any information that is supported by an additional reference, please 
 Please indicate whether the information below is correct. Use Word comments to flag any issues.  
 ``` {r format protected lands and political boundaries lists, echo=FALSE}
 
-#join tables and report threats and recs for selected species
+#format protected lands and political boundaries lists
 
-PBs <- split(PoliticalBoundaries, PoliticalBoundaries$COUNTY)
+# PBs <- split(PoliticalBoundaries, PoliticalBoundaries$COUNTY)
+# 
+# munil <- list()
+# 
+# for(i in 1:length(PBs)){
+# munil[[i]] <- unique(PBs[[i]]$MUNICIPALITY)  
+# }
+# 
+# printCounty <- list()
+# for (i in 1:length(PBs)){
+# printCounty[[i]]  <- paste0(PBs[[i]]$COUNTY[1], " County",": ", paste(munil[[i]], collapse=', '))  
+# }
 
-munil <- list()
-
-for(i in 1:length(PBs)){
-munil[[i]] <- unique(PBs[[i]]$MUNICIPALITY)  
-}
-
-printCounty <- list()
-for (i in 1:length(PBs)){
-printCounty[[i]]  <- paste0(PBs[[i]]$COUNTY[1], " County",": ", paste(munil[[i]], collapse=', '))  
-}
-
-
+#`r paste(printCounty, collapse='; ')` 
 ```
 
-**Municipalities:** `r paste(printCounty, collapse='; ')`  
+**Municipalities:** Currently NA
 **USGS quads:** `r selectedNhas$USGS_QUAD`  
 **Previous CNHI reference:** `r selectedNhas$OLD_SITE_NAME`  
 **Associated NHAs:** `r selectedNhas$ASSOC_NHA`   
