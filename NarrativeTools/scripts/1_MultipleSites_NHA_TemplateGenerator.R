@@ -31,7 +31,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 #Load list of NHAs that you wish to generate site reports for
 NHAlist_file <- ("AlreadyRun.csv")
 NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
-#NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
+NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -403,7 +403,6 @@ ELCODE_TR[[i]] <- ElementTR[[i]] %>%
 
 #convert geometry to simple features for the map
 slnha <- list()
-nha_sf_list <- list()
 
 nha_sf_list <- arc.data2sf(selected_nhas)
 
@@ -411,8 +410,8 @@ a <- st_area(nha_sf_list) #calculate area
 a <- a*0.000247105 #convert m2 to acres
 selected_nhas$Acres <- as.numeric(a)
 
-mtype <- 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
-basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type=mtype, ext=1.5, use.colortable=FALSE))
+mtype <- 'hhttp://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
+basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type="mtype", ext=1.5, use.colortable=FALSE))
 
 # plot the maps
 nha_map <- list()
