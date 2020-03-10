@@ -182,30 +182,31 @@ Please indicate whether the information below is correct. Use Word comments to f
 ``` {r format protected lands and political boundaries lists, echo=FALSE}
 
 #format protected lands and political boundaries lists
-
-# PBs <- split(PoliticalBoundaries, PoliticalBoundaries$COUNTY)
-# 
-# munil <- list()
-# 
-# for(i in 1:length(PBs)){
-# munil[[i]] <- unique(PBs[[i]]$MUNICIPALITY)  
-# }
-# 
-# printCounty <- list()
-# for (i in 1:length(PBs)){
-# printCounty[[i]]  <- paste0(PBs[[i]]$COUNTY[1], " County",": ", paste(munil[[i]], collapse=', '))  
-# }
-
-#`r paste(printCounty, collapse='; ')` 
+if(nrow(PoliticalBoundaries) >0){
+ PBs <- split(PoliticalBoundaries, PoliticalBoundaries$COUNTY)
+ 
+ munil <- list()
+ 
+ for(i in 1:length(PBs)){
+ munil[[i]] <- unique(PBs[[i]]$MUNICIPALITY)  
+ }
+ 
+ printCounty <- list()
+ for (i in 1:length(PBs)){
+ printCounty[[i]]  <- paste0(PBs[[i]]$COUNTY[1], " County",": ", paste(munil[[i]], collapse=', '))  
+ }
+} else if(nrow(PoliticalBoundaries)==0) {
+  printCounty <- "Political boundaries information was not calculated yet for this site"
+}
 ```
 
-**Municipalities:** Currently NA
+**Municipalities:** `r paste(printCounty, collapse='; ')`  
 **USGS quads:** `r selectedNhas$USGS_QUAD`  
 **Previous CNHI reference:** `r selectedNhas$OLD_SITE_NAME`  
 **Associated NHAs:** `r selectedNhas$ASSOC_NHA`   
 **Overlapping Protected Lands:** `r paste(ProtectedLands$PROTECTED_LANDS, collapse=', ')`    
 **Percent of NHA Protected:** `r sum(ProtectedLands$PERCENT_)`%        
-**Acreage:** `r signif(selectedNhas$Acres, digits=0)` acres
+**Acreage:** `r signif(selectedNhas$ACRES, digits=0)` acres
 
 Please cite this Natural Heritage Area as:  
 Pennsylvania Natural Heritage Program. `r format(Sys.Date(), "%Y")`. `r as.character(selectedNhas$SITE_NAME)` NHA. Created on `r format(Sys.Date(), "%d %b %Y")`. Available at: http://www.naturalheritage.state.pa.us/CNHI.aspx
@@ -215,8 +216,14 @@ Pennsylvania Natural Heritage Program. `r format(Sys.Date(), "%Y")`. `r as.chara
 
 # Map  
 
-![Core habitat boundaries of `r selectedNhas$SITE_NAME` NHA](`r paste(NHAdest2, "/", nhaFoldername,"_tempmap.png",sep="")`)
+```{r,include a map image, echo=FALSE}
+#knitr::include_graphics(paste(MapPath, "/", MapFile,sep=""))
+```
 
+Refer to the map for this site here, and please ignore both the brief description text AND the significance rank in this version of the map, they are incorrect because I messed up something with the dynamic text:  
+[Map](`r paste(MapPath,"/", MapFile, sep="")`)  
+
+<br><br><br><br>
 
 # Photos    
 
