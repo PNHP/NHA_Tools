@@ -11,6 +11,8 @@
 #-------------------------------------------------------------------------------
 #Build SQL queries for NHA database to ask the questions you want answered
 
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+require(here)
 
 # load in the paths and settings file (which contains the rest of the libraries needed)
 source(here::here("scripts", "0_PathsAndSettings.r"))
@@ -36,8 +38,15 @@ nha_indb <- dbGetQuery(db_nha, "SELECT * FROM nha_runrecord") #select all rows o
 dbDisconnect(db_nha)
 
 Notemplates <- subset(selected_nhas, !(selected_nhas$NHA_JOIN_ID %in% nha_indb$NHA_JOIN_ID))
-Notemplates <- subset(nha_indb, nha_indb$date_run == "2020-03-04")
+Notemplates <- subset(nha_indb, nha_indb$date_run == "2020-03-04") #or alternate, select by diff paramater
 Notemplates$NHA_JOIN_ID
 #Notemplates==dataframe of NHAs to run template generator for
 
+#Pull in list of NHAs w/ political boundaries and then check against the list of sites w/o templates, to only run sites with political boundaries defined AND lacking templates
+
+PBs <- read.csv("PB_list.csv")
+
+PBs_list <- unique(PBs$NHA_JOIN_ID)
+
+Notemplates <- Notemplates[which(Notemplates$NHA_JOIN_ID %in% PBs_list),]
 

@@ -350,9 +350,11 @@ summary(as.factor(selected_nhas$site_score)) #manual check step: take a look at 
 #Build pieces needed for each site report
 
 #generate list of folder paths and file names for selected NHAs
+Site_Name_Listt <- Site_Name_List[match(selected_nhas$SITE_NAME, Site_Name_List)]
+
 nha_foldername_list <- list()
-for (i in 1:length(Site_Name_List)) {
-  nha_foldername_list[[i]] <- gsub(" ", "", Site_Name_List[i], fixed=TRUE)
+for (i in 1:length(Site_Name_Listt)) {
+  nha_foldername_list[[i]] <- gsub(" ", "", Site_Name_Listt[i], fixed=TRUE)
   nha_foldername_list[[i]] <- gsub("#", "", nha_foldername_list[i], fixed=TRUE)
   nha_foldername_list[[i]] <- gsub("'", "", nha_foldername_list[i], fixed=TRUE)
 }
@@ -408,33 +410,30 @@ ELCODE_TR[[i]] <- ElementTR[[i]] %>%
 
 
 ######################################################
-# make the maps
+# make the maps--after being exported as map series
 
-#convert geometry to simple features for the map
-slnha <- list()
+MapPath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_BaseImages/draft_NHAmaps"
 
-nha_sf_list <- arc.data2sf(selected_nhas)
+Map.List <- list.files(path=MapPath)
 
-nha_sf_listPro <- st_transform(nha_sf_list, 4326)
-
-
-mtype <- 'hhttp://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?'
-basetiles <- sapply(seq_along(nha_sf_list$geom), function(x) tmaptools::read_osm(nha_sf_list$geom[x], type="esri", ext=1.5, use.colortable=FALSE))
-
-# plot the maps
-nha_map <- list()
-for (i in 1:length(nha_sf_list$geom)) {
-tmap_mode("plot")
-nha_map[[i]] <- tm_shape(basetiles[[i]], unit="m") +
-  tm_rgb() +
-  tm_shape(nha_sf_list[i,]) +
-  tm_borders("red", lwd=1.5)+
-  tm_legend(show=FALSE) + 
-  tm_layout(attr.color="white") +
-  tm_compass(type="arrow", position=c("left","bottom")) +
-  tm_scale_bar(position=c("center","bottom"))
-tmap_save(nha_map[[i]], filename=paste(NHAdest1[i], "/", nha_foldername_list[[i]],"_tempmap.png",sep=""), units="in", width=7) 
+#create a vector to use for matching the file names to the site names
+Map.Listm <- NULL
+for (i in 1:length(Map.List)) {
+  Map.Listm[i] <- gsub("Map__", "", Map.List[i], fixed=TRUE)
+  Map.Listm[i] <- gsub("_", "", Map.Listm[i], fixed=TRUE)
+  Map.Listm[i] <- gsub(".pdf", "", Map.Listm[i], fixed=TRUE)
 }
+Maps <- as.data.frame(cbind(Map.List,Map.Listm))
+
+Maps <- Maps[order(Maps$Map.Listm),]
+
+# for (i in 1:length(selected_nhas$SITE_NAME)){
+#   selected_nhas$SITE_NAME[i] <- gsub("'","", selected_nhas$SITE_NAME[i], fixed=TRUE)
+# }
+
+Mapss <- Maps[which(Maps$Map.Listm %in% selected_nhas$SITE_NAME),]
+check <- selected_nhas[which(!selected_nhas$SITE_NAME %in% Mapss$Map.Listm),]
+Mapss <- Mapss[match(selected_nhas$SITE_NAME,Mapss$Map.Listm),]
 
 ###################################################################
 #Write the output R markdown document for each site, all at once 
@@ -450,18 +449,11 @@ for (i in 1:length(nha_filename_list)) {
   SiteRank1 <- SiteRank[[i]]
   PoliticalBoundaries <- PoliticalBoundaries_list[[i]]
   ProtectedLands <- protected_lands_list[[i]]
+  MapFile <- as.character(Mapss$Map.List[i])
 rmarkdown::render(input=here::here("scripts","template_NHAREport_part1v2.Rmd"), output_format="word_document", 
                   output_file=nha_filename_list[[i]],
                   output_dir=NHAdest1[i])
 }  
-
-# delete the map, after its included in the markdown
-
-for (i in 1:length(nha_filename_list)){
-fn <- paste(NHAdest1[i], "/", nha_foldername_list[i],"_tempmap.png",sep="")
-if (file.exists(fn)) #Delete file if it exists
-  file.remove(fn)
-}
 
 ####################################################
 #output data about NHAs with completed templates to database and summary sheets
@@ -486,19 +478,19 @@ plantperc <- function(x) {
 }
 
 musselperc <- function(x){
-  u <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE == 'U',])
+  u <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE == 'IMBIV',])
   ut <- nrow(species_table_select[[x]])
   u/ut
 }
 
 insectperc <- function(x){
-  i <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE %in%  c('IM','IB','IA','ID','IT'),])
+  i <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE %in%  c('IICOL02', 'IIODO', 'IILEP', 'IITRI', 'IIPLE', 'IIHYM', 'IIEPH', 'IIORT'),])
   it <- nrow(species_table_select[[x]])
   i/it
 }
   
 herpperc <- function(x){
-  h <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE %in%  c('R','A'),])
+  h <- nrow(species_table_select[[x]][species_table_select[[x]]$ELEMENT_TYPE %in%  c('AR','AAAA', 'AAAB'),])
   ht <- nrow(species_table_select[[x]])
   h/ht
 }
@@ -523,7 +515,7 @@ nha_data$nha_filename <- unlist(nha_filename_list)
 
 nha_data$nha_folderpath <- NHAdest1
 nha_data$nha_foldername <- unlist(nha_foldername_list)
-nha_sum <- nha_data[,c("NHA_JOIN_ID","SITE_NAME","COUNTY","nha_folderpath", "site_score")]
+nha_sum <- nha_data[,c("NHA_JOIN_ID","SITE_NAME","nha_folderpath", "site_score", "Template_Created")]
 nha_sum <- cbind(nha_sum, EO_sumtable)
 dbAppendTable(db_nha, "nha_sitesummary", nha_sum) 
 
