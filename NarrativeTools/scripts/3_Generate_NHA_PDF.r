@@ -16,6 +16,9 @@
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
   require(here)
 
+# clear the environment
+rm(list = ls())
+
 # load in the paths and settings file
 source(here::here("scripts","0_PathsAndSettings.r"))
 
