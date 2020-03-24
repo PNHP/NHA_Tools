@@ -31,13 +31,10 @@ databasename <- paste(databasepath,databasename,sep="/")
 
 
 
-
 ##################################################################################################################################
 #Import current Element Tracking (ET) file into NHA database
 
-ET_path <- "P://Conservation Programs/Natural Heritage Program/Data Management/Biotics Database Areas/Element Tracking/current element lists"
-
-# this is the path to the element tracking list folder on the p-drive in Pittsburgh.
+ET_path <- "P://Conservation Programs/Natural Heritage Program/Data Management/Biotics Database Areas/Element Tracking/current element lists" # this is the path to the element tracking list folder on the p-drive in Pittsburgh.
 
 # get the threats template
 ET_file <- list.files(path=ET_path, pattern=".xlsx$")  # --- make sure your excel file is not open.
@@ -60,13 +57,7 @@ ET <- ET[which(ET$TRACKING.STATUS=="Y"|ET$TRACKING.STATUS=="W"),]
 
 # rename columns to match geodatabase names, where overlap occurs 
 
-names(ET) <- c("Element.Subnational.ID","ELCODE","SNAME","SCOMNAME","G_RANK","S_RANK","SRANK.CHANGE.DATE","SRANK.REVIEW.DATE","TRACKING.STATUS","PA.FED.STATUS","S_PROTECTI","PBSSTATUS","PBS.DATE","PBS.QUALIFIER","SGCN.STATUS","SGCN.COMMENTS","SENSITIVE_","AQUATIC.INDICATOR","ER.RULE")
-
-names(ET)[names(ET) == "SCIENTIFIC.NAME"] <- "SNAME"
-names(ET)[names(ET) == "COMMON.NAME"] <- "SCOMNAME"
-names(ET)[names(ET) == "G.RANK"] <- "G_RANK"
-names(ET)[names(ET) == "S.RANK"] <- "S_RANK"
-names(ET)[names(ET) == "SENSITIVE.SPECIES"] <- "SENSITIVE_"
+names(ET) <- c("ELSubID","ELCODE","SNAME","SCOMNAME","G_RANK","S_RANK","SRANK.CHANGE.DATE","SRANK.REVIEW.DATE","TRACKING.STATUS","PA.FED.STATUS","S_PROTECTI","PBSSTATUS","PBS.DATE","PBS.QUALIFIER","SGCN.STATUS","SGCN.COMMENTS","SENSITIVE_","AQUATIC.INDICATOR","ER.RULE","InER?")
 
 # change dates from excel format to rest of the world format (assuming we are working w/ Excel 2010)
 ET$SRANK.CHANGE.DATE <- convertToDate(ET$SRANK.CHANGE.DATE, origin="1900-01-01")
