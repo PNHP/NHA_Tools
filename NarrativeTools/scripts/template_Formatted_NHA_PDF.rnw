@@ -57,15 +57,28 @@
 \large A site of \underline{\Sexpr{nha_siterank} Significance} \
 \medskip \\
 
-% % image
-\begin{wrapfigure}{R}{0.5\textwidth} % [13]
-  \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %  
-  \captionsetup{labelformat=empty, justification=raggedright}
-  <<label=captionfunction, echo=FALSE, results='asis'>>=
+% image
+<<label=topimage, echo=FALSE, results='asis'>>=
+if(!is.na(nha_photos$P1N)){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{",nha_photos$P1F,"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
-  @
-  \caption{\Sexpr{capfun}}
-\end{wrapfigure}
+  cat(paste0("\\caption{",capfun,"} \n"))
+  cat("\\end{wrapfigure} \n")
+} else if(is.na(nha_photos$P1N)){
+ cat("% no image present so nothing is added")#do nothing
+}
+@
+
+% \begin{wrapfigure}{R}{0.5\textwidth} % [13]
+%   \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %
+%   \captionsetup{labelformat=empty, justification=raggedright}
+%   <<label=captionfunction, echo=FALSE, results='asis'>>=
+%   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
+%   @
+%   \caption{\Sexpr{capfun}}
+% \end{wrapfigure}
 
 
 % Site Description
