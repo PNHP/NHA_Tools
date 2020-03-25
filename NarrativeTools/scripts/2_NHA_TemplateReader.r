@@ -9,7 +9,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
-nha_name <- "Cramer Pike"
+nha_name <- "Carnahan Run at Stitts Run Road"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -22,7 +22,7 @@ selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "A
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
 NHA_file
 # select the file number from the list below
-n <- 2
+n <- 1
 NHA_file <- NHA_file[n]
 # create the path to the whole file!
 NHAdest1 <- paste(NHAdest,"DraftSiteAccounts", nha_foldername, NHA_file, sep="/")
