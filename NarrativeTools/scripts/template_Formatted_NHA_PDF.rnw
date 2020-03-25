@@ -71,15 +71,6 @@ if(!is.na(nha_photos$P1N)){
 }
 @
 
-% \begin{wrapfigure}{R}{0.5\textwidth} % [13]
-%   \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %
-%   \captionsetup{labelformat=empty, justification=raggedright}
-%   <<label=captionfunction, echo=FALSE, results='asis'>>=
-%   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
-%   @
-%   \caption{\Sexpr{capfun}}
-% \end{wrapfigure}
-
 
 % Site Description
 \normalsize
