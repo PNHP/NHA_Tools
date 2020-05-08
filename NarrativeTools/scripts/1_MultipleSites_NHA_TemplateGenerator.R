@@ -29,10 +29,25 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 # Select focal NHAs
 
 #Load list of NHAs that you wish to generate site reports for
-NHAlist_file <- ("AlreadyRun.csv")
-#NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
-NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
 
+# choose the method of uploading your site list that you want to work with
+print("Enter a number to select a method of selecting NHAs:")
+print("- 1: no list, just manually running one or two sites")
+print("- 2: upload a .csv with the site list")
+print("- 3: pull in a dataframe from a db query, run in the NHA_statuschecks script")
+# default to "3"
+n <- 3
+
+if(n==1){
+print("choose method 1 in the next step and select your sites by name")
+}else if(n==2){
+  NHAlist_file <- ("AlreadyRun.csv")
+  #NHA_list <- read.csv(here("_data", "sourcefiles", "AlreadyRun.csv")) #download list that includes site names and/or (preferably) NHA Join ID
+}else if(n==3){
+NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
+}
+
+#Open NHA server path
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 
@@ -49,16 +64,17 @@ if(n==1){ #if you are just running a few sites, you can select individual site b
   #selected_nhas <- arc.select(nha, where_clause="NHA_JOIN_ID IN('alj86800')") 
   Site_Name_List <- as.vector(selected_nhas$SITE_NAME)
   Site_Name_List <- as.list(Site_Name_List)
-}else if(n==2){ #Select larger number of sites
-  #Method A) If using site names (but this gets hung up on apostrophes)
-  # NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-  # Site_Name_List <- as.vector(NHA_list$SITE_NAME)
-  # Site_Name_List <- as.list(Site_Name_List)
-  # SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
+}else if(n==2){ #Select larger number of sites by names (but this gets hung up on apostrophes)
+  NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
+  Site_Name_List <- as.vector(NHA_list$SITE_NAME)
+  Site_Name_List <- as.list(Site_Name_List)
+  SQLquery_Sites <- paste("SITE_NAME IN(",paste(toString(sQuote(Site_Name_List)),collapse=", "), ") AND STATUS IN('NP','NR')") #use this to input vector of site names to select from into select clause.
 }else if(n==3){ #Method B) Or use NHA join ID 
+  selected_nhas <- arc.select(nha, where_clause="STATUS='NP'")
+  Site_Name_List <- as.list(selected_nhas$SITE_NAME)
   Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
   NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-  SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')") 
+  SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP')") 
 }
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
@@ -100,7 +116,7 @@ PoliticalBoundaries_list
 #check to see if political boundaries have been generated for these NHAs
 # nrowPB <- list()
 # for (i in 1:length(PoliticalBoundaries_list)){
-#   nrowPB[[i]] <- nrow(PoliticalBoundaries_list[[i]])
+#  nrowPB[[i]] <- nrow(PoliticalBoundaries_list[[i]])
 # }
 # nrowPB
 ####################################################
@@ -122,8 +138,6 @@ species_table_select #list of species tables
 
 #create one big data frame first of all the EOIDs across all the selected NHAs
 speciestable <- bind_rows(species_table_select, .id = "column_label")
-speciestable[which(speciestable$EO_ID==10936),]
-speciestable[52,]
 
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
