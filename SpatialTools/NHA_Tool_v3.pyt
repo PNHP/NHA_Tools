@@ -218,7 +218,14 @@ class CreateNHAv3(object):
         else:
             arcpy.AddWarning("No CPP Cores are selected. Please make a selection and try again.")
             sys.exit()
-
+        
+        desc = arcpy.Describe(nha_core)
+        if not desc.FIDSet == '':
+            arcpy.AddWarning("There is currently a selection on the NHA Core layer. Please clear the selection and try again.")
+            sys.exit()
+        else:
+            pass          
+           
         arcpy.AddMessage("......")
         # create list of eo ids for all selected CPPs that are current or approved
         with arcpy.da.SearchCursor(cpp_core,["EO_ID","Status"]) as cursor:
