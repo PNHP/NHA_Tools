@@ -12,6 +12,7 @@
 import arcpy,os,sys,string
 from getpass import getuser
 import sqlite3 as lite
+import pandas as pd
 
 arcpy.env.overwriteOutput = True
 
@@ -218,14 +219,14 @@ class CreateNHAv3(object):
         else:
             arcpy.AddWarning("No CPP Cores are selected. Please make a selection and try again.")
             sys.exit()
-        
+
         desc = arcpy.Describe(nha_core)
         if not desc.FIDSet == '':
             arcpy.AddWarning("There is currently a selection on the NHA Core layer. Please clear the selection and try again.")
             sys.exit()
         else:
-            pass          
-           
+            pass
+
         arcpy.AddMessage("......")
         # create list of eo ids for all selected CPPs that are current or approved
         with arcpy.da.SearchCursor(cpp_core,["EO_ID","Status"]) as cursor:
@@ -565,10 +566,12 @@ class SiteRankFill(object):
             cur = con.cursor()
 
         dictionary = {}
-        cur.execute('select NHA_JOIN_ID,site_score from nha_runrecord')
-        result = cur.fetchall()
-        for NHA_JOIN_ID,site_score in result:
-           dictionary[NHA_JOIN_ID] = site_score
+        query = 'SELECT NHA_JOIN_ID,site_score,date_run FROM nha_runrecord ORDER BY NHA_JOIN_ID ASC;'
+        df = pd.read_sql(query,con)
+
+        df = df.sort_values('date_run').drop_duplicates(subset='NHA_JOIN_ID',keep='last')
+
+        dictionary = df.set_index('NHA_JOIN_ID')['site_score'].to_dict()
 
         with arcpy.da.UpdateCursor(nha_core,["NHA_JOIN_ID","SIG_RANK"]) as cursor:
             for row in cursor:
