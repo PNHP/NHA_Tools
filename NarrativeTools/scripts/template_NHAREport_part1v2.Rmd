@@ -256,14 +256,4 @@ Do you have pictures of either the site, or the species present at the site? If 
 <br><br><br><br>
 
 
-***
- 
-**Photo three**  
-
-1. Photographer Name and affiliation (e.g. Pete Woods, PNHP): |P3N_B| *enter name here.*  |P3N_E|
-2. Photo caption: |P3C_B| *enter short description of photo here* |P3C_E|
-3. Photo file name: |P3F_B| *enter name of photo file uploaded to folder here, including format (eg.jpg, .png).* |P3F_E|   
-  
-
-***
 
