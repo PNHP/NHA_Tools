@@ -89,6 +89,8 @@ identical(selected_nhas$SITE_NAME, as.character(NHA_list$SITE_NAME))
 
 Site_ID_list <- as.list(unique(selected_nhas$NHA_JOIN_ID)) #create list of join IDs for pulling out related table information. added in unique for occasions where a site might be in the import list multiple times (e.g. when it crosses county lines and we want to talk about it for all intersecting counties)
 
+Site_ID_list <- Site_ID_list[match(selected_nhas$NHA_JOIN_ID, Site_ID_list)] #order so it will match the order of sites at the end
+
 ####################################################
 ## Pull in protected lands information #############
 nha_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
@@ -100,6 +102,7 @@ for (i in 1:length(Site_ID_list)) {
 }
 
 protected_lands_list
+names(protected_lands_list) <- Site_ID_list
 ####################################################
 ## Pull in county/municipality info    #############
 nha_PoliticalBoundaries <- arc.open(paste(serverPath,"PNHP.DBO.NHA_PoliticalBoundaries", sep=""))
@@ -112,6 +115,8 @@ for (i in 1:length(Site_ID_list)) {
 }
 
 PoliticalBoundaries_list
+names(PoliticalBoundaries_list) <- Site_ID_list
+
 
 #check to see if political boundaries have been generated for these NHAs
 # nrowPB <- list()
@@ -141,7 +146,8 @@ speciestable <- bind_rows(species_table_select, .id = "column_label")
 
 SQLquery_pointreps <- paste("EO_ID IN(",paste(toString(speciestable$EO_ID),collapse=", "), ")") #don't use quotes around numbers
 
-#check if you get an error, in case there is missing data for anything cbind(speciestable$EO_ID, speciestable$NHA_JOIN_ID) speciestable$EO_ID[181] <- 24075
+#check if you get an error, in case there is missing data for anything cbind(speciestable$EO_ID, speciestable$NHA_JOIN_ID) 
+#sum(is.na(speciestable$EO_ID)) to check, to find which(is.na(speciestable$EO_ID)),then this to fix: speciestable$EO_ID[1018] <- 24075 or remove a line like speciestable <- speciestable[-1018,]
 pointreps <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 selected_pointreps <- arc.select(pointreps, c('EO_ID', 'EORANK','GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'SENSITV_SP', 'SENSITV_EO'), where_clause=SQLquery_pointreps)
 
@@ -181,6 +187,10 @@ names(SD_speciesTable) <- namevec #keep names associated with list of tables
 
 #add a column in each selected NHA species table for the image path, and assign image. 
 #Note: this uses the EO_ImSelect function, which I modified in the source script to work with a list of species tables
+
+#if you get an error, it is probably because you have an empty species table as a result of a data entry error.
+
+
 for (i in 1:length(SD_speciesTable)) {
     for(j in 1:nrow(SD_speciesTable[[i]])){
   SD_speciesTable[[i]]$Images <- EO_ImSelect(SD_speciesTable[[i]][j,])
@@ -244,8 +254,8 @@ sigrankspecieslist <- SD_speciesTable #so if things get weird, you only have to 
 
 
 #remove species which are not included in thesite ranking matrices--GNR, SNR, SH/Eo Rank H, etc. 
-sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
-                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR
+#sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
+#                             function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNR"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNR--for now, GNR is being rounded to G5 so this step is unnecessary
 
 sigrankspecieslist <- lapply(seq_along(sigrankspecieslist), 
                              function(x) sigrankspecieslist[[x]][which(sigrankspecieslist[[x]]$GRANK!="GNA"&!is.na(sigrankspecieslist[[x]]$EORANK)),]) #remove EOs which are GNA
@@ -351,7 +361,7 @@ selected_nhas <- selected_nhas[match(namevec, selected_nhas$NHA_JOIN_ID),]#order
 
 #ensure that both data frames have sites in the same order
 identical(selected_nhas$NHA_JOIN_ID, namevec)
-
+identical(selected_nhas$NHA_JOIN_ID, Site_ID_list) #this is giving a FALSE, check whether it is messing things up? I think this is what is sorting the protected lands and the political boundaries; I fixed this at the end of the script, when renaming the elemnts to run through the R markdown template.
 
 #merge significance data into NHA table
 selected_nhas$site_score <- unlist(SiteRank) #add site significance rankings to NHA data frame
@@ -433,7 +443,7 @@ Map.List <- list.files(path=MapPath)
 #create a vector to use for matching the file names to the site names
 Map.Listm <- NULL
 for (i in 1:length(Map.List)) {
-  Map.Listm[i] <- gsub("Map__", "", Map.List[i], fixed=TRUE)
+  Map.Listm[i] <- gsub("Map_", "", Map.List[i], fixed=TRUE)
   Map.Listm[i] <- gsub("_", "", Map.Listm[i], fixed=TRUE)
   Map.Listm[i] <- gsub(".pdf", "", Map.Listm[i], fixed=TRUE)
 }
@@ -451,6 +461,11 @@ Mapss <- Mapss[match(selected_nhas$SITE_NAME,Mapss$Map.Listm),]
 
 ###################################################################
 #Write the output R markdown document for each site, all at once 
+
+#reorder political boundaries and protected lands lists
+#reorder the list
+PoliticalBoundaries_list <- PoliticalBoundaries_list[names(sigrankspecieslist)]
+protected_lands_list <- protected_lands_list[names(sigrankspecieslist)]
 
 for (i in 1:length(nha_filename_list)) {
   NHAdest2 <- NHAdest1[i]
