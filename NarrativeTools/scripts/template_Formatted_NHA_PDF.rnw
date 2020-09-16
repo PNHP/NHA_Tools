@@ -14,7 +14,7 @@
 \usepackage{url}
 \urlstyle{same}
 \usepackage{graphicx}
-\graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/} }
+\graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/}{../../DraftSiteAccounts/z_photos} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
 \addbibresource{../../citations/PNHP_refs.bib}
 \usepackage{enumitem}

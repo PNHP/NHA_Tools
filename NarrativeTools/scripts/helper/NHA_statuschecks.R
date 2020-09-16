@@ -29,7 +29,7 @@ SQLquery_Counties <- paste("COUNTY IN(",paste(toString(sQuote(SW_Counties)),coll
 
 
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
-selected_nhas <- arc.select(nha, where_clause="created_user='ajohnson' AND STATUS = 'NP'") #NP sites that Anna created
+selected_nhas <- arc.select(nha, where_clause="SOURCE_REPORT='SPC' AND STATUS = 'NP'") #NP sites that are part of SPC source report
 
 #query NHA database of sites for which templates have been created
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename)
@@ -38,8 +38,15 @@ nha_indb <- dbGetQuery(db_nha, "SELECT * FROM nha_runrecord") #select all rows o
 dbDisconnect(db_nha)
 
 Notemplates <- subset(selected_nhas, !(selected_nhas$NHA_JOIN_ID %in% nha_indb$NHA_JOIN_ID))
-Notemplates <- subset(nha_indb, nha_indb$date_run == "2020-03-04") #or alternate, select by diff paramater
-Notemplates$NHA_JOIN_ID
+#Notemplates <- selected_nhas
+ #this is ready to feed into script 1, option 3 for selecting NHAs to run templates for
+#If you need to manually remove sites that are screwing up for some reason (i.e. no species table?)
+#remove <- c("alj86722","alj86721")
+#NHA_list <- NHA_list[!(NHA_list$NHA_JOIN_ID %in% remove),] 
+
+
+#Notemplates <- subset(nha_indb, nha_indb$date_run == "2020-03-04") #or alternate, select by diff paramater
+
 #Notemplates==dataframe of NHAs to run template generator for
 
 #Pull in list of NHAs w/ political boundaries and then check against the list of sites w/o templates, to only run sites with political boundaries defined AND lacking templates
