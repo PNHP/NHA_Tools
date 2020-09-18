@@ -130,7 +130,7 @@ foldername <- function(x){
 #knit2pdf(here::here("scripts","template_Formatted_NHA_PDF.rnw"), output=paste(pdf_filename, ".tex", sep=""))
 makePDF <- function(rnw_template, pdf_filename) {
   knit(here::here("scripts", rnw_template), output=paste(pdf_filename, ".tex",sep=""))
-  call <- paste0("xelatex -interaction=nonstopmode ",pdf_filename , ".tex")
+  call <- paste0("xelatex -interaction=nonstopmode ", pdf_filename , ".tex")
   system(call)
   system(paste0("biber ",pdf_filename))
   system(call) # 2nd run to apply citation numbers
