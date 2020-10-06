@@ -96,6 +96,9 @@ names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
+# do a check here if it results in a zero length table and will break the script
+ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("All is well with this join"))
+
 
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
