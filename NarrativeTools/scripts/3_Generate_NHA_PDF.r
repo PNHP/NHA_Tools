@@ -23,7 +23,7 @@ rm(list = ls())
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Conemaugh River at Old River Hill Rd" # "" # "Linbrook Woodlands Conservation Area"
+nha_name <- "Bentleyville" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -71,7 +71,7 @@ for (i in 1:length(PBs)){
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
 # # delete existing site account info from this site, prior to overwriting with new info
- dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
 # add in the new data
 dbAppendTable(db_nha, "nha_siteaccount", nha_data)
 dbDisconnect(db_nha)
@@ -187,3 +187,4 @@ pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
+
