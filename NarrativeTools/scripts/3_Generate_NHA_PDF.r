@@ -23,7 +23,7 @@ rm(list = ls())
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Bentleyville" # "" # "Linbrook Woodlands Conservation Area"
+nha_name <- "North Park Lake" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -94,10 +94,16 @@ speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
+# delete unneeded fields
+speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE","NHA_JOIN_ID","EORANK","GRANK","SRANK","SPROT","PBSSTATUS","LASTOBS_YR","SENSITIVE","SENSITIVE_EO")]
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
 # do a check here if it results in a zero length table and will break the script
 ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("All is well with this join"))
+
+# sort the species table taxonomically
+
+
 
 
 # create paragraph about species ranks
@@ -110,25 +116,25 @@ granklist <- merge(rounded_grank, speciestable[c("SNAME","SCOMNAME","GRANK","SEN
 # secure species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE!="Y"),])
 if(a>0){
-  spCount_GSecure <- ifelse(length(a)==0, 0, a)
   spExample_GSecure <- sample_n(granklist[which(granklist$SENSITIVE!="Y"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
+spCount_GSecure <- ifelse(length(a)==0, 0, a)
 rm(a)
 
 # vulnerable species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G3")&granklist$SENSITIVE!="Y"),])
 if(a>0){
-  spCount_GVulnerable <- ifelse(length(a)==0, 0, a)
   spExample_GVulnerable <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & granklist$GRANK_rounded=="G3"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
+spCount_GVulnerable <- ifelse(length(a)==0, 0, a)
 rm(a)
 
 # imperiled species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")&granklist$SENSITIVE!="Y"),])
 if(a>0){
-  spCount_GImperiled <- ifelse(length(a)==0, 0, a)
   spExample_GImperiled <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & (granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
+spCount_GImperiled <- ifelse(length(a)==0, 0, a)
 rm(a)
   
 rm(granklist, rounded_srank, rounded_grank)
