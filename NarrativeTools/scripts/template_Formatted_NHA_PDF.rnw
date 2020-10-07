@@ -86,9 +86,9 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occuring at the edge of the their range or loss of habitat.")
 }
 @
-
+\noindent
 The species tracked by PNHP present at this NHA include:
-\medskip
+\smallskip
 % Species Table
 \begin{ThreePartTable}
 \renewcommand\TPTminimum{\textwidth}
@@ -124,8 +124,7 @@ The species tracked by PNHP present at this NHA include:
 
      <<label=speciestable, echo=FALSE, results='asis'>>=
      #Sort species table first taxonomically, and then alphabetically by SName
-     #TaxOrder (old version) <- c("M","MA", "B","A", "R", "F", "MU","U", "P","ID","IA","IB","IM","IT","IO","C","S")
-     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIOD","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+     TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
      speciestable$OrderVec <- speciestable$ELEMENT_TYPE
      speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
      speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
