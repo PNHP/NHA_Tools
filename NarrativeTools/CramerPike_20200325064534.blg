@@ -1,9 +1,0 @@
-[0] Config.pm:304> INFO - This is Biber 2.14
-[2] Config.pm:307> INFO - Logfile is 'CramerPike_20200325064534.blg'
-[141] biber-MSWIN64:322> INFO - === 
-[190] Biber.pm:415> INFO - Reading 'CramerPike_20200325064534.bcf'
-[405] Biber.pm:943> INFO - Found 0 citekeys in bib section 0
-[416] Utils.pm:304> WARN - The file 'CramerPike_20200325064534.bcf' does not contain any citations!
-[441] bbl.pm:652> INFO - Writing 'CramerPike_20200325064534.bbl' with encoding 'UTF-8'
-[442] bbl.pm:755> INFO - Output to CramerPike_20200325064534.bbl
-[446] Biber.pm:128> INFO - WARNINGS: 1
