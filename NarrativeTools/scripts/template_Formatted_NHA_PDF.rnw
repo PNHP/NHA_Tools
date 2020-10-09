@@ -17,6 +17,7 @@
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/}{../../DraftSiteAccounts/z_photos} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
 \addbibresource{../../citations/PNHP_refs.bib}
+% \usepackage{cite}
 \usepackage{enumitem}
 \setlist{nolistsep}
 \usepackage{fancyhdr} %for headers,footers
@@ -101,7 +102,7 @@ The species tracked by PNHP present at this NHA include:
     \item [1] See the PNHP website (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
     \item [2] See NatureServe website (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
-     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\\end{tablenotes}","\\end{tablenotes}") 
+     SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
      @
     \Sexpr{paste(SensitiveFNote)}
 \end{TableNotes}
@@ -167,7 +168,7 @@ The species tracked by PNHP present at this NHA include:
          speciestable$icon[i] <- "Sensitive.png"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS[i],"&", speciestable$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS_YR[i],"&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
