@@ -23,7 +23,7 @@ rm(list = ls())
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "North Park Lake" # "" # "Linbrook Woodlands Conservation Area"
+nha_name <- "Loyalhanna Gorge" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -101,9 +101,10 @@ speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
 # do a check here if it results in a zero length table and will break the script
 ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("All is well with this join"))
 
-# sort the species table taxonomically
-
-
+# take one value from multiple species
+speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
+speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
+speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
 
 
 # create paragraph about species ranks
@@ -150,11 +151,18 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-
 #site rank
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
+
+# sources and funding
+
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
+dbDisconnect(db_nha)
+
+
 
 ## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
