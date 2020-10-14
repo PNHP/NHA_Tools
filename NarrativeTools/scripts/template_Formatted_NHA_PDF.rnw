@@ -17,8 +17,6 @@
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/}{../../DraftSiteAccounts/z_photos} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
 \addbibresource{../../citations/PNHP_refs.bib}
-%\addbibresource{pnhp_refs.bib}
-%\addbibresource{P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/citationspnhp_refs}
 \usepackage{enumitem}
 \setlist{nolistsep}
 \usepackage{fancyhdr} %for headers,footers
@@ -57,15 +55,19 @@
 \large A site of \underline{\Sexpr{nha_siterank} Significance} \
 \medskip \\
 
-% % image
-\begin{wrapfigure}{R}{0.5\textwidth} % [13]
-  \includegraphics[width=0.5\textwidth]{\Sexpr{nha_photos$P1F}} %  
-  \captionsetup{labelformat=empty, justification=raggedright}
-  <<label=captionfunction, echo=FALSE, results='asis'>>=
+% image
+<<label=topimage, echo=FALSE, results='asis'>>=
+if(!is.na(nha_photos$P1N)){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{",nha_photos$P1F,"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
   capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
-  @
-  \caption{\Sexpr{capfun}}
-\end{wrapfigure}
+  cat(paste0("\\caption{",capfun,"} \n"))
+  cat("\\end{wrapfigure} \n")
+} else if(is.na(nha_photos$P1N)){
+ cat("% no image present so nothing is added")#do nothing
+}
+@
 
 
 % Site Description
@@ -84,6 +86,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occuring at the edge of the their range or loss of habitat.")
 }
 @
+
 The species tracked by PNHP present at this NHA include:
 \medskip
 % Species Table
