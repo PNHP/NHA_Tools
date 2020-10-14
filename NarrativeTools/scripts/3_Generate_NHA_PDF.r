@@ -98,14 +98,16 @@ names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE","NHA_JOIN_ID","EORANK","GRANK","SRANK","SPROT","PBSSTATUS","LASTOBS_YR","SENSITIVE","SENSITIVE_EO")]
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
+
 # do a check here if it results in a zero length table and will break the script
 ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("All is well with this join"))
 
 # take one value from multiple species
+dupspecies <- sort(speciestable[which(duplicated(speciestable$SNAME)),]$SNAME)
+print(paste("The following species have multiple EOs: ", paste(dupspecies, collapse=", "), sep=""))
 speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
 speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
 speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
-
 
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
