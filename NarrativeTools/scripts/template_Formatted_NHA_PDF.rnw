@@ -240,6 +240,22 @@ Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{
 }
 
 \newpage
-insert map here
+
+
+% insert the NHA map
+<<label=mapimage, echo=FALSE, results='asis'>>=
+if(!is.na(nha_photos$P1N)){
+  mapfile <- paste("Layout_", nha_name, sep="")
+  #cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+  cat(paste0("\\includegraphics[width=0.95\\textwidth]{",mapfile,"} %  \n"))
+  #cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
+  #capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
+  #cat(paste0("\\caption{",capfun,"} \n"))
+  #cat("\\end{wrapfigure} \n")
+} else if(is.na(nha_photos$P1N)){
+ cat("insert map here") # do nothing
+}
+@
+
 
 \end{document}
