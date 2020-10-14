@@ -23,7 +23,7 @@ rm(list = ls())
 source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- "Conemaugh River at Old River Hill Rd" # "" # "Linbrook Woodlands Conservation Area"
+nha_name <- "Loyalhanna Gorge" # "" # "Linbrook Woodlands Conservation Area"
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -71,7 +71,7 @@ for (i in 1:length(PBs)){
 nha_data$CountyMuni <- paste(printCounty, collapse='; ')
 
 # # delete existing site account info from this site, prior to overwriting with new info
- dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
+dbExecute(db_nha, paste("DELETE FROM nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(nha_data$NHA_JOIN_ID), sep=""))
 # add in the new data
 dbAppendTable(db_nha, "nha_siteaccount", nha_data)
 dbDisconnect(db_nha)
@@ -94,8 +94,20 @@ speciestable <- merge(species_table_select,selected_pointreps, by="EO_ID")
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 names(speciestable)[names(speciestable)=="SENSITV_EO"] <- c("SENSITIVE_EO")
 
+# delete unneeded fields
+speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE","NHA_JOIN_ID","EORANK","GRANK","SRANK","SPROT","PBSSTATUS","LASTOBS_YR","SENSITIVE","SENSITIVE_EO")]
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
+
+# do a check here if it results in a zero length table and will break the script
+ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("All is well with this join"))
+
+# take one value from multiple species
+dupspecies <- sort(speciestable[which(duplicated(speciestable$SNAME)),]$SNAME)
+print(paste("The following species have multiple EOs: ", paste(dupspecies, collapse=", "), sep=""))
+speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
+speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
+speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
 
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
@@ -106,19 +118,28 @@ rounded_grank <- dbReadTable(db_nha, "rounded_grank")
 granklist <- merge(rounded_grank, speciestable[c("SNAME","SCOMNAME","GRANK","SENSITIVE")], by="GRANK")
 # secure species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE!="Y"),])
+if(a>0){
+  spExample_GSecure <- sample_n(granklist[which(granklist$SENSITIVE!="Y"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
+}
 spCount_GSecure <- ifelse(length(a)==0, 0, a)
-spExample_GSecure <- sample_n(granklist[which(granklist$SENSITIVE!="Y"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
+rm(a)
+
 # vulnerable species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G3")&granklist$SENSITIVE!="Y"),])
+if(a>0){
+  spExample_GVulnerable <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & granklist$GRANK_rounded=="G3"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
+}
 spCount_GVulnerable <- ifelse(length(a)==0, 0, a)
 rm(a)
-spExample_GVulnerable <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & granklist$GRANK_rounded=="G3"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
+
 # imperiled species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")&granklist$SENSITIVE!="Y"),])
+if(a>0){
+  spExample_GImperiled <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & (granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
+}
 spCount_GImperiled <- ifelse(length(a)==0, 0, a)
 rm(a)
-spExample_GImperiled <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & (granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
-
+  
 rm(granklist, rounded_srank, rounded_grank)
 
 # threats
@@ -132,11 +153,18 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-
 #site rank
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
+
+# sources and funding
+
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
+dbDisconnect(db_nha)
+
+
 
 ## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
@@ -187,3 +215,4 @@ pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
+

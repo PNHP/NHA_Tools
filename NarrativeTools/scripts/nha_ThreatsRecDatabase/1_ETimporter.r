@@ -96,6 +96,10 @@ dbDisconnect(db) # disconnect the db
 ETitalics <- unique(ETitalics)
 ETitalics <- ETitalics[!is.na(ETitalics)]
 
+# add in additional names that do not appear on the ET
+addnames <- c("Baylisascaris procyonis", "Endothecia parasitica", "Bacillis thuringiensis") # Raccoon roundworm, chestnut blight, BT
+ETitalics <- c(ETitalics, addnames)
+
 # abrecivate the genus names
 shortname <- do.call("rbind", strsplit(sub(" ", ";", ETitalics), ";")) #Replace the first space with a semicolon (using sub and not gsub), strsplit on the semicolon and then rbind it into a 2 column matrix:
 shortname <- as.data.frame.matrix(shortname)
