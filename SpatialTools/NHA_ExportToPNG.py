@@ -26,4 +26,4 @@ if ms.enabled:
         ms.currentPageNumber = pageNum
         print("Exporting {0}".format(ms.pageRow.SITE_NAME))
         pageName = ms.pageRow.SITE_NAME
-        l.exportToPNG(os.path.join(output_folder,f"{ms.pageRow.SITE_NAME}.png"),resolution=200)
+        l.exportToPNG(os.path.join(output_folder,"Layout_" + ''.join(e for e in (ms.pageRow.SITE_NAME) if e.isalnum()) + ".png"),resolution=200)
