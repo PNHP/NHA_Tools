@@ -23,7 +23,8 @@ if(length(NHA_file)==1) {
   n <- 1
 } else {
   print(NHA_file)
-  n <- as.numeric(readline(prompt="select the file number from the list above: "))
+  cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
+  n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))
 }
 print(paste0("using the ",NHA_file[n], " for input into the script!"))
 NHA_file <- NHA_file[n]
