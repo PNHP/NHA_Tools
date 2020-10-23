@@ -1,15 +1,13 @@
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-  require(here)
-
+#if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+#  require(here)
 # clear the environment
-rm(list = ls())
-
+#rm(list = ls())
 # load in the paths and settings file
-source(here::here("scripts", "0_PathsAndSettings.r"))
+#source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
-nha_name <- "Loyalhanna Gorge"
+nha_name <- LauncherNHA
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
