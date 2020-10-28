@@ -170,6 +170,7 @@ for(j in 1:length(ETitalics)){
   nha_data$Description <- str_replace_all(nha_data$Description, ETitalics[j])
 }
 # italicize all SNAMEs in the threats and recommendations text. 
+nha_data$ThreatRecP <- str_replace_all(nha_data$ThreatRecP, ETitalics) # for the paragraph
 for(j in 1:nrow(nha_threats)){
   nha_threats$TRB[j] <- str_replace_all(nha_threats$TRB[j], ETitalics)
 }
