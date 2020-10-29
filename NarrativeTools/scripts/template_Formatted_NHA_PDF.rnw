@@ -213,7 +213,7 @@ for(t in 1:nrow(nha_threats)){
 @
 \end{itemize}
 \medskip
-\noindent We envision this NHA as one of the first steps for promoting conservation for the species of concern at the site. Many of these sites have multiple habitats present and conservation recommendations for the sites may occasionally conflict. PNHP partners are available for additional consultation and can point to additional resources.
+\noindent We envision this NHA site account as one of the first steps for promoting conservation management actions to support the species of concern at the site. Many of these sites may have multiple habitat types present and require a mix of conservation strategies that may occasionally conflict. PNHP staff are available for additional consultation to help address specific site challenges. For additional information, please contact PNHP GENERAL EMAIL.
 
 \bigskip
 
