@@ -5,6 +5,7 @@
 \setmainfont{Gill Sans MT}
 \pdfmapfile{=pdftex35.map} %I think this fixes some MikTex font reading issues
 \usepackage[margin=10pt,font=small]{caption}
+\usepackage{afterpage}
 \usepackage{geometry}
 \usepackage{xcolor}
 \usepackage{longtable,booktabs,threeparttablex}
@@ -47,7 +48,7 @@
 }
 
 \begin{document}
-\raggedright
+%\RaggedRight
 \catcode`\_=11
 
 % Header
@@ -69,7 +70,6 @@ if(!is.na(nha_photos$P1N)){
  cat("% no image present so nothing is added")#do nothing
 }
 @
-
 
 % Site Description
 \normalsize
@@ -97,6 +97,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
 \noindent
 All species tracked by PNHP present at this NHA include:
 \smallskip
+\afterpage{\clearpage}
 % Species Table
 \begin{ThreePartTable}
 \renewcommand\TPTminimum{\textwidth}
@@ -106,12 +107,14 @@ All species tracked by PNHP present at this NHA include:
 \setlength\tabcolsep{0pt}
 
 \begin{TableNotes}
+ \begin{footnotesize}
     \item [1] See the PNHP website (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
     \item [2] See NatureServe website (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
      SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
      @
     \Sexpr{paste(SensitiveFNote)}
+  \end{footnotesize}
 \end{TableNotes}
 
 \begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
@@ -209,6 +212,8 @@ for(t in 1:nrow(nha_threats)){
 }
 @
 \end{itemize}
+\medskip
+\noindent We envision this NHA as one of the first steps for promoting conservation for the species of concern at the site. Many of these sites have multiple habitats present and conservation recommendations for the sites may occasionally conflict. PNHP partners are available for additional consultation and can point to additional resources.
 
 \bigskip
 
