@@ -47,7 +47,7 @@
 }
 
 \begin{document}
-%\raggedright
+\raggedright
 \catcode`\_=11
 
 % Header
@@ -79,11 +79,18 @@ if(!is.na(nha_photos$P1N)){
 This site has been rated as \Sexpr{nha_siterank} significant due to
 % calculates what text to say
 <<label=sigparagraph, echo=FALSE, results='asis'>>=
+
+# Case 1: global significance and the species are not sensitive
 if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
   cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+# Case 2: regional significance and the species are not sensitive
 } else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0) {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
-}  else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
+# Case 3: regional significance and the species are not sensitive
+# } else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & ) {
+#   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))  
+# Case 4: state significance and the species are not sensitive
+  }  else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
 }
 @
