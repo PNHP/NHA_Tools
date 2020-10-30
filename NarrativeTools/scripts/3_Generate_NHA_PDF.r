@@ -102,7 +102,8 @@ ifelse(nrow(speciestable)==0,print("ERROR: Bad join with Taxa Icons"), print("Al
 
 # take one value from multiple species
 dupspecies <- sort(speciestable[which(duplicated(speciestable$SNAME)),]$SNAME)
-print(paste("The following species have multiple EOs: ", paste(dupspecies, collapse=", "), sep=""))
+ifelse(length(dupspecies)>0, cat(paste("The following species have multiple EOs: ", paste(dupspecies, collapse=", "), sep="")), print("No duplicate species in the table."))
+
 speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
 speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
 speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
