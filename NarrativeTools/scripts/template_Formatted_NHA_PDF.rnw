@@ -101,7 +101,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 }
 @
 \noindent
-All species tracked by PNHP present at this NHA include:
+\\\\All species tracked by PNHP documented at this NHA include:
 \smallskip
 \afterpage{\clearpage}
 % Species Table
@@ -231,7 +231,7 @@ for(t in 1:nrow(nha_threats)){
 \textbf{Previous CNHI reference:} \Sexpr{ifelse(!is.na(selected_nha$OLD_SITE_NAME), paste("This site replaces the following previously published sites: ",selected_nha$OLD_SITE_NAME,"."), "This site does not overlap a previously published site.") } \\
 \textbf{Associated NHAs:} \Sexpr{ifelse(selected_nha$ASSOC_NHA!="None", paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
-\textbf{Acreage:} \Sexpr{signif(selected_nha$ACRES, digits=0)} acres \\  
+\textbf{Approximate Acreage:} \Sexpr{round(selected_nha$ACRES)} acres \\  
   
 %%% References %%% 
 \noindent\textbf{\underline{References}}
