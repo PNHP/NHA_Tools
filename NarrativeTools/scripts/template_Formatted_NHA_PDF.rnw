@@ -223,8 +223,8 @@ for(t in 1:nrow(nha_threats)){
 \smallskip
 \textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
 \textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
-\textbf{Previous CNHI reference:} \Sexpr{selected_nha$OLD_SITE_NAME} \\
-\textbf{Associated NHAs:} \Sexpr{selected_nha$ASSOC_NHA} \\ 
+\textbf{Previous CNHI reference:} This site replaces the following previously published sites: \Sexpr{selected_nha$OLD_SITE_NAME} \\
+\textbf{Associated NHAs:} This site is associated with the following other NHAs: \Sexpr{selected_nha$ASSOC_NHA}.  We recommend consulting the accounts for those sites for additional conservation information. \\ 
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
 \textbf{Acreage:} \Sexpr{signif(selected_nha$ACRES, digits=0)} acres \\  
   
