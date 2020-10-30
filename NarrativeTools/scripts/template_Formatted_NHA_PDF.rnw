@@ -223,8 +223,8 @@ for(t in 1:nrow(nha_threats)){
 \smallskip
 \textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
 \textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
-\textbf{Previous CNHI reference:} This site replaces the following previously published sites: \Sexpr{selected_nha$OLD_SITE_NAME} \\
-\textbf{Associated NHAs:} This site is associated with the following other NHAs: \Sexpr{selected_nha$ASSOC_NHA}.  We recommend consulting the accounts for those sites for additional conservation information. \\ 
+\textbf{Previous CNHI reference:} \Sexpr{ifelse(!is.na(selected_nha$OLD_SITE_NAME), paste("This site replaces the following previously published sites: ",selected_nha$OLD_SITE_NAME,"."), "This site does not overlap a previously published site.") } \\
+\textbf{Associated NHAs:} \Sexpr{ifelse(selected_nha$ASSOC_NHA!="None", paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
 \textbf{Acreage:} \Sexpr{signif(selected_nha$ACRES, digits=0)} acres \\  
   
