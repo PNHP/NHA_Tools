@@ -115,6 +115,9 @@ rounded_srank <- dbReadTable(db_nha, "rounded_srank")
 rounded_grank <- dbReadTable(db_nha, "rounded_grank")
 
 granklist <- merge(rounded_grank, speciestable[c("SNAME","SCOMNAME","GRANK","SENSITIVE")], by="GRANK")
+
+
+
 # secure species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE!="Y"),])
 if(a>0){
@@ -129,6 +132,7 @@ if(a>0){
   spExample_GVulnerable <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & granklist$GRANK_rounded=="G3"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
 spCount_GVulnerable <- ifelse(length(a)==0, 0, a)
+spCount_GVulnerableSens <- ifelse(any(((granklist$GRANK_rounded=="G3")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
 # imperiled species
@@ -137,7 +141,10 @@ if(a>0){
   spExample_GImperiled <- sample_n(granklist[which(granklist$SENSITIVE!="Y" & (granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
 spCount_GImperiled <- ifelse(length(a)==0, 0, a)
+spCount_GImperiledSens <- ifelse(any(((granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
+
+
   
 rm(granklist, rounded_srank, rounded_grank)
 
