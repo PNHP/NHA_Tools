@@ -101,6 +101,9 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 # Case 4a: state significance and the species are all sensitive
 } else if(nha_siterank$site_score=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level but they are sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
+# Case 5: local significance and the species are not sensitive
+} else if(nha_siterank$site_score=="Local" & spCount_GSecure>0) {
+  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
 }
 @
 \noindent
