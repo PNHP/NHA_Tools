@@ -116,14 +116,13 @@ rounded_grank <- dbReadTable(db_nha, "rounded_grank")
 
 granklist <- merge(rounded_grank, speciestable[c("SNAME","SCOMNAME","GRANK","SENSITIVE")], by="GRANK")
 
-
-
 # secure species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE!="Y"),])
 if(a>0){
   spExample_GSecure <- sample_n(granklist[which(granklist$SENSITIVE!="Y"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
 spCount_GSecure <- ifelse(length(a)==0, 0, a)
+spCount_GSecureSens <- ifelse(any(((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
 # vulnerable species
@@ -165,7 +164,6 @@ nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord W
 dbDisconnect(db_nha)
 
 # sources and funding
-
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
 dbDisconnect(db_nha)
