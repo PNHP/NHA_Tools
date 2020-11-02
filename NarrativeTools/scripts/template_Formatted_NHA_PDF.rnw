@@ -8,7 +8,7 @@
 \usepackage{afterpage}
 \usepackage{geometry}
 \usepackage{xcolor}
-\usepackage{longtable,booktabs,threeparttablex}
+\usepackage{longtable,booktabs,threeparttablex, array}
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -163,6 +163,11 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
          speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
        } else {
          speciesstring <- paste0(speciestable$SCOMNAME[i]," (\\textit{",speciestable$SNAME[i],"}) ")
+         if(nchar(speciesstring)>58) {
+           speciesstring <- paste0(speciestable$SCOMNAME[i],"\\\\ \\enspace (\\textit{",speciestable$SNAME[i],"}) ")
+         } else {
+           speciesstring <- speciesstring
+         }
        }
        # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
        if(speciestable$SCOMNAME[i]==speciestable$SNAME[i] & speciestable$SENSITIVE[i]!="Y"){
