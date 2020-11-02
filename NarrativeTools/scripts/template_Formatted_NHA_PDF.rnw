@@ -104,6 +104,9 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 # Case 5: local significance and the species are not sensitive
 } else if(nha_siterank$site_score=="Local" & spCount_GSecure>0) {
   cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
+# Case 5: local significance and the species are  sensitive
+} else if(nha_siterank$site_score=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
 }
 @
 \noindent
