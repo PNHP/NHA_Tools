@@ -117,12 +117,12 @@ rounded_grank <- dbReadTable(db_nha, "rounded_grank")
 granklist <- merge(rounded_grank, speciestable[c("SNAME","SCOMNAME","GRANK","SENSITIVE")], by="GRANK")
 
 # secure species
-a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE!="Y"),])
+a <- nrow(granklist[which((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR"|granklist$GRANK_rounded=="GNA")&granklist$SENSITIVE!="Y"),])
 if(a>0){
   spExample_GSecure <- sample_n(granklist[which(granklist$SENSITIVE!="Y"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
 }
 spCount_GSecure <- ifelse(length(a)==0, 0, a)
-spCount_GSecureSens <- ifelse(any(((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR")&granklist$SENSITIVE=="Y")), "yes", "no")
+spCount_GSecureSens <- ifelse(any(((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR"|granklist$GRANK_rounded=="GNA")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
 # vulnerable species
