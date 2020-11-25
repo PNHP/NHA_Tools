@@ -106,13 +106,15 @@ shortname <- as.data.frame.matrix(shortname)
 names(shortname) <- c("genus","theRest")
 shortname$gabbr <- substr(shortname$genus,1,1)
 shortname$shortname <- paste0(shortname$gabbr,". ",shortname$theRest)
-
 shortname <- shortname$shortname
 
 # genus names
 genusnames <- word(ETitalics, 1)
 genusnames <- as.character(genusnames)
 genusnames <- unique(genusnames)
+genusnameremove <- c("Virginia","Senna")
+genusnames <- genusnames[!genusnames %in% genusnameremove]
+
 
 # merge it all together
 ETitalics <- c(ETitalics, genusnames, shortname)

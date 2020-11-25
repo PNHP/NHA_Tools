@@ -1,0 +1,521 @@
+
+%This knitr document is called by the knit2pdf ....
+\documentclass{article}
+\usepackage[utf8]{inputenc} %\UseRawInputEncoding
+\usepackage{fontspec}
+\setmainfont{Gill Sans MT}
+\pdfmapfile{=pdftex35.map} %I think this fixes some MikTex font reading issues
+\usepackage[margin=10pt,font=small]{caption}
+%\usepackage{afterpage}
+\usepackage{geometry}
+\usepackage{longtable,booktabs,threeparttablex, array}
+\usepackage{xcolor}
+%\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{graphicx}
+\graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{../../z_BaseImages/introMaps/}{photos/}{../../DraftSiteAccounts/z_photos} }
+\usepackage[style=authoryear,hyperref=false]{biblatex}
+\addbibresource{../../citations/PNHP_refs.bib}
+% \usepackage{cite}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{fancyhdr} %for headers,footers
+% \usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+%\usepackage{lastpage}
+
+\geometry{letterpaper, top=0.45in, bottom=0.75in, left=0.75in, right=0.75in}
+\pagestyle{fancy} \fancyhf{} \renewcommand\headrulewidth{0pt} %strip default header/footer stuff
+
+\setlength\intextsep{0pt}
+
+% %add footers
+% \lfoot{
+%  \small   %small font. The double slashes is newline in fancyhdr
+%  \textcolor{gray}{\Sexpr{paste(as.character(nha_nameLatex), "Natural Heritage Area", sep=" ")}\\Pennsylvania Natural Heritage Program }
+% }
+% \rfoot{
+%  \small  
+%  \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
+% }
+
+\begin{document}
+%\RaggedRight
+\catcode`\_=11
+
+% title page
+
+%%%  Recommended Citation %%% 
+% \setlength{\fboxsep}{5pt}
+% \fbox{
+% \begin{minipage}[c]{0.2\linewidth}
+% \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
+% \end{minipage}%
+% \begin{minipage}[c]{0.75\linewidth}
+% This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.
+% \\ \\ Please cite this Natural Heritage Area as: \\
+% Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
+% \end{minipage}
+% }
+
+\newpage
+
+
+
+
+
+\tableofcontents
+
+\newpage
+\section{THE PENNSYLVANIA NATURAL HERITAGE PROGRAM}
+\begin{wrapfigure}{R}{0.3\textwidth}
+\includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
+\end{wrapfigure}
+The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with over 20,000 detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.As part of the information maintained by PNHP, a system of global ranks and state ranks is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
+\bigskip
+
+%%%  NatureServe Callout %%% 
+
+\setlength{\fboxsep}{5pt}
+\fbox{
+\begin{minipage}[c]{0.75\linewidth}
+\includegraphics[width=.45\linewidth]{NS-logo_blue-short-tag_2019-09}
+\newline
+NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology to document the extent of biodiversity throughout the country, with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe. All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.   
+\end{minipage}
+}
+
+\newpage
+\section{INTRODUCTION}
+\noindent This project is a comprehensive update to the earlier \Sexpr{nameCounty} County Natural Areas Inventory project of 1998. This current project was initiated to update the documentation of previously known species of concern (those considered at risk of local or global extinction), to identify additional habitats supporting species of concern, and to provide conservation recommendations to help ensure their continued survival within the region. The ability of a community to fulfill its vision for the future depends on its capacity to assemble information that will enable it to act effectively and wisely. Since 1989, County Natural Heritage Inventories (CNHIs) have served as a way to both gather and pass along new and existing information to those responsible for land use decisions, as well as to all residents who wish to know more about the natural heritage of their county. The \Sexpr{nameCounty} County Natural Heritage Inventory focuses on the best examples of living ecological resources in the county. The Western Pennsylvania Conservancy (WPC)served as the principal investigator, prepared the report, and created the maps for this study. The Pennsylvania Natural Heritage Program (PNHP), of which WPC is a partner, is responsible for collecting, tracking, and interpreting information regarding thestate’s biological diversity.A healthy natural environment is essential to human health and sustenance. \\
+
+\noindent A healthy environment provides clean air and water; supports fish, game,and agriculture; and furnishes renewable sources of materials for countless aspects of our livelihoods and economy. In addition to these direct services, a clean and healthy environment plays a central role in our quality of life, whether through its aesthetic value (found in forested ridges, mountain streams and encounters with wildlife), or in the opportunities it provides for exploration, recreation, and education. Finally, a healthy natural environment supports economic growth by adding to the region’s attractiveness as a location for new business enterprises, and provides the basis for the recreation, tourism, and forestry industries, all of which have the potential for long-term sustainability. Fully functional ecosystems are the key indicators of a healthy environment and working to maintain ecosystems is essential to the long-term sustainability of our economies. \\
+
+\noindent Planning for long-term sustainability can maintain open space, including natural environments and the plants and animals associated with them. Using this Natural Heritage Inventory as a conservation tool can steer development away from environmentally sensitive areas, creating a needed balance between economic growth and the conservation of natural resources. It is important that county and municipal governments, the public, developers,and planners know the location of such environmentally sensitive areas in order to maintain and protect these areas. Knowing where these areas are located can help prevent potential land use conflicts, and help focus conservation efforts and limited funds on the most vulnerable areas.The Pennsylvania Natural Heritage Program, in cooperation with the \Sexpr{nameCounty} County Planning Commission, has undertaken this project to provide a document and maps that will aid in the identification of these important areas. \\
+
+\noindent The \tectit{\Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) Update \Sexpr{YearUpdate}} represents the known species of concern, including plants, animals, and natural communities in \Sexpr{nameCounty} County. The inventory provides maps of the best natural communities (habitats) and the locations of animal and plant species of concern (rare, threatened, and endangered)in \Sexpr{nameCounty} County. These maps do not pinpoint the exact location of the species of concern but rather represent a conservation zone that is critical to the preservation of the site (Core Habitat) and a surrounding zone of potential impacts (Supporting Landscape)where applicable. A written description including threats and disturbances, conservation recommendations, and a summary table of the species of concern, including degree of rarity, last-observed date, and quality rank accompany each map. Potential threats and stresses, and suggestions for protection of the rare communities, plants, or animals at the site are included in the individual site descriptions. \\
+
+\noindent The information and maps presented in this report provide a useful guide for planning residential or commercial developments,recreational parks or trails, for conserving natural areas, and for setting priorities for the preservation of the most vulnerable habitats. All of the sites in this report were evaluated for their importance in protecting biological diversity on a state and local level, but many also have scenic value, provide water quality protection, and are potential sites for low-impact passive recreation, nature observation, and/or environmental education. \\
+
+\noindent The \Sexpr{nameCounty} County Natural Heritage Inventory – Update \Sexpr{YearUpdate} will be made available to each municipality through the \Sexpr{nameCounty} County Planning Commission. The Natural Heritage Inventory is a conservation tool that will aid in the creation of municipal and county comprehensive plans. Its emphasis on biological diversity should inform county and regional open space plans already underway, or updates to those plans already completed. \Sexpr{nameCounty} County,its municipalities, land trusts, and other organizations can also use the Natural Heritage Inventory to identify potential protection projects that may be eligible for funding through state or community grant programs. \\
+
+\noindent Landowners will also find this inventory useful in managing and planning for the use of their land; it gives them the opportunity to explore alternatives that will provide for their needs and still protect the species and habitats that occur on their land. For example, the Forest Stewardship Program, coordinated by the Pennsylvania Department of Conservation and Natural Resource’s Bureau of Forestry, assists landowners in creating management plans. These plans incorporate landowner objectives (e.g.,wildlife or timber management). Other programs include the USDA’s Forest Legacy Program and the Pennsylvania Department of Agriculture’s Agricultural Land Preservation Program. Land managers may wish to consult with this report and the environmental review tool found on the Pennsylvania Natural Heritage Program’s website (www.naturalheritage.state.pa.us)in an effort to avoid potential conflicts in areas with species of concern and/or identify ways of enhancing or protecting these resources.
+
+\subsection{\Sexpr{nameCounty} CNHI Update Changes}
+The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in 1998. The original 1998 report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate}update followed the basic model of the original 1998 project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report.\\ 
+
+\subsubsection{Natural Heritage Area (NHA) Name Changes} 
+Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).
+
+\subsubsection{Changes in number of significant ecological features and shape of NHA mapping} 
+The natural resources of the region are continually changing. As habitats and land use patterns change, so do the species that occupy them. Periodic updates to the \Sexpr{nameCounty} County Natural Heritage Inventory will be necessary to reflect these changes. The Natural Heritage Areas depicted in this report in many cases differ significantly from the previous report. There are several reasons why this has occurred:
+\begin{itemize}
+ \item The primary cause for changes in shapes of Natural Heritage Areas is the use of a different protocol for mapping the species of concern. The sites developed in past reports were drawn by different biologists at different times for many different species using best professional judgment. This often resulted in vast discrepancies between sites drawn for the same species by different biologists. In order to achieve a more standardized approach to NHA depiction, the Pennsylvania Natural Heritage Program has developed a more formulaic method for identifying areas of concern around each species present at any one location. This approach includes representing “Core Habitat”and “Supporting Landscape” separately rather than combined as in previous reports, and focusing primarily on Core Habitat when providing specific management or maintenance suggestions. Please see the methods section for a description of “Core Habitat” and “Supporting Landscape.”
+ \item Some species documented in the previous report, through additional fieldwork across the state, have been found to be more common than previously thought and have been delisted, and are no longer considered to be species of concern. If an area documented in the previous report only contained a species of concern that has since been delisted, it would no longer be represented in this report, which focuses on those species considered to be at risk of global extinction or local extirpation.
+ \item Several areas that were in close proximity to each other have been combined into one NHA.
+ \item Some large sites have been split into smaller, more discrete NHAs, especially when each new, smaller NHA constitutes a separate habitat type or faces unique management challenges.Some areas were enlarged if additional fieldwork expanded the known extent of a population of species of concern at a location. 
+ \item Some areas were eliminated if the habitat at the location was considered no longer able to support the species formerly documented at the location. This may have resulted from significant changes to, or destruction of, the suitable habitat.
+ \item Former “Locally Significant” areas were not considered in this report since NHAs are currently only developed for locations supporting species of concern.
+ \item Former “Significant Geologic Features” were not considered for this report as they are not living resources.
+ \item Many new NHAs have been added for several reasons: 
+ \begin{itemize}
+   \item New field work resulted in the documentation of new locations for species of concern. 
+   \item Species formerly not tracked have been added to the species of concern list due to declines in known populations (e.g.,wood turtle).
+   \item Use of a longer time frame from which to draw data. The past cutoff date beyond which records were not considered for these reports was 1980. Now employed is a “rolling window” of 50 years to more closely reflect what is considered in the environmental review process. For the date of this report,   \Sexpr{YearUpdate}, the cutoff date is 1968.
+   \item Some entire groups of organisms were not previously considered for reports and now are (e.g.,dragonflies). The PNHP previously lacked sufficient taxonomic expertise, or comprehensive species distribution data, to consider groups of organisms which are now included in the report.
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Document layout}
+The 1998 \Sexpr{nameCounty} NAI was organized by USGS quadrangle. The \Sexpr{YearUpdate} Update is organized alphabetically by NHA name, with only one site depicted on each map. The scale of each map is based on the relative scale of the NHA.
+
+\subsection{Statewide Coverage}\
+The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
+
+\newpage
+\section{Biodiversity in Pennsylvania}
+\noindent An ecosystem is the complex of interconnected, interacting living organisms inhabiting a particular area or unit of space, and interacting with their physical environment.All the parts of an ecosystem are interconnected,and the survival of any species or the continuation of a given natural process largely depends upon the system as a whole, but in turn, these species and processes contribute to maintaining the system. An important consideration in assessing overall ecosystem health is the concept of biodiversity. Biodiversity can be defined as the full variety of life that occurs in a given place, and is measured at several scales: genetic diversity within a single species, species diversity, natural communities, and landscapes. \\
+
+\noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population allows a species to better adapt successfully to environmental changes. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations,through the migration of individual plants and animals across the landscape and the dispersal of pollen and seeds among populations (Thorne et al. 1996). Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
+
+\noindent A natural community is an interactive assemblage of plant and animal species that share a set of similar environmental tolerances or preferences,and occur together repeatedly across the landscape, such as a red maple swamp. Each type of natural community represents habitat for a different assemblage of species, and often indicates different environmental characteristics (for example, different natural communities prefer different ranges of moisture, temperature, or soil pH).Hence identification and stewardship of the full range of native community types is needed to meet the challenge of conserving habitat for all species.\\
+
+\noindent From an ecological perspective, a landscape is a large area of land that includes a mosaic of natural community types and a variety of habitats for many species. At this scale, it is important to consider whether communities and habitats are isolated or connected by corridors of natural landscape traversable by wildlife, and whether the size of a natural landscape is sufficient to support viable populations and ecosystems which will be persistent long-term. Because the living and non-living elements of an ecosystem are interconnected and interdependent, it is essential to conserve native biodiversity at all of these scales, from genes through landscapes, if ecosystems are to continue functioning as habitat and providing the natural resources that humans rely upon.\\
+
+\noindent Pennsylvania’s natural heritage is rich in biodiversity and the state includes many examples of high quality natural communities and large expanses of natural landscapes. Over 20,000 species are known to occur in the state, and the extensive tracts of forest in the northern and central parts of the state represent a large portion of the remaining areas of suitable habitat in the mid-Atlantic region for many forest-dependent species of birds and mammals. Unfortunately, biodiversity and ecosystem health are seriously threatened in many parts of the state by pollution and habitat loss. Of all the animals and vascular plants that have been documented in the state, more than one in ten are imperiled; \Sexpr{EThistoricextipated} species are considered historic to the state and \Sexpr{ETextipated} of these lost entirely since European settlement. 351 are threatened or endangered. Many of these species are imperiled because available habitat has been reduced and/or degraded. \\
+
+\noindent Fifty-six percent of Pennsylvania’s wetlands have been lost or substantially degraded by filling, draining, or conversion to ponds. According to the Pennsylvania Department of Environmental Protection (DEP), 60 percent of those Pennsylvania lakes that have thus far been assessed for biological health are listed as impaired. Of 83,000 miles of streams in Pennsylvania, almost 70,000 miles have been assessed for water quality. From this, nearly 11,000 miles have been designated as impaired due to abandoned mine discharges, acid precipitation, and agricultural and urban runoff. The species that depend on these habitats are correspondingly under threat: 58 percent of threatened or endangered plant species are wetland or aquatic species; 13 percent of Pennsylvania’s 200 native fish species have been lost, while an additional 23 percent are imperiled. Among freshwater mussels, one of the most globally imperiled groups of organisms, 18 of Pennsylvania’s 67 native species are extirpated (meaning locally extinct)and another 22 are imperiled.\\
+
+\noindent Prior to European settlement, over 90percent of Pennsylvania’s land area was forested. Today, 60 percent of the state is still forested, but much of this forest is fragmented by roads, utility rights-of-way, agriculture, and development. Only 42percent is interior forest habitat; meaning that some of the species which are very sensitive to human disturbances and that depend upon interior forest habitat are in decline. In addition to habitat fragmentation, forest pests, acid precipitation (which causes nutrient leaching and stunted growth), over browsing by deer and the aggressive spread of invasive species also threaten forest ecosystem health. \\
+
+\noindent The Pennsylvania Natural Heritage Program (PNHP)in cooperation with the Pennsylvania Biological Survey (PABS) assesses the conservation status of species of vascular plants, vertebrates, and selected invertebrate groups native to Pennsylvania.While Pennsylvania hosts a diversity of other life forms, too little information is known about the distribution of mosses, liverworts, lichens, fungi, and most invertebrates to assess their conservation status at this time. Despite lacking information about all of these groups of species, it is still possible to protect at least some rare species for which we know little about by conserving rare natural communities. Species tend to occur in specific habitats or natural communities, and by conserving a broad range of examples of all natural community types we will likely also conserve many of the associated species, whether or not we even know what those species are. Thus, the natural community approach is a coarse filter for broad scale biodiversity protection, while the fine filter, species-specific approach is used for those individual species for which it is feasible.\\
+
+\noindent The goals of this report are to identify areas important in sustaining biodiversity at the species, natural community, and landscape levels and to provide that information to more fully inform land use decisions. County Natural Heritage Inventories (CNHIs) identify areas in the state that support Pennsylvania’s rare, threatened, or endangered species as well as natural communities that are considered to be rare in the state or exceptional examples of the more common community types. A description of each area’s natural features and recommendations for maintaining their viability are provided. Also, in an effort to provide information focused on planning for biodiversity conservation, this report includes species and natural community fact sheets, references, and links to information on invasive exotic species. Together, with the other land use information, this report can help guide the planning and land management necessary to maintain the ecosystems on which our natural heritage depends. 
+
+\newpage
+\section{NATURAL HISTORY OVERVIEW OF \Sexpr{toupper(nameCounty)} COUNTY}
+\Sexpr{nameCounty} County is rich in history, and scenic and natural resources. However, its rural character, natural resources, and farmland are all seriously threatened by the conversion of farmland and natural habitats to suburban and commercial uses, a trend common throughout southwestern Pennsylvania. Major interstate highways linking \Sexpr{nameCounty} County to metropolitan centers have made commuting to Pittsburgh feasible.\\
+
+\noident The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased development. Wise planning, however,can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
+
+\subsection{Land Cover}
+
+Here is the 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.65\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{\Sexpr{paste("Landcovergraph_",nameCounty,sep="")}} % first figure itself
+        \caption{first figure}
+    \end{minipage}\hfill
+    \begin{minipage}{0.35\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{\Sexpr{paste("Layout_Landcover_",toupper(nameCounty),sep="")}} % second figure itself
+        \caption{second figure}
+    \end{minipage}
+\end{figure}
+
+
+\subsection{Physiography \& Geology}
+
+\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
+\caption{third figure}
+\end{figure}
+\end{wrapfigure}
+
+\noindent Characteristic landscapes and distinctive geological formations define Physiographic Provinces (Figure 1). Physiography relates in part to a region’s topography and climate. These two factors, along with bedrock type, significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influences animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others.\\
+
+Allegheny Front\\
+\noindent The Allegheny Front Section of the Appalachian Plateaus Province consists of rounded to linear hills rising to an escarpment in the eastern portion and undulating hills that slope away to the west of an escarpment. The Allegheny Front is the major southeast-or east-facing escarpment in the Allegheny Mountains in southern Pennsylvania, western Maryland, and eastern West Virginia. The Allegheny Front forms the boundary between the Appalachians Mountains to its east and the Appalachian Plateau to its west.This region is broadly folded, composed of shale, siltstone, and sandstone.\\
+
+Appalachian Mountains\\
+\noindent The eastern two-thirds of \Sexpr{nameCounty} county lies in the Appalachian Mountain section of the Ridge and Valley Physiographic Province. This section is characterized by long, narrow ridges,broad to narrow valleys,and occasionally karst.The bedrock is composed of sandstone, siltstone, shale, conglomerate, limestone, and dolomite. 
+
+
+
+
+
+\subsection{Watersheds}
+\noindent The streams in \Sexpr{nameCounty} County are part of the Susquehanna and Potomac River drainage basins (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
+
+\noindent Floodplains are flat, often flooded, areas along streams and rivers. They are important terrestrial habitat areas tied to the flowing water system. Floodplains are typically inundated by water during the spring runoff and then remain dry after these floodwaters recede. The effects of water on these systems influence the vegetation communities that can persist there. These forested floodplains also serve as a protective buffer against erosion, provide cooling shade to the waterway, filter pollutants and excessive nutrients from runoff, and help alleviate flood damage along many of the area’s creeks. \\
+
+\noindent In addition to naturally vegetated floodplains, vegetated riparian buffers along streams and other bodies of water provide vital benefits including protection of water quality, reduced erosion, flood control,and wildlife habitat. Elimination of riparian vegetation removes the capacity of this region to buffer the effects of the surrounding landscape and consequently reduces the water quality in the stream, as well as increasing the risk of flooding to developments near water bodies. Two major negative stream ecosystem effects of the loss of riparian buffers are sedimentation and nutrient enrichment. \\
+
+\noindent Streams that are dammed have modified habitats because of increased water temperatures and changes in the way sediment moves and is distributed in the river. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals,including human communities. 
+
+\subsection{Natural Communities}
+\noindent The interaction of geology and climate produces several critical functions in the landscape including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and ultimately wildlife habitat formation. The classification of plant communities typically revolves around the dominant species, habitat, and growth form. Boundaries between community types in the field are often gradual and indistinct. \\
+
+\noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate)associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
+
+\noindent Little to none of the original forest cover still exists in \Sexpr{nameCounty} County. Much of the forest on the valley floors was cleared for agriculture and development and the forests that remain have been logged one or more times for fuel and lumber (Keever 1972). These factors have changed the extent and species composition of the forest. For example, the tulip poplar, a fast-growing early successional tree species,was considered to be a minor component of this forest region but has now become a co-dominant with the oaks in many places. Species composition in the understory has shifted as well,with native spicebush and viburnums becoming more dominant in some areas and exotic species such as Japanese honeysuckle, tree-of-heaven, common privet, bush honeysuckles, autumn olive, winged euonymus, Japanese stilt grass,and garlic mustard becoming established in other areas. In many woodlands, these exotics tend to crowd out the native species and reduce the overall biological diversity of the flora. In turn, this reduction in the diversity of the flora also leads to a reduced fauna.\\
+
+\noindent Although the original forest is gone, there are still plant communities have naturally re-established and that reflect the patterns of the forest that were prevalent in the county. These plant communities occur in response to variations in local climate, topographic position and exposure, bedrock, soils, and hydrology. Natural communities can be resilient to disturbances such as logging when connections between undisturbed patches and disturbed patches remain across the landscape, allowing for new individuals to disperse to disturbed habitat patches, and when plant seed banks remain in the soils. \\
+
+\noindent The hills within the county are often covered with a mix of oak, Virginia pine, pitch pine, black gum, black birch, tulip poplar, and maple,with varying amounts of beech and hickory. Viburnum species are prevalent shrub components. The cooler north-facing slopes and ravines are often distinctive because they are dominated by hemlock and white pine. White oak, red maple, and beech are also common canopy species. \\
+
+\noindent Two notable but limited plant communities within the county are the shale barren woodlands and wetlands. The shale barren woodlands were best developed on steep south to southwest facing slopes above major creeks and rivers, but only remnants still exist today.Chestnut oak, red oak, Virginia pine, pitch pine, andblack gumare common tree components. Because of variations in microtopography, a wide assortment of shrubs and herbs may be found in the least disturbed examples of this community, and many of the species found in these barrens are endemicto these typesof communities—that is,they are rarely found outside of these communities. Wetlands are scattered throughout the county and range from wooded,with red maple as the dominant tree,to marshes with cattails orwet meadows with a variety of grasses and sedges. The type of wetland depends on disturbance, soils, and hydrology (depth and length of time of flooding).
+
+\subsection{Regional Disturbances}
+Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today.\\
+
+\noindent Natural Disturbances–Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. Floodplain forests benefit from the periodic scouring and deposition of sediments as streams overtop their banks. At the same time, streamside wetland communities retain excess water, thus reducing the scale of downstream flooding. \\
+
+\noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species (Rhoads and Klein 1993; Latham et al. 2005). Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct lossof rare plants (Yahner 1995). \\
+
+\noindent Human Disturbances–Human and natural disturbances create different habitats in different scenarios, but human disturbances often leave the most lasting effect on the environment. Many human disturbances can be beneficial to a specific suite of species that require an early successional habitat. However, what is beneficial to one species is often detrimental to many other species. Many once-common species have become rare because they are unable to adapt to disturbance of their small, specialized part of the environment. Consequently, many species have declined due to human alteration of the landscape. Human disturbances are semi-permanent parts of the landscape, but decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations.
+
+\subsection{Forest Fragmentation}
+Prior to European settlement, forest covered more than 90 percent of the area that became Pennsylvania (Goodrich et al., 2003). Today 62 percent of the state is forested, comprising an area of over 17 million acres (Figure 3a; Goodrich et al., 2003; Myers et al., 2000). Figure 3b shows the division of these forests by major fragmenting features such as interstate highways and major rivers; however, much of this forest exists as relatively small islands isolated by surrounding linear features such as roads, utility rights-of-way, all-terrain vehicle trails, snowmobile trails, railroads, and patches of non-forested lands(habitat patch areas from 1-250 acres). The forest blocks of the county are presented in Figure 4, classified by size. Forest blocks greater than 25 acres represent potential contiguous habitat for animals sensitive to all scales of fragmenting features, such as amphibians and interior forest birds.\\
+
+\noindent Fragmentation of contiguous forested landscapes into smaller, isolated tracts has an effect on plant and animal distribution and community composition. When a large piece of forest tract is fragmented, or split into pieces, the resulting forest islands may lack some of the habitats that existed in the original tract, or may be smaller than the minimum area required by a given species (Lynch and Whigham, 1984). For example, the Louisiana waterthrush (\textit{Parkesia motacilla})is rarely found in small woodlots because they require upland forest streams within their territory and most small woodlots lack this necessary component (Robbins, 1980; Robinson, et al., 1995). Area-sensitive species such as the northern goshawk (\textit{Accipiter gentilis}), barred owl (\textit{Strix varia}), bobcat(\textit{Lynx rufus}), and timber rattlesnake (\textit{Crotalus horridus}) require interior forest areas in excess of 6,000 acres to accommodate breeding and foraging territories (Ciszek, 2002; Mazur and James, 2000; Squires and Reynolds, 1997).\\
+
+\noindent Edge forest is composed of a zone of altered microclimate and contrasting community structure distinct from the interior,or core forest (Matlack, 1993). Along with a reduction in total forested area, forest fragmentation creates a suite of edge effects which can extend 1,000 feet into the remaining fragment (Forman and Deblinger, 2000). Edge effects include increased light intensity, reduced depth of the leaf-litter layer, altered plant and insect abundance, and reduced numbers and species diversity of macroinvertebrates (Haskell, 2000; Watkins et al., 2003; Yahner, 2000). The macroinvertebrates in the leaf litter are significant for the pivotal role they play in energy and nutrient cycling; these macroinvertebrates also provide an important food source for salamanders and ground-feeding birds (Voshell, 2002). Additionally, a number of studies have shown that the nesting success of forest-interior songbirds is lower near forest edges than in the interior, due to increased densities of nest predators and brood parasites.\\
+
+\noindent Not only do roads fragment forests, but roads can also act as corridors for dispersal of invasive plants and toxic chemicals, and pollute nearby aquatic systems (Forman and Alexander, 1998; Trombulak and Frissell, 2000; Watkins et al., 2003; Williams, 1995). Vehicles can transport exotic plant seeds into previously un-infested areas, while road construction and maintenance operations provide sites for seed germination and seedling establishment \parencite{schmidt_plant_1989} (Schmidt, 1989; Trombulak and Frissell, 2000). Road traffic and maintenance of rights-of-way also contribute to the introduction of at least six different groupsof chemicals into the environment: heavy metals, salt, organic pollutants, ozone, nutrients, and herbicides (Forman and Alexander, 1998; Trombulak and Frissell, 2000). Heavy metals such as lead, aluminum, and iron contaminate soils, plants, invertebrates, and vertebrates up to 656 feet from roads (Trombulak and Frissell, 2000). Deicing salts alter the soil’s chemical composition (including the pH), which affects plant growth (Forman and Alexander, 1998; Trombulak and Frissell, 2000). Airborne sodium chloride from snowplowing may cause leaf injury to trees up to almost 400 feet from a road (Forman and Alexander, 1998). Organic pollutants such as dioxins and polychlorinated biphenyls (PCBs)are present in higher concentrations along roads, and hydrocarbons may accumulate in aquatic ecosystems near roads. Storm runoff from roads, particularly where roads abut or cross water bodies, can result in the transportation of nutrients and sediments into aquatic ecosystems. Drifting or misused herbicides applied to roadsides and utility rights-of-ways to control woody plant growth may damage forest edge and interior plant species or directly kill rare plants (Williams, 1995).\\
+
+\noindent Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively pristine habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, predator-prey interactions,and natural disturbances regimes. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass.
+
+\subsection{Invasive Species}
+The introduction of non-native species into Pennsylvania began with the initial European settlement in the 17th century (Thompson 2002)andcontinues today. Plants and animals have been deliberately introduced for a variety of purposes including food sources, erosion control, landscaping, and game for hunting and fishing. Other species have been accidentally introduced as ‘stowaways’ through increases in global trade and transportation. These introductions have had drastic effects on Pennsylvania’s biodiversity over time. For example, over 37\% of the plant species now found in the statedid not occur here during the first period of European settlement (Thompson 2002). While many introduced species do not spread aggressively or have strong influences on native species, a subset of introduced species—those classified as “invasive”—have a variety of negative impacts on native species and natural communities.
+\subsubsection{Invasive Plants} 
+Invasive plants reproduce rapidly, spread quickly over the landscape, and have few, if any, natural controls such as herbivores and diseases to keep them in check (Table 1). Invasive plants typically have a number of characteristics that allow them to spread rapidly and make them difficult to remove or control:  1)Spreading aggressively by runners or underground roots;2)Producing large numbers of seeds that survive to germinate; 3)Dispersing seeds away from the parent plant through various means such as wind, water, wildlife, and people.Invasive plants are capable of displacing native plants from natural communities, especially those with rare, vulnerable, or limited populations. This initial impact is worsened by the tendency for native wildlife to prefer native species over invasive species for food. In some cases, a switch to the invasive plant food supply may affect the physiology of the prey species. For example, many invasive shrubs, such as non-native bush honeysuckles (\textit{Lonicera} spp.), provide fruits that native birds find attractive, yet these fruits do not provide the nutrition and high-fat content the birds need in their diets (Swearingen et al. 2002). Aggressive invasive plants can also transform a diverse small-scale ecosystem, such as a wetland or meadow, into a monoculture of a single species, drastically reducing the overall plant richness of an area and limiting its ecological value. The decrease in plant biodiversity can, in turn, impact the mammals, birds, and insects in an area, as the invasive plants do not provide the same food and cover value as the natural native plant species did (Swearingen et al., 2002). 
+\subsubsection{Invasive Animal Species}
+In addition to invasive plants, Pennsylvania is now home to several exotic species of animals including mammals, birds, fish, and reptiles along with a suite of invertebrates, fungi, and bacteria. These species can directly threaten populations of native animals through direct competition or predation. Other invasive exotic animals can alter habitats and ecosystems by changing plant cover or diversity. Chestnut blight (\textit{Cryphonectria parasitica}), a fungus, was probably introduced to North America from infected nursery stock from China in the 1890s. First detected in New York City in 1904, it has all but wiped out the American chestnut (\textit{Castanea dentata}) from Maine to Alabama to the Mississippi River. American chestnut once comprised one-fourth to one-half of eastern U.S. forests and was prized as a food for humans, livestock, and wildlife and for its beautiful and durable wood. Today, only stump sprouts from killed trees remain and the canopy composition has been filled by the chestnut’s associate species of oaks and hickories.Emerald ash borer (\textit{Agrilus planipennis})is a beetle that kills all species of ash trees (Fraxinus spp.) Accidentally introduced into North America from Asia in 2002, it was first detected in Pennsylvania in 2007 in \Sexpr{nameCounty} Countyand hasspread rapidly across the state since then.  It is expected that in coming years ash trees will be functionally extirpated in Pennsylvania. Another introduced tree-killing species is the hemlock woolly adelgid (\textit{Adelges tsugae}). This is a small aphid-like insect that feeds on the leaves of eastern hemlock trees (\textit{Tsuga canadensis}). Infestations of the woolly adelgid appear as whitish fluffy clumps of feeding adults and eggs along the underside of the branch tips of the hemlock. Hemlock decline and mortality typically occurs within four to ten years of initial infestation. The adelgid can cause up to 90\% mortality in eastern hemlocks, which are important for shading trout streams, and provide habitat for about 90 species of birds and mammals, some exclusively, in addition to having cultural value by virtue of being the Pennsylvania state tree. Several control options are currently being tested, but these have met with very limited success. It is currently distributed from Maine to Georgia and can be found in most of the counties in Pennsylvania (DCNR 2007).Its presence in \Sexpr{nameCounty} County was confirmed in 2007. The gypsy moth (\textit{Lymantria dispar}) has caused extensive defoliation of forests in the northeast. This European moth was intentionally introduced to the U.S. in 1869 as part of a failed commercial silk production venture. Its main impact is that it defoliates trees, concentrating on oak species, but opportunistically eating almost any type of plant. This defoliation can result in a reduction in the growth rate and eventual death of afflicted trees. Several invasive animal species are spreading throughout the streams, rivers, and lakes of Pennsylvania, but in many cases the impact of these species remains unknown. The zebra mussel (\textit{Dreissena polymorpha}) was accidentally introduced to the Great Lakes in the 1980s and has been spreading in Pennsylvania’s waters. This mussel poses a great threat to industry, recreation, and native fish and mussel species and should be controlled wherever it occurs. Another non-native bivalve, the Asian clam (\textit{Corbicula fluminea}), has spread throughout most of Pennsylvania’s waterways including the Susquehanna and its tributaries. Of greatest concern to biodiversity is the capacity of the clam to alter the ecology of aquatic systems, making it less hospitable to the native assemblage of freshwater mussels, fish, invertebrates, and plants. Another aquatic species found in the region, the rusty crayfish (\textit{Orconectes rusticus}), has been transplanted from its native range in the midwestern United States to many of Pennsylvania’s watersheds in the form of live fishing bait,even though it is prohibited from transport by the state. Potentially, rusty crayfish can reproduce in large numbers and reduce lake and stream vegetation, depriving native fish and their prey of cover and food. Their size and aggressive nature keep many fish species from feeding on them. Rusty crayfish may also reduce native crayfish, freshwater mussels, and reptile and amphibian populations by out-competing them for food and habitat or by preying directly on young individuals. 
+
+Overall Invasive Recommendations
+
+The spread of invasive species within the region presents a significant hurdle to the reestablishment of native plants and animals. Additionally, new invasive species continue to be introduced, further degrading natural habitat and displacing native species. This continuous disturbance from invasive species mandates their active management for any native vegetation restoration plan to be successful. Successful control of invasive species is a time-, labor-, and resource-intensive process, but it is also necessary for native areas to survive. Prevention or control during the early stages of an infestation is the best strategy. In areas where invasive plants are well established, multiple control strategies and follow-up treatments may be necessary. After the infestation has been eliminated, regular “maintenance” of the site to prevent a new infestation may also be needed. Specific treatment depends on the target species' biological characteristics and population size. Invasive plants can be controlled using biological, mechanical,and/or chemical methods. 
+
+\begin{longtable}{p{2in}p{5in}}
+ \caption{Common invasive species in \Sexpr{nameCounty} County.}
+ \hline
+ \textbf{Species} & \textbf{Description and Threat}\\
+ \hline
+        Japanese plumegrass (Miscanthus sinensis), Bamboo (Pseudosasa spp.), Common reed (Phragmites australis ssp. australis)
+        &
+        These large grasses spread through runners and/orwind-blown seeds. They are highly invasive and quickly form large monocultures that offer little habitat to native species.
+      \hline
+        European alder (Alnus glutinosa), Japanese angelica-tree (Aralia elata), Japanese barberry (Berberis thunbergii), Butterfly bush (Buddleja sp.), Burning bush (Euonymus alatus), Privet (Ligustrum spp.), White mulberry (Morus alba),  Bradford pear (Pyrus calleryana), Jetbead (Rhodotypos scandens), Wineberry (Rubus phoenicolasius), Japanese Spiraea (Spiraea japonica)
+        &
+        Many of these commonly used landscape shrubs have escaped from cultivation to form dense thickets that displace native woody and herbaceous plants.
+      \hline
+        Garlic mustard (Alliaria petiolata), Chervil (Anthriscus sylvestris), Crown vetch (Coronilla varia), Japanese stiltgrass (Microstegium vimineum), Lesser celandine (Ranunculus ficaria)
+        &
+        These increasingly common invasive herbs are spreading through natural areas throughout the region often forming large patches that can prevent native species regeneration.
+      \hline
+        Purple loosestrife (Lythrum salicaria), Japanese and giant knotweed (Fallopia japonica and F. sachalinensis)
+        &
+        These fast-growing exotics displace natural vegetation, greatly alter natural ecosystems, and degrade riparian systems throughout the state. Once established in a wetland these species are difficult to eradicate and will displace native species.
+      \hline
+        Five-leaved akebia (Akebia quinata), Porcelain berry (Ampelopsis brevipedunculata), Oriental bittersweet (Celastrus orbiculatus),
+        Wintercreeper (Euonymus fortunei), English ivy (Hedera helix), Japanese hops (Humulus japonicus), Japanese honeysuckle (Lonicera japonica),
+        Periwinkle (Vinca minor), Exotic wisterias (Wisteria sinensis and W. floribunda)
+        &
+        These perennial vines cover and out-compete native vegetation as well as girdle trees by twining up them. They are noted for devastating unmanaged trees and shrubs by smothering the plants and often form an impenetrable barrier along forest and stream edges. Additionally, Japanese hops and English ivy are noted for causing skin rashes.
+      \hline
+        Mile-a-minute (Persicaria perfoliata) 
+        & 
+        An annual vine that invades open and disturbed areas and scrambles over native vegetation, smothering them. 
+      \hline
+        Autumn olive (Elaeagnus umbellata), Non-native bush honeysuckles (Lonicera tatarica, L. morrowii,L. maackii, and L. xylosteum),Glossy buckthorn (Rhamnus frangula), Multiflora rose (Rosa multiflora)
+        &
+        Found in a variety of environments from wetlands to uplands. These compete with native plants for moisture, nutrients, and pollinators. Fruits do not provide high-energy food for migrating birds.
+      \hline
+        Non-native viburnums (Viburnum plicatum, V. sieboldii, V. dilatatum)
+        &
+        Shrubs or small trees that supplant native viburnum species. Commonly used in landscaping, the berries of viburnums attract birds allowing quick and widespread invasion.
+      \hline
+        Norway maple (Acer platanoides),Sycamore maple (Acer pseudoplatanus), Tree-of-heaven (Ailanthus altissima), Princess tree (Paulownia tomentosa), Bird cherry (Prunus avium), Siberian elm (Ulmus pumila)
+        &
+        These fast growing introduced trees are still sold as ornamental trees. They have spread throughout Pennsylvania invading many rich upland woodlands and are commonly found along roadsides.
+        \hline
+\end{longtable}
+
+
+\newpage
+\section{METHODS}
+The following are an overview of the general methods used to create this report.  For more detail about any of these methods,please contact the Pennsylvania Natural Heritage Program.Mapping Of Natural Heritage Areas (NHAs)A Natural Heritage Area (NHA)isan area containing one or more plant or animal species of concern at state or federal levels, exemplary natural communities, or exceptional native biological diversity. NHAs include both the immediate habitat and surrounding lands important in the support of these elements. They are mapped according to their sensitivity to human activities, with designations of Core Habitat and Supporting Landscape areas. The sensitivity of each designation varies significantly according to the particular plant, animal,or natural community habitat that the area represents and is discussed in detail in each NHA Site Description.Core Habitat –areas representing critical habitat that cannot absorb significant levels of activity without substantial negative impacts to elements of concern. Supporting Landscape –areas directly connected to Core Habitat that maintain vital ecological processes and/or secondary habitat that may be able to withstand some lower level of activity without substantial negative impacts to elements of concern.In most cases, the Supporting Landscape is not included in the NHA maps included with the reports. Supporting landscapes associated with the NHA’s can be viewed, however, in the online Conservation Explorer mapping tool: http://conservationexplorer.dcnr.pa.gov/content/map.\\
+
+Data obtained on species of concern and natural communities during the field work for this inventory was combined with existing data on species of concern and exemplary natural communities in the PNHP database back to 50 years before present and summarized. Plant and animal nomenclatures follow those adopted by the Pennsylvania Biological Survey. Natural community descriptions follow Zimmerman et al. (2012), which is a revision of Fike (1999). All sites with rare species and/or natural communities were selected for inclusion in Natural Heritage Areas (NHAs; see definition below). Spatial data on the elements of concern were compiled in a Geographic Information System (ESRI ArcGIS 10). Boundaries defining Core Habitat and Supporting Landscapes for each species or community of concern were delineated using PNHP specifications for Conservation Planning Polygons (CPPs)for the elements of concern. These specifications are based on scientific literature and expert knowledge for individual species or animal assemblages and may incorporate physical factors (e.g., slope, aspect, hydrology); ecological factors (e.g., species composition, disturbance regime); or input provided by jurisdictional government agencies. Core Habitat and Supporting Landscapes for each NHA are then delineated based on the CPPs. NHAs may represent a combination of CPPs for multiple species and populations or they may represent critical habitat defined by a CPP for just one element of biodiversity. NHAs are mapped without regard to political boundaries, and can extend across property boundaries onto un-surveyed lands, when likely-suitable habitat for species is contiguous with surveyed areas. NHA boundaries vary in size and extent depending on the physical characteristics of a given site and the ecological requirements of its unique natural elements. For instance, two Core Habitat wetlands ofthe same size occurring in the same region may require Supporting Landscape areas of very different size and shape to support their functions if one receives mostly ground water and the other receives mostly surface water, or if one supports a plant species of concern, while the other supports a bird species of concern. Each NHA is then assigned a significance rank—ranging from state to regional to global significance—based on its importance,ecological integrity,and contribution to biological diversity across the state. These ranks can be used to help prioritize future conservation efforts.\\
+
+\subsection{Mapping and Conservation Planning for Sensitive Species}
+As some data that PNHP collects is considered sensitive, due to threats to the focal species from collection or other harm, the program has adopted the following general guidelines regarding the release of natural heritage information:• The discretionary release of PNHP information should elp conserve the species, habitat, or site in question.•Non-sensitive information will be made broadly available, while the distribution of sensitive information will be restricted.• Sensitive information is defined as location information for species identified by the appropriate jurisdictional agency as collectible, having economic value, or being susceptible to decline as a result of visitation. Sensitive species present in \Sexpr{nameCounty} County are identified in Table 2, but these species are not mentioned by name in NHA descriptions.• The release of sensitive information as defined above (1) will be considered on a case-by-case basis, (2) will be limited to those with a demonstrated need to know, and (3) will require a signed information sharing agreement. The decision to release the information will bemade by the agency having jurisdiction over the species in question. Valid reasons for releasing sensitive information could include, but are not be limited to, environmental review, research, and conservation planning. The information sharing agreement will define restrictions on how the information can be used and limit further distribution or sharing.• Information that is not considered sensitive will be made available as supporting habitat conservation-planning polygons and will include the name of the species or community present. Requests for more detailed information will be considered on a need-to-know basis and will require an information sharing agreement.Spatial representation for these sensitive species will be consistent with PNHP data sharing guidelines outlined above. These are presented as large, statewide level sites which will contain a single polygon feature for a given area that matches merged overlapping CPP Supporting Landscapes for the sensitive species. In some cases this will equate to a range map for the species, and in others, it may be a series of adjacent large forest patches. The scale of these matches the scale at which jurisdictional agencies are comfortable allowing species information to be released. These will sufficiently obscure the precise locations of sensitive species occurrences. Conservation planning information will follow a similar format as all other NHA Site Accounts and will include a description of the species present, habitat needs, general threats and stresses,and conservation recommendations. This information will not be specific to a particular occurrence, but rather it will provide guidance for users of the data to have a general awareness of the taxa and to be able to use the information in project planning and broad-scale conservation efforts.
+
+\subsection{Site Accounts} 
+An account describing the site and outlining the conservation priorities, threats and stresses, and conservation recommendations is presented for each NHA. Each site account includes a table listing the species tracked by PNHP documented at that site. This table includes the species common and scientific names. A species listed as a “Sensitive Species of Concern” is unnamed by request of the jurisdictional agency responsible for its protection, due to factors such as illegal collection, intentional destruction, or potential to be disturbed by people. Additional information noted in the table includes PNHP element ranks, State Status, quality rank and the last year this specieswas officially observed (see below). Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via the PNHP website at http://www.naturalheritage.state.pa.us/.Conservation Rank information is also presented in tables for each NHA and a basic of overview of field values is presented below.
+
+\subsubsection{PNHP Element Ranks}
+Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational). The numbers have the following meaning: 1 = Critically Imperiled: at very high risk of extinction due to extreme rarity (often 5 or fewer populations), very steep declines, or other factors. 2 = Imperiled: at high risk of extinction or elimination due to very restricted range, very few populations, steep declines, or other factors. 3 = Vulnerable: at moderate risk of extinction or elimination due to a restricted range, relatively few populations, recent and widespread declines, or other factors. 4 = Apparently Secure: uncommon but not rare; some cause for long-term concern due to declines or other factors. 5 = Secure: common; widespread and abundant. For example, G1 would indicate that a species is critically imperiled across its entire range (i.e., globally). In this example, the species as a whole is regarded as being at very high risk of extinction. A rank of S3 would indicate the species is vulnerable and at moderate risk within a particular state or province, even though it may be more secure elsewhere. Species and ecosystems are designated with either an "X" (presumed extinct or extirpated)if there is no expectation that they still survive, or an "H" (possibly extinct or extirpated)if they are known only from historical records but there is a chance they may still exist. Other variants and qualifiers are used to add information or indicate any range of uncertainty. Additional information regarding PNHP element rank definitions, as well as complete descriptions of ranks and qualifiers can be found at http://www.naturalheritage.state.pa.us/RankStatusDef.aspx or http://www.natureserve.org/explorer/ranking.htm.PNHP typically tracks all species ranked S1-S3 in Pennsylvania. Some less-rare species are also tracked if they are thought to be of conservation concern. Still other species which are not currently tracked are actually rare, but due to a lack of scientific information, they are not yet ranked and recognized as rare.
+
+\subsubsection{Federal and State Status} Federally listed species are under the jurisdiction of the US Fish and Wildlife Service and have the following status definition: 
+\begin{itemize}
+\item LE = Listed Endangered: a species which is in danger of extinction throughout all or a significant portion of its range. 
+\item LT = Listed Threatened: any species which is likely to become an endangered species within the foreseeable future throughout all or a significant portion of its range. 
+\end{itemize}
+
+\noindent The three state jurisdictional agencies (DCNR, PGC, and PFBC)each have slightly different definitions that define status ranks of species under their jurisdiction. Therefore, for the purposes of this report, the following general definitions are used to indicate the degree of rarity of each species. \begin{itemize}
+\item PE = Pennsylvania Endangered: species in imminent danger of extinction or extirpation throughout their range in Pennsylvania if the deleterious factors affecting them continue to operate. 
+\item PT = Pennsylvania Threatened: species that may become endangered within the foreseeable future throughout their range in Pennsylvania unless the casual factors affecting the organism are abated. 
+\item N = No Status –no current legal status, but the species is under study for listing consideration in the future. 
+\end{itemize}
+Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a precise and expanded list of Federal and State Status definitions. 
+
+\subsubsection{Quality Ranks}
+Each population of a species of concern is assigned a quality rank, based on the estimated probability that it will persist over timeat the site. The most commonly assigned ranks are summarized below: 
+\begin{itemize}
+\item A: Excellent Viability –very likely to persist for 20-30 years in current condition or better. 
+\item B: Good Viability –likely to persist for 20-30 years in current condition or better. 
+\item C: Fair Viability –persistence uncertain, or decline in condition likely over 20-30 years. 
+\item D: Poor Viability –very high risk of extirpation. 
+\item E: Verified Extant –recently verified as still existing, but without enough information to estimate viability. 
+\item H: Historical –recent field information is lacking, but might still be present 
+\item F: Failed to Find –recent field surveys have failed to locate the species, but habitat still exists and there is a possibility of persistence. 
+\item X: Extirpated –surveys demonstrate persuasively that the species is no longer present. 
+\end{itemize}
+Combination ranks (such as AB or CD)are used to indicate a range of uncertainty associated with a population’s viability. Please refer to http://www.natureserve.org/explorer/eorankguide.htm for expanded definitions and application of quality ranks.
+
+\subsection{Site Ranking}
+Each Natural Heritage Area is assigned a significance rank that represents the site’s biodiversity importance. Ranks are calculated by a score that represents the G-ranks and S-ranks of each species present at the site, weighted by the Quality ranks for those populations. These scores are summed for each site to produce an overall site score. These scores were used to guide the ranking of the site by expert review. Site scores are assigned categorical ranks based on score thresholds and criteria defined by PNHP biologists.
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{Your first table.}
+    \label{tab:table1}
+    \begin{tabular}{|p{2cm}|p{12cm}|} 
+      \textbf{Rank} & \textbf{Description}\\
+      \hline
+      Global & Sites which have global importance for biological diversity and Pennsylvania hasa primary role to maintain (e.g.,most of the known occurrences are within Pennsylvania). Sites in this category generally contain one or more occurrences of species of global concern (e.g.,G2and G1) or large concentrations of species of lower significance. \\
+      Regional & Sites which have regional importance for biological diversity and these Pennsylvania sites are important for maintaining representation of those species in the greater Northeast /mid-Atlantic region. Sites in this category generally contain one or more occurrences of species of global concern (e.g., G3) or concentrations of species of lower significance. \\
+      State & Sites which are important for the biological diversity and ecological integrity at the state scale. Sites have occurrences of elements of concern with lower ranks (G and S rank see above), smaller populations or extent, or generally lower biodiversity scores than Global or Regional ranked areas. \\
+     Local & Sites which have importance to biological diversity at the county scale, but are not, as yet,known to contain species of concern or state significant natural communities. Often recognized because of their relative size, undisturbed character, or proximity to areas of known significance, these sites may be targeted with future surveys. \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\section{RESULTS}
+To update this County Natural Heritage Inventory, the botanists, ecologists, and zoologists of the Pennsylvania Natural Heritage Program, and partner organizations, have explored the natural resources of \Sexpr{nameCounty} County. This work represents an organized effort to inventory the biodiversity present throughout the county. Some of the earliest formal natural history study in this area was completed in the early part of the 19th century. These early explorers provided records that, whenever possible, have been updated in this report. In the surveys conducted for this inventory, researchers have not only identified rare, threatened, and endangered plants and animals, but also many common species, for which no formal records previously existed in museum and agency records. 
+
+\subsection{Species and Communities of Concern in \Sexpr{nameCounty} County}
+\Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report(Table 2).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
+
+\begin{longtable}{p{10.8cm}p{1.6cm}p{1.6cm}p{1.6cm}}
+\caption{Species and Natural Communities of Concern in \Sexpr{nameCounty} County.}
+%\label{tab:table3}\\
+\hline
+\textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
+\midrule
+
+ \endfirsthead
+\textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
+\midrule
+\endhead
+
+\midrule[\heavyrulewidth]
+\multicolumn{4}{r}{\textit{table continued on next page}}\\
+\endfoot
+
+\midrule[\heavyrulewidth]
+%\insertTableNotes  % tell LaTeX where to insert the table-related notes
+\endlastfoot
+
+<<label=speciestable, echo=FALSE, results='asis'>>=
+for(t in taxa){
+  if(t=="AM"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Mammals}}', '\\\\ \n'))
+  }
+  else if(t=="AB"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Birds}}', '\\\\ \n'))
+  }
+  else if(t=="AAAA"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Amphibians}}', '\\\\ \n'))
+  }
+  else if(t=="AR"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Reptiles}}', '\\\\ \n'))
+  }
+  else if(t=="AF"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Fish}}', '\\\\ \n'))
+  }
+  else if(t=="IMBIV"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Freshwater Mussels}}', '\\\\ \n'))
+  }
+  else if(t=="P"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Plants}}', '\\\\ \n'))
+  }
+  else if(t=="IMGAS"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{IMGAS}}', '\\\\ \n'))
+  }
+  else if(t=="IILEP"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Butterflies and Moths}}', '\\\\ \n'))
+  }
+  else if(t=="CGH"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{CGH}}', '\\\\ \n'))
+  }
+  else if(t=="IICOL"){
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{IICOL}}', '\\\\ \n'))
+  }
+  else{
+    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}',t,'}', '\\\\ \n'))
+  }
+  for(i in 1:nrow(speciestable)){
+    if(speciestable$ELEMENT_TYPE[i] == t){
+      cat(paste0(paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="") , " & ", speciestable$GRANK[i], " & ", speciestable$SRANK[i], " & ", paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")," \\\\") )
+     }
+  }
+}  
+  
+  
+
+
+# 
+# for(i in 1:nrow(speciestable)){
+#        cat(paste0(paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="") , " & ", speciestable$GRANK[i], " & ", speciestable$SRANK[i], " & ", paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")," \\\\") )
+# }
+@
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Natural Heritage Areas of \Sexpr{nameCounty} County}
+This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table 3). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="G"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="R"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="S"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="L"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
+
+
+\begin{longtable}{|p{0.8cm}|p{3.6cm}|p{1.6cm}|p{8.2cm}|}
+\caption{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are Global, Regional, State, and Local.}
+\label{tab:table3}\\
+\hline
+\textbf{Map ID} & \textbf{Site Name} & \textbf{Significance Rank} & \textbf{Brief Description} \\
+\midrule
+\endfirsthead
+\textbf{Map ID} & \textbf{Site Name} & \textbf{Significance Rank} & \textbf{Brief Description} \\
+\midrule
+\endhead
+
+\midrule[\heavyrulewidth]
+\multicolumn{4}{r}{\textit{table continued on next page}}\\
+\endfoot  
+
+\midrule[\heavyrulewidth]
+%\insertTableNotes  % tell LaTeX where to insert the table-related notes
+\endlastfoot
+
+<<label=nhatable, echo=FALSE, results='asis'>>=
+for(i in 1:nrow(nha_list)){
+       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
+       cat("\\hline")
+}
+@
+\end{longtable}
+
+
+\newpage
+\section{CONCLUSIONS AND RECOMMENDATIONS}
+
+\subsection{Future Natural Resource Research in the Region}
+This Natural Heritage Inventory was developed using the most currently available data from the PNHP databases. The data in this report represents a snapshot of the region’s natural resources at the time the report was written. Many potential high quality natural habitats in the region have never been surveyed for species of concern, or may have been visited in a season not conducive to the documentation of the species present. Any further work in the area could yield additional records of species of concern while future land use changes may result in the extirpation of species documented in this report. This is partially due to the fact that natural systems are dynamic and constantly changing due to natural and human induced pressures. Additional survey efforts are encouraged for these reasons. The PNHP considers this report a working document that can and should be updated as new information is available.
+\subsection{A Final Note on Rare, Threatened, and Endangered Species}
+The rare, threatened, and endangered species highlighted in this report are some of the several hundred species in Pennsylvania that are threatened with extirpation or extinction. If a species becomes extinct or is lost from a portion of its native range, the ecosystem in which it lived will lose an important element. Often the repercussions of extinctions are not known until the species is gone, and the species is generally irreplaceable in the system. This may be because the habitat has been altered to the point that the biological system no longer functions properly. Species of concern are often indicative of fragile ecosystems that easily degrade; their protection may help monitor the overall quality of the region’s ecosystems. A great example of a species of concern acting as an indicator of environmental quality is the bald eagle -a species which indicated the deleterious effects of the pesticide DDT in our environment. Banning DDT led to the eventual recovery of the species, as well as many other species which were similarly impacted.Another reason for protecting species of concern is for their value as unique genetic resources. Every species may provide significant information for future use in genetic research and medical practices. Beyond these practical considerations, perhaps the most compelling reasons for stewardship are the aesthetic and ethical considerations; there is beauty and recreational value inherent in healthy,species-rich ecosystems. The protection of rare, threatened, and endangered species depends on several factors, including increasing scientific knowledge and concerted efforts from government agencies, conservation organizations, educational institutions, private organizations, and individuals. The following section outlines general recommendations to begin to protect the species outlined in this report.Using the Natural Heritage Inventory in the Planning Process One of the main roles of this document is to integrate ecological and conservation information into the planning process. Considering this information early in the planning process reduces the likelihood of costly conflicts with rare, threatened and endangered species, and protects these resources for future generations.Comprehensive land use planning and its related ordinances can be effective tools for the conservation of the region’s biological diversity.Land use planning establishes guidelines for the kinds of land uses that are suitable in an area and provides a basis for guiding public and private development to benefit communities, the local economy,and the environment. Zoning and subdivision ordinances then set out rules that implement the land use plan. Planning, zoning,and subdivision ordinances are not only valuable tools for urban and suburban areas where development pressures have already affected the use of open space and the integrity of the natural environment, but are also valuablefor rural areas where current losses are less pronounced. These areas can apply planning to avoid the haphazard losses of valuable regional resources, while still achieving desirable levels of development. 
+
+Planning for the land use decisions of today and those of the future is an important task and this Natural Heritage Inventory can serve as a useful tool. Pennsylvania Natural Heritage Program staff and expertise are available for additional technical assistance and planning for the conservation of these sites.
+
+\subsection{General Recommendations}
+The following are general recommendations for the protection of the Natural Heritage Areas within the region. Approaches to protecting a Natural Heritage Area are wide ranging, and factors such as land ownership, time constraints, and tools and resource availability should be considered when prioritizing protection of these sites. Prioritization works best when incorporated into a long-term region-wide plan. Opportunities may arise that do not conform to a plan, and the decision on how to manage or protect a natural heritage area may be made on a site by site basis. The following are approaches and recommendations for natural heritage area conservation.
+\begin{enumerate}
+\item Consider conservation initiatives for natural heritage areas on private land–Conservation easements protect land while leaving it in private ownership. An easement is a legal agreement between a landowner and a conservation or government agency that permanently limits a property’s use in order to protect its conservation values. It can be tailored to the needs of both the landowner and the conservation organization, and it will not be extinguished with new ownership. Tax incentives may apply to conservation easements donated for conservation purposes.Lease and management agreements also allow the landowner to retain ownership and temporarily ensure protection of land. There are no tax incentives for these conservation methods. A lease to a land trust or government agency can protect land temporarily and ensure that its conservation values will be maintained. This can be a first step to help a landowner decide if they want to pursue more permanent protection methods. Management agreements require landowners and land trusts to work together to develop a plan for managing resources (such as plant or animal habitat, watersheds, forested areas, or agricultural lands) with the land trust offering technical expertise. Land acquisition by a conservation organization can be at fair market value or as a bargain sale where a purchase price is set below fair market value with tax benefits that reduce or eliminate the disparity. One strategy is to identify areas that may be excellent locations for new county or township parks. Sites that can serve more than one purpose such as wildlife habitat, flood and sediment control, water supply, recreation, and environmental education are ideal. Private lands adjacent to public lands should be examined for acquisition when a natural heritage area is present on either property, and there is a need of additional land to complete protection of the associated natural features.Unrestricted donations of land are welcomed by land trusts. The donation of land entitles the donor to a charitable deduction for the full market value, and it releases the donor from the responsibility of managing the land. If the land is donated because of its conservation value, the land will be permanently protected. A donation of land that is not of high biological significance may be sold, with or without restrictions, to a conservation buyer, and the funds used to further the land trust’s conservation mission. Local zoning ordinances are one of the best-known regulatory tools available to municipalities. Examples of zoning ordinances a municipality can adopt include: overlay districts where the boundary is tied to a specific resource or interest such as riverfront protection and floodplains, and zoning to protect stream corridors and other drainage areas using buffer zones. Often it is overlooked that zoning can prevent municipal or county-wide development activities which are undesirable to the majority of the residents, and allow for planning that can meet the goals of the county residents. 
+\item Prepare management plans that address species of concern and natural communities–Many of the natural heritage areas that are already protected are in need of additional management plans to ensure the continued existence of the associated natural elements. Site-specific recommendations should be added to existing management plans or new plans should be prepared. Recommendations may include: removal of invasive plant species; leaving the area alone to mature and recover from previous disturbance; creating natural areas within existing parks; limiting land-use practices such as mineral extraction, residential or industrial development, and agriculture; or implementing sustainable forestry practices. For example, some species simply require continued availability of a natural community while others may need specific management practices such as canopy thinning, mowing,or burning to maintain their habitat requirements. Existing parks and conservation lands provide important habitat for plants and animals at both the county level and on a regional scale. For example, these lands may serve as nesting or wintering areas for birds,or as stopover areas during migration. Management plans for these areas should emphasize a reduction in activities that fragment habitat. Adjoining landowners should be educated about the importance of their land as it relates to habitat value, especially for species of concern, and agreements should be worked out to minimize activities that may threaten native flora and fauna.
+\item Protect bodies of water–Protection of reservoirs, wetlands, rivers, and creeks is vital for ensuring the health of human communities and natural ecosystems. Waterways that include natural heritage areas, identified in the Results section of this report, are important, sensitive areas that should be protected. Multiple qualities can be preserved by protecting aquatic habitats. For example, conserving natural areas around watersheds that supply municipal water provides an additional protective buffer around the water supply, maintains habitat for wildlife, and may also provide (low impact) recreation opportunities. Many rare species, unique natural communities, and significant habitats occur in wetlands and water bodies, which are directly dependent on natural hydrological patterns and water quality for their continued existence. Ecosystem processes also provide clean water supplies for human communities and do so at significant cost savings in comparison to water treatment facilities. Therefore, protection of high quality watersheds is the primary way to ensure the viability of natural habitats and water quality. Scrutinize development proposals for their impact on entire watersheds, not just the immediate project area. Cooperative efforts in land use planning among municipal, county, state, and federal agencies, developers, and residents can lessen the impact of development on watersheds. 
+\item Provide for natural buffers in and around natural heritage areas–Development plans should provide for natural buffers between disturbances and critical zones of natural heritage areas. Proposed activities within the Core Habitat of a Natural Heritage Area should be closely scrutinized for potential immediate impacts to the habitat of elements of concern. Proposed activities within the Supporting Landscape of a Natural Heritage Area should be evaluated for potential long-term impacts to habitats of elements of concern, such as water quality, or quantity degradation, or habitat fragmentation. Disturbances may include construction of new roads and utility corridors, non-sustainable timber harvesting, and fragmentation of large pieces of land. Storm runoff from these activities results in the transport of nutrients and sediments into aquatic ecosystems (Trombulak and Frissell, 2000). Vegetated buffers (preferably of Pennsylvania native plant species) help reduce erosion and sedimentation while shading and cooling the water. Preserving water quality in rivers and streams is important to fish as some species, such as brook trout and some darters, are highly sensitive to poor water quality. Sensitive fish are readily lost from streams when water quality starts to decline. Creating or maintaining a vegetated buffer benefits aquatic animal life, provides habitat for other wildlife species, and creates a diversity of habitats along the creek or stream. 
+\item Reduce fragmentation of the landscape surrounding natural heritage areas–Encourage development in sites that have already seen past disturbances (especially mined and heavily timbered areas). Care should be taken to ensure that protected natural areas do not become islands surrounded by development. In these situations, the site is effectively isolated, and its value for wildlife is greatly reduced. Careful planning can maintain natural environments along with the plants and animals associated with them. A balance between growth and the conservation of natural and scenic resources can be achieved by guiding development away from the most environmentally sensitive areas. The reclamation of previously disturbed areas for commercial and industrial projects, also known as brownfield development, presents one way to encourage economic growth while allowing ecologically sensitive areas to remain undisturbed. For example, reclaimed surface mines can be used for development (potentially even wind development)when feasible. Cluster development can be used to allow the same amount of development on much less land, and leave the remaining land intact for wildlife and native plants. By compressing development into already disturbed areas with existing infrastructure (villages, roads, existing rights-of-way), large pieces of the landscape can be maintained intact. If possible, networks or corridors of woodlands or greenspace should be preserved linking natural areas to each other. Preserving greenspace around development can provide ample recreation opportunities and potentially increase nearby property value.
+\item Manage for invasive species–Invasive species threaten native diversity by dominating habitat used by native species and by disrupting the integrity of the ecosystems they occupy. Management for invasive species depends upon the extent of their establishment. Small infestations may be easily controlled or eliminated,but larger, well established populations typically present difficult management challenges. The earlier exotic invasive species are identified and controlled, the greater the likelihood of eradication with the smallest expenditure of resources. 
+\item Encourage conservation work by grassroots organizations–County and municipal governments can do much of the work necessary to plan for the protection and management of natural areas identified in this report; however, grassroots organizations are needed to assist with obtaining funding, identifying landowners who wish to protect their land, and providing information about easements, land acquisition, management, and stewardship of protected sites. Increasingly, local watershed organizations and land trusts are taking proactive steps to accomplish conservation at the local level. When activities threaten to impact ecological features, the responsible agency should be contacted. If no agency exists, private groups such as conservancies, land trusts, and watershed associations should be sought for ecological consultation and specific protection recommendations.
+\end{enumerate}
+
+\newpage
+\section{REFERENCES AND LITERATURE CITED}
+
+\printbibliography[heading=none]
+
+\newpage
+
+CERIS (Purdue University Center for Environmental and Regulatory Information Systems).  Pest Tracker: Exotic Pest Reporting.  Accessed September 10, 2014 at http://pest.ceris.purdue.edu/Ciszek, D. 2002. Lynx rufus. Animal Diversity Web. Available from http://animaldiversity.ummz.umich.edu/site/accounts/information/Lynx_rufus.html(accessed October 2009).DCNR. 2007. What is the Hemlock Wooly Adelgid? Pennsylvania DCNR, Harrisburg, PA. Available from http://www.dcnr.state.pa.us/forestry/woollyadelgid/index.aspx(accessed October 2009).Fike, J. 1999. Terrestrial & Palustrine Plant Communities of Pennsylvania. PennsylvaniaDept. of Conservation and Natural Resources, The Nature Conservancy, Western PA Conservancy. 87 pp.Forman, R.T., and L.E. Alexander. (1998). Roads and their Major Ecological Effects. Annual Review of Ecology and Systematic 29:207-231.Forman, R.T., and D.R. Deblinger. (2000). The Ecological Road-Effect Zone ofa Massachusetts (U.S.A.)Suburban Highway. Conservation Biology 14:36-46.Haskell, D.G. (2000). Effects of Forest Roads on Macroinvertebrate Soil Fauna of the Southern Appalachian Mountains. Conservation Biology 14(1):57-63.Keever, C. 1972. Distribution of major forest species in southeastern Pennsylvania. Ecol. Monogr. 43:303-327.Latham, R.L., J. Beyea, M. Benner, C.A. Dunn, M.A. Fajvan, R.R. Freed, M. Grund, S.B. Horsley, A.F. Rhoads, and B.P. Shissler. 2005. Managing White-tailed Deer from an Ecosystem Perspective: Pennsylvania Case Study. Report by the Deer Management Forum for Pennsylvania Audubon and Pennsylvania Habitat Alliance, Harrisburg. The report is available on Audubon Pennsylvania’s website at http://pa.audubon.org/deer_report.html. Accessed: November 19, 2008. Lynch, J.F., and D.F. Whigham. (1984). Effects of Forest Fragmentation on Breeding Bird Communities in Maryland, USA. Biological Conservation 28:287-324.Matlack, G.R. (1993). Microenvironment Variation Within and Among Forest Edge Sites in the Eastern United States. Biological Conservation 66:185-194.Mazur, K.M., and P.C. James. (2000). Barred Owl (Strix varia). In The Birds of North America, No. 508 (A. Poole and F. Gill, eds.). The Birds of North America, Inc., Philadelphia, PA, and The American Ornithologists’ Union, Washington, D.C.Monk, C.D., D.W. Imm, R.L. Potter. 1990. Oak forests of eastern North America. Castanea 55(2): 77-96.Myers, W., J. Bishop, R. Brooks, T. O’Connell, D. Argent, G. Storm, J. Stauffer, and R. Carline. 2000. The Pennsylvania Gap Analysis Project Final Report. The Pennsylvania State University and U.S. Geological Survey, University Park, PA. 142 p.Rhoads, A.F. and W.M. Klein, Jr. 1993. The Vascular Flora of Pennsylvania: Annotated Checklist and Atlas. American Philosophical Society, Philadelphia, PA. 636 pp.Robbins, C.S. (1980). Effects of Forest Fragmentation on Breeding Bird Populations in the Piedmont of the Mid-Atlantic Region. Atlantic Naturalist33: 31-36.Robinson, S.K., Thompson III, F.R., Donovan, T.M., Whitehead, D.R., and J. Faaborg. (1995). Regional Forest Fragmentation and the Nesting Success of Migratory Birds. Science 267:1987-1990.Schmidt, W. (1989). Plant Dispersal by Motor Cars. Plant Ecology 80 (2): 147-152.Squires, J.R., and R.T. Reynolds. (1997). Northern Goshawk (Accipiter gentilis). In The Birds of North America, No. 298 (A. Poole and F. Gill, eds.). The Academy of Natural Sciences, Philadelphia, PA, and The American Ornithologists’ Union, Washington, D.C.
+Swearingen, J., K. Reshetiloff, B. Slattery, and S. Zwicker. 2002. Plant Invaders of Mid-Atlantic Natural Areas. National Park Service and U.S. Fish & Wildlife Service, Washington, D.C. 82 pp.Thompson, S.A., editor. 2002. Biodiversity in Pennsylvania: Snapshot 2002. Pennsylvania Biodiversity Partnership, Pittsburgh, Pennsylvania. 60 pp.Thorne, B.L., I.H. Haverty, and D.H. Benzing. 1996. Associations between termites and bromeliads in two dry tropical habitats. Biotropica 28: 781-785.Trombulak, S.C., and C.A. Frissell. (2000). Review of the Ecological Effects of Roads on Terrestrial and Aquatic Communities. Conservation Biology 14 (1):18-30.Voshell, Jr, J.R. (2002). A Guide to Common Freshwater Invertebrates of North America. McDonald and Woodward Publishing Co., Blacksburg, Virginia.Watkins, R.Z., Chen, J., Pickens, J., and K.D. Brosofske. (2003). Effects of Forest Roads on Understory Plants in a Managed Hardwood Landscape. Conservation Biology 17(2):411-419.Williams, C.E. (1995). Effects of Powerline Corridors on Forest Ecosystem Integrity. Pages 76-86 in S.K. Majumdar, E.W. Miller, and F. J. Brenner (eds.), Environmental Contaminants, Ecosystems and Human Health. Pennsylvania Academy of Science, Easton, PA.Yahner, R.H. (2000). Eastern Deciduous Forest: Ecology and Wildlife Conservation. University of Minnesota Press: Minneapolis, MN.Zimmerman, E., T. Davis, G. Podniesinski, M. Furedi, J. McPherson, S. Seymour, B. Eichelberger, N. Dewar, J. Wagner, and J. Fike (editors). 2012. Terrestrial and Palustrine Plant Communities of Pennsylvania, 2nd Edition. Pennsylvania Natural Heritage Program, Pennsylvania Department of Conservation and Natural Resources, Harrisburg, Pennsylvania.CERIS (Purdue University Center for Environmental and Regulatory Information Systems).  Pest Tracker: Exotic Pest Reporting.  Accessed September 10, 2014 at http://pest.ceris.purdue.edu/
+
+
+
+
+
+\end{document}

@@ -5,9 +5,10 @@
 \setmainfont{Gill Sans MT}
 \pdfmapfile{=pdftex35.map} %I think this fixes some MikTex font reading issues
 \usepackage[margin=10pt,font=small]{caption}
+\usepackage{afterpage}
 \usepackage{geometry}
 \usepackage{xcolor}
-\usepackage{longtable,booktabs,threeparttablex}
+\usepackage{longtable,booktabs,threeparttablex, array}
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -47,7 +48,7 @@
 }
 
 \begin{document}
-%\raggedright
+%\RaggedRight
 \catcode`\_=11
 
 % Header
@@ -70,26 +71,48 @@ if(!is.na(nha_photos$P1N)){
 }
 @
 
-
 % Site Description
 \normalsize
 \noindent
 \Sexpr{as.character(nha_data$Description)}\\\\
 % paragraph about significance ranks
-This site has been rated as \Sexpr{nha_data$SITE_RANK} significant due 
+This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because
 % calculates what text to say
 <<label=sigparagraph, echo=FALSE, results='asis'>>=
-if(nha_siterank$site_score=="Global" & spCount_GImperiled>0) {
-  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the commonwealth."))
-} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0) {
+
+# Case 1: global significance and the species are not sensitive
+if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
+  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+# case 1a:
+} else if(nha_siterank$site_score=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
+  cat(paste0("this site is rated as significant because the sensitive species of concern is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+  # Case 2: regional significance and the species are not sensitive
+} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
-}  else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
-  cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occuring at the edge of the their range or loss of habitat.")
+  # Case 2a: regional significance and the species are sensitive
+} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+  cat(paste0("this site is rated as significant because the sensitive species of concern is of G3 rank."))
+# Case 3: regional significance and the species are not sensitive
+} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
+   cat(paste0("of the high concentration of G4, G5, or GNR species at this site."))  
+# Case 4: state significance and the species are not sensitive
+} else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
+  cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
+# Case 4a: state significance and the species are all sensitive
+} else if(nha_siterank$site_score=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level but they are sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
+# Case 5: local significance and the species are not sensitive
+} else if(nha_siterank$site_score=="Local" & spCount_GSecure>0) {
+  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
+# Case 5: local significance and the species are  sensitive
+} else if(nha_siterank$site_score=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
 }
 @
 \noindent
-The species tracked by PNHP present at this NHA include:
+\\\\All species tracked by PNHP documented at this NHA include:
 \smallskip
+\afterpage{\clearpage}
 % Species Table
 \begin{ThreePartTable}
 \renewcommand\TPTminimum{\textwidth}
@@ -99,12 +122,14 @@ The species tracked by PNHP present at this NHA include:
 \setlength\tabcolsep{0pt}
 
 \begin{TableNotes}
+ \begin{footnotesize}
     \item [1] See the PNHP website (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
     \item [2] See NatureServe website (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
      SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
      @
     \Sexpr{paste(SensitiveFNote)}
+  \end{footnotesize}
 \end{TableNotes}
 
 \begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
@@ -147,6 +172,11 @@ The species tracked by PNHP present at this NHA include:
          speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
        } else {
          speciesstring <- paste0(speciestable$SCOMNAME[i]," (\\textit{",speciestable$SNAME[i],"}) ")
+         if(nchar(speciesstring)>58) {
+           speciesstring <- paste0(speciestable$SCOMNAME[i],"\\\\ \\enspace (\\textit{",speciestable$SNAME[i],"}) ")
+         } else {
+           speciesstring <- speciesstring
+         }
        }
        # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
        if(speciestable$SCOMNAME[i]==speciestable$SNAME[i] & speciestable$SENSITIVE[i]!="Y"){
@@ -188,7 +218,6 @@ The species tracked by PNHP present at this NHA include:
 \end{longtable}   
 \end{ThreePartTable}
 
-
 %%% Threats and Species Recommendations %%%
 \medskip
 \noindent
@@ -202,6 +231,8 @@ for(t in 1:nrow(nha_threats)){
 }
 @
 \end{itemize}
+\medskip
+\noindent We envision this NHA site account as one of the first steps for promoting conservation management actions to support the species of concern at the site. Many of these sites may have multiple habitat types present and require a mix of conservation strategies that may occasionally conflict. PNHP staff are available for additional consultation to help address specific site challenges. For additional information, please contact naturalheritage@paconserve.org.
 
 \bigskip
 
@@ -211,17 +242,15 @@ for(t in 1:nrow(nha_threats)){
 \smallskip
 \textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
 \textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
-\textbf{Previous CNHI reference:} \Sexpr{selected_nha$OLD_SITE_NAME} \\
-\textbf{Associated NHAs:} \Sexpr{selected_nha$ASSOC_NHA} \\ 
+\textbf{Previous CNHI reference:} \Sexpr{ifelse(!is.na(selected_nha$OLD_SITE_NAME), paste("This site replaces the following previously published sites: ",selected_nha$OLD_SITE_NAME,"."), "This site does not overlap a previously published site.") } \\
+\textbf{Associated NHAs:} \Sexpr{ifelse(selected_nha$ASSOC_NHA!="None", paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
-\textbf{Acreage:} \Sexpr{signif(selected_nha$ACRES, digits=0)} acres \\  
+\textbf{Approximate Acreage:} \Sexpr{round(selected_nha$ACRES)} acres \\  
   
 %%% References %%% 
 \noindent\textbf{\underline{References}}
 %\bibliographystyle{plain}
 \printbibliography[heading=none]
-
-
 
 \bigskip
 % the next line moves the recommended citation to the bottom of the page
@@ -245,7 +274,7 @@ Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{
 % insert the NHA map
 <<label=mapimage, echo=FALSE, results='asis'>>=
 if(!is.na(nha_photos$P1N)){
-  mapfile <- paste("Layout_", nha_name, sep="")
+  mapfile <- paste("Layout_", nha_foldername, sep="")
   #cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
   cat(paste0("\\includegraphics[width=0.95\\textwidth]{",mapfile,"} %  \n"))
   #cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")

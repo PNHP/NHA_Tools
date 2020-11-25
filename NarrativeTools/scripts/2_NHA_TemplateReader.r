@@ -1,15 +1,13 @@
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-  require(here)
-
+#if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+#  require(here)
 # clear the environment
-rm(list = ls())
-
+#rm(list = ls())
 # load in the paths and settings file
-source(here::here("scripts", "0_PathsAndSettings.r"))
+#source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
-nha_name <- "Loyalhanna Gorge"
+nha_name <- LauncherNHA
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -25,7 +23,8 @@ if(length(NHA_file)==1) {
   n <- 1
 } else {
   print(NHA_file)
-  n <- as.numeric(readline(prompt="select the file number from the list above: "))
+  cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
+  n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))
 }
 print(paste0("using the ",NHA_file[n], " for input into the script!"))
 NHA_file <- NHA_file[n]
