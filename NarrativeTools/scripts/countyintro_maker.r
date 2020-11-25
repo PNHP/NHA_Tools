@@ -3,6 +3,7 @@ if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 require(here)
 
 library(english)
+library(ggplot2)
 require(scales)
 
 # clear the environment
@@ -28,6 +29,9 @@ ListJoinID <- paste(toString(sQuote(ListJoinID)), collapse = ",")
 # access geodatabase to pull site info 
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 nha_list <- arc.select(nha, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, ") AND STATUS = 'NP'"))  # AND STATUS = 'NP'
+# change abbreviations to full words
+nha_list$SIG_RANK <- ifelse(nha_list$SIG_RANK=="G", "Global", ifelse(nha_list$SIG_RANK=="R", "Regional", ifelse(nha_list$SIG_RANK=="S", "State", ifelse(nha_list$SIG_RANK=="L", "Local", NA))))
+
 
 ListJoinID <- nha_list$NHA_JOIN_ID
 ListJoinID <- paste(toString(sQuote(ListJoinID)), collapse = ",")
@@ -43,6 +47,22 @@ ET <- arc.select(ET, c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SEN
 
 speciestable <- merge(nha_relatedSpecies, ET, by="ELCODE", all.x=TRUE)
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
+
+
+TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+speciestable$OrderVec <- speciestable$ELEMENT_TYPE
+#speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
+speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
+speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
+
+species <- speciestable$SNAME
+taxa <- unique(speciestable$ELEMENT_TYPE)
+
+
+# get a count of PX species for the report
+EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])
+ETextipated <- nrow(ET[which(ET$SRANK=="SX"),])
+
 #################################################################################################################
 # Background GIS Data for the County
 
@@ -65,7 +85,7 @@ CountyNLCD16$group <- factor(CountyNLCD16$group, levels=c("Forest","Developed","
 CountyNLCD16$Acres <- CountyNLCD16$Area * 0.000247105
 
 
-# make graph for landcover
+# make graph for land cover
 p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) + 
   geom_bar(position="stack", stat="identity") +
   scale_fill_manual(values = c("Open Water"="#466B9F","Developed, Open Space"="#DEC5C5","Developed, Low Intensity"="#D99282","Developed, Medium Intensity"="#EB0000","Developed, High Intensity"="#AB0000","Barren Land"="#B3AC9F","Deciduous Forest"="#68AB5F","Evergreen Forest"="#1C5F2C","Mixed Forest"="#B5C58F","Shrub/Scrub"="#CCB879","Herbaceuous"="#DFDFC2","Herbaceuous"="#AB6C28","Hay/Pasture"="#DCD939","Cultivated Crops"="#AB6C28","Woody Wetlands"="#B8D9EB","Emergent Herbaceuous Wetlands"="#6C9FB8") ) +
