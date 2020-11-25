@@ -97,8 +97,15 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
   print(p)
   dev.off()
 
+# land trust service areas for the conclusions
+  CountyLandTrust <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyLandTrustServiceArea ")
+  CountyLandTrust <- arc.select(CountyLandTrust , c("COUNTY_NAM","ORG_NAME","ORG_PROFIL","ORG_WEB"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+    
+  # watershed service areas for the conclusions
+  CountyWatershed <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyWatershedServiceArea ")
+  CountyWatershed <- arc.select(CountyWatershed , c("COUNTY_NAM","Name","Profile","Weblink"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
   
-
+  
 ###################################################################################################################
 
 # get a count of the different ranks of the NHAs
