@@ -9,6 +9,7 @@
 %\usepackage{afterpage}
 \usepackage{geometry}
 \usepackage{longtable,booktabs,threeparttablex, array}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 \usepackage{xcolor}
 %\usepackage[table]{xcolor}
 \usepackage{wrapfig}
@@ -385,7 +386,7 @@ To update this County Natural Heritage Inventory, the botanists, ecologists, and
 \subsection{Species and Communities of Concern in \Sexpr{nameCounty} County}
 \Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report(Table 2).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
 
-\begin{longtable}{p{10.8cm}p{1.6cm}p{1.6cm}p{1.6cm}}
+\begin{longtable}{p{10.8cm}C{1.6cm}C{1.6cm}C{1.6cm}}
 \caption{Species and Natural Communities of Concern in \Sexpr{nameCounty} County.}
 %\label{tab:table3}\\
 \hline
@@ -462,10 +463,10 @@ for(t in taxa){
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Natural Heritage Areas of \Sexpr{nameCounty} County}
-This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table 3). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="G"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="R"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="S"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="L"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
+This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table 3). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="Global"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="Regional"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="State"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="Local"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
 
 
-\begin{longtable}{|p{0.8cm}|p{3.6cm}|p{1.6cm}|p{8.2cm}|}
+\begin{longtable}{C{0.5in}p{2in}C{1in}p{3in}}
 \caption{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are Global, Regional, State, and Local.}
 \label{tab:table3}\\
 \hline
@@ -487,7 +488,7 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 <<label=nhatable, echo=FALSE, results='asis'>>=
 for(i in 1:nrow(nha_list)){
        cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
-       cat("\\hline")
+#       cat("\\hline")
 }
 @
 \end{longtable}
