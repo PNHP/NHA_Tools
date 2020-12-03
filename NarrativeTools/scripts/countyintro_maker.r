@@ -58,10 +58,17 @@ speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
 
-
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])
 ETextipated <- nrow(ET[which(ET$SRANK=="SX"),])
+
+# get a count of the total EOs in Biotics
+eo_ptrep <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
+eo_ptrep <- arc.select(eo_ptrep) # , c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")
+eo_count <- nrow(eo_ptrep)
+eo_ptrep <- NULL
+eo_count <- ceiling(eo_count/1000)*1000
+eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
 
 #################################################################################################################
 # Background GIS Data for the County
@@ -112,7 +119,6 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
 
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
-
 
 
 ##############################################################################################################
