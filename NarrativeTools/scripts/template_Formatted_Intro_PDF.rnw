@@ -252,13 +252,16 @@ Prior to European settlement, forest covered more than 90 percent of the area th
 
 \noindent Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively pristine habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, predator-prey interactions,and natural disturbances regimes. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass.
 
+\newpage
 \subsection{Invasive Species}
 % call out box about invasive species!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.69\textwidth]{iMapInvasivesPA}
+  \end{center}
  \begin{flushleft}
    \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals by providing an online platform where invasive species sightings and management efforts can be recorded and shared. By providing data on invasive species distributions, the iMapInvasives program helps to facilitate both current and future endeavors to control and eradicate invasive species across Pennsylvania. The iMapInvasives program works with non-profit groups, institutions, and state government to compile information on aquatic and terrestrial invasive species occurrences and treatments. Information is then used by countless organizations to prioritize invasive species control projects. In addition to natural resource professionals, tools in iMapInvasives can be used by citizen scientists, land owners, and others wishing to contribute their invasive species findings and view species distributions.\\
-   
    \noindent Learn more about the Pennsylvania iMapinvasives at https://www.paimapinvasives.org/
   \end{flushleft}
   \end{minipage}}
