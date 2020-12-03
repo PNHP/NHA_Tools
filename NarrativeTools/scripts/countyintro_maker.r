@@ -12,9 +12,23 @@ rm(list = ls())
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
+# Variables for the Intro!
 nameCounty <- "Allegheny"
 YearUpdate <- 2020
 YearPrevious <- 
+  
+editor1 <- "Anna Johnson"
+editor2 <- "Christopher Tracey"
+
+staffPNHP <- "JoAnn Albert, Charlie Eichelberger, Kierstin Carlson, Rocky Gleason, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman."
+
+projectLead <- "Ryan Gordon"
+projectLeadOrg <- "Southwest Pennsylvania Commission"
+
+projectClient <- "Southwest Pennsylvania Commission"
+projectClientAdd1 <- "112 Washington Pl \\#500"
+projectClientAdd2 <- "Pittsburgh, PA 15219"
+
 
 #################################################################################################################
 # get NHA GIS data
@@ -116,9 +130,13 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
 ###################################################################################################################
 
 # get a count of the different ranks of the NHAs
-
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
+
+
+# editor formatting for citation
+editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
+
 
 
 ##############################################################################################################

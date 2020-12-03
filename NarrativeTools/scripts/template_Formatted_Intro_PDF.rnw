@@ -56,28 +56,67 @@
 \catcode`\_=11
 
 % title page
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+  \raggedleft % Right align the title page
+	\rule{2pt}{\textheight} % Vertical line
+	\hspace{0.05\textwidth} % Whitespace between the vertical line and title page text
+	\parbox[b]{0.75\textwidth}{ % Paragraph box for holding the title page text, adjust the width to move the title page left or right on the page
+		{\Huge\bfseries \Sexpr{nameCounty} County \\Natural Heritage Inventory\\}\\[1\baselineskip] % Title
+		 {\Large\textit{\Sexpr{YearUpdate} Update}}\\[2\baselineskip] % Subtitle or further description
+		 {\Large\textsc{\Sexpr{editor1} and \Sexpr{editor2}, editors.}}\\[4\baselineskip] % Author name, lower case for consistent small caps
+		
+		\large\textit{Prepared for:}\\
+		\large\textbf{\Sexpr{projectClient}}\\ 
+    	\large\Sexpr{projectClientAdd1}\\
+    	\large Pittsburgh, PA 15219\\ %\large\Sexpr{projectClientAdd2}\\\\
+		
+		\large\textit{Prepared by:}\\
+		\large\textbf{Pennsylvania Natural Heritage Program}\\ 
+    	\large 800 Waterfront Drive\\
+    	\large Pittsburgh, PA 15222\\		
+		
+		\vspace{0.2\textheight} % Whitespace between the title block and the publisher
+		\includegraphics[width=0.45\textwidth]{PNHP_New_Logo_cmpact}\\
+		%{\noindent The Publisher~~\plogo}\\[\baselineskip] % Publisher and logo
+		%%  Recommended Citation %%%
+    Please cite this Natural Heritage Inventory report as:\\ 
+    \Sexpr{editor1a} and \Sexpr{editor2}. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.
+	}
+\end{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
 
-%%%  Recommended Citation %%% 
-% \setlength{\fboxsep}{5pt}
-% \fbox{
-% \begin{minipage}[c]{0.2\linewidth}
-% \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
-% \end{minipage}%
-% \begin{minipage}[c]{0.75\linewidth}
-% This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.
-% \\ \\ Please cite this Natural Heritage Area as: \\
-% Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
-% \end{minipage}
-% }
 
+%%% ACKNOWLEDGEMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\section{ACKNOWLEDGEMENTS}
+\noindent We would like to acknowledge the citizens and landowners of \Sexpr{nameCounty} County and surrounding areas who volunteered information, time, and effort to the inventory and granted permission to access land. A big thank you goes to those who suggested areas of interest, provided data, and assisted with field surveys. Additional thanks goes to \Sexpr{projectLead} of the \Sexpr{projectLeadOrg} for providing support for this project.\\
+
+\noindent Advisory Committee to the \Sexpr{YearUpdate} update to the \Sexpr{nameCounty} County Natural Heritage Inventory:
+\begin{itemize}
+\item{Laura Jackson, Woodland Owners of the Southern Alleghenies and Audubon Society}
+\item{Jennifer Lentz-Kowacs, Bedford County Conservation District}
+\item{Dave Scamardella, Bureau of Forestry District 2 Service Forester, Bedford County}
+\item{Don Schwartz, Bedford County Planning Commission, Director}
+\item{Ron Stanley, Ridge and Valley Streamkeepers}
+\item{Guy Stottlemyer, Bedford County Conservation District and Trout Unlimited}
+\item{Fred Temke, Bedford County Planning Commission}
+\item{Justin Vreeland, Wildlife Supervisor, Pennsylvania Game Commission, Southcentral Regional Wildlife Management}
+\item{Dave Young,Pennsylvania Bureau of State Parks}
+\end{itemize}
+\smallskip
+\noindent We want to recognize the Pennsylvania Natural Heritage Program and NatureServe for providing the foundation for the work that we perform for these studies. Current and former PNHP staff that contributed to this report includes \Sexpr{staffPNHP}. \\
+
+\noindent The species information utilized in the inventory came from many sources as well as our own field surveys. 
+We wish to acknowledge all of those who carried out botanical and zoological survey work over the years. Biologists, both on their own and from institutions and agencies such as the Carnegie Museum of Natural History, the Department of Conservation and Natural Resources, the Pennsylvania Game Commission, and the Pennsylvania Fish and Boat Commission have contributed numerous plantand animal records over the years. The task of inventorying the natural heritage of the county would have been much more difficult and incomplete without this tremendous pool of information gathered by many people over many years.Finally, we especially wish to thank the landowners who granted us permission to conduct inventories on their lands. Without their support, this report would have been far less complete.\\
+
+\noindent This project was funded through grants provided by the Pennsylvania Department of Conservation and Natural Resources, Wild Resources Conservation Program and the Pennsylvania Department of Community and Economic Development, Commonwealth Financing Authority.  Support was also provided by the Bedford County Board of Commissioners.We encourage comments and questions. \\
+
+\noindent The success of the report will be measured by the use it receives and the utility it serves to those making decisions about resources and land use throughout the county. Thank you for your interest. 
+
+
+%%% TOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
-
-
-
-
-
 \tableofcontents
 
+%%% PNHP Intro %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
 \section{THE PENNSYLVANIA NATURAL HERITAGE PROGRAM}
 \begin{wrapfigure}{R}{0.3\textwidth}
