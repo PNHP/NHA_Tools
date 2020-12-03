@@ -17,11 +17,6 @@
 if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 require(here)
 
-
-# if (!requireNamespace("odbc", quietly = TRUE)) install.packages("odbc")
-#   require(odbc)
-# note: we need to install 64bit java: https://www.java.com/en/download/manual.jsp
-
 # load in the paths and settings file (which contains the rest of the libraries needed)
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
@@ -47,7 +42,10 @@ print("choose method 1 in the next step and select your sites by name")
 NHA_list <- Notemplates #list of NHAs to run templates for, generated from query of geodatabase vs. list of sites run through template generator
 }
 
-#Open NHA server path
+
+
+NHA_list <- NHA_list[which(NHA_list$SITE_NAME!="Kelso Road"&NHA_list$SITE_NAME!="Pittsburgh Botanic Garden"),]
+
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 
@@ -74,7 +72,10 @@ if(n==1){ #if you are just running a few sites, you can select individual site b
   Site_Name_List <- as.list(selected_nhas$SITE_NAME)
   Site_NHAJoinID_List <-as.character(NHA_list$NHA_JOIN_ID)
   NHA_list <- NHA_list[order(NHA_list$SITE_NAME),] #order alphabetically
-  SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP')") 
+
+  Site_Name_List <- as.list(NHA_list)
+  SQLquery_Sites <- paste("NHA_Join_ID IN(",paste(toString(sQuote(Site_NHAJoinID_List)),collapse=", "), ") AND STATUS IN('NP','NR')") 
+
 }
 
 selected_nhas <- arc.select(nha, where_clause=SQLquery_Sites)
@@ -184,6 +185,14 @@ dbDisconnect(TRdb)
 SD_speciesTable <- lapply(seq_along(species_table_select),
                           function(x) merge(species_table_select[[x]], Join_ElSubID, by="ELCODE"))# merge in the ELSubID until we get it fixed in the GIS layer
 names(SD_speciesTable) <- namevec #keep names associated with list of tables
+
+# check to see
+ if(any(sapply(SD_speciesTable, nrow)==0)){
+   print("There are zero length data frames in the collection of species tables, please fix before proceeding")
+ } else {
+   "data frames look great, move along, move along"
+ }
+
 
 #add a column in each selected NHA species table for the image path, and assign image. 
 #Note: this uses the EO_ImSelect function, which I modified in the source script to work with a list of species tables
@@ -343,7 +352,7 @@ for (i in seq_along(SummedTotalScore)) {
 
 #manual check step, take a look if you want to see where things are mismatched--do any sites need to have ranks overriden?
 check <- as.data.frame(cbind(SiteRank, SummedTotalScore, G3_regional, G2_global, G1_global, namevec, selected_nhas$NHA_JOIN_ID))
-
+check
 #Do the site ranking overrides automatically
 
 for (i in seq_along(SiteRank)) {
@@ -374,7 +383,7 @@ summary(as.factor(selected_nhas$site_score)) #manual check step: take a look at 
 #Build pieces needed for each site report
 
 #generate list of folder paths and file names for selected NHAs
-Site_Name_Listt <- Site_Name_List[match(selected_nhas$SITE_NAME, Site_Name_List)]
+Site_Name_Listt <- Site_Name_List[match(selected_nhas$SITE_NAME, Site_Name_List$SITE_NAME)]$SITE_NAME
 
 nha_foldername_list <- list()
 for (i in 1:length(Site_Name_Listt)) {
@@ -479,9 +488,7 @@ for (i in 1:length(nha_filename_list)) {
   PoliticalBoundaries <- PoliticalBoundaries_list[[i]]
   ProtectedLands <- protected_lands_list[[i]]
   MapFile <- as.character(Mapss$Map.List[i])
-rmarkdown::render(input=here::here("scripts","template_NHAREport_part1v2.Rmd"), output_format="word_document", 
-                  output_file=nha_filename_list[[i]],
-                  output_dir=NHAdest1[i])
+rmarkdown::render(input=here::here("scripts","template_NHAREport_part1v2.Rmd"), output_format="word_document", output_file=nha_filename_list[[i]], output_dir=NHAdest1[i])
 }  
 
 ####################################################

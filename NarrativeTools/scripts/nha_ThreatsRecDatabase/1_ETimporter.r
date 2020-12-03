@@ -31,13 +31,10 @@ databasename <- paste(databasepath,databasename,sep="/")
 
 
 
-
 ##################################################################################################################################
 #Import current Element Tracking (ET) file into NHA database
 
-ET_path <- "P://Conservation Programs/Natural Heritage Program/Data Management/Biotics Database Areas/Element Tracking/current element lists"
-
-# this is the path to the element tracking list folder on the p-drive in Pittsburgh.
+ET_path <- "P://Conservation Programs/Natural Heritage Program/Data Management/Biotics Database Areas/Element Tracking/current element lists" # this is the path to the element tracking list folder on the p-drive in Pittsburgh.
 
 # get the threats template
 ET_file <- list.files(path=ET_path, pattern=".xlsx$")  # --- make sure your excel file is not open.
@@ -60,13 +57,7 @@ ET <- ET[which(ET$TRACKING.STATUS=="Y"|ET$TRACKING.STATUS=="W"),]
 
 # rename columns to match geodatabase names, where overlap occurs 
 
-names(ET) <- c("Element.Subnational.ID","ELCODE","SNAME","SCOMNAME","G_RANK","S_RANK","SRANK.CHANGE.DATE","SRANK.REVIEW.DATE","TRACKING.STATUS","PA.FED.STATUS","S_PROTECTI","PBSSTATUS","PBS.DATE","PBS.QUALIFIER","SGCN.STATUS","SGCN.COMMENTS","SENSITIVE_","AQUATIC.INDICATOR","ER.RULE")
-
-names(ET)[names(ET) == "SCIENTIFIC.NAME"] <- "SNAME"
-names(ET)[names(ET) == "COMMON.NAME"] <- "SCOMNAME"
-names(ET)[names(ET) == "G.RANK"] <- "G_RANK"
-names(ET)[names(ET) == "S.RANK"] <- "S_RANK"
-names(ET)[names(ET) == "SENSITIVE.SPECIES"] <- "SENSITIVE_"
+names(ET) <- c("ELSubID","ELCODE","SNAME","SCOMNAME","G_RANK","S_RANK","SRANK.CHANGE.DATE","SRANK.REVIEW.DATE","TRACKING.STATUS","PA.FED.STATUS","S_PROTECTI","PBSSTATUS","PBS.DATE","PBS.QUALIFIER","SGCN.STATUS","SGCN.COMMENTS","SENSITIVE_","AQUATIC.INDICATOR","ER.RULE","InER?")
 
 # change dates from excel format to rest of the world format (assuming we are working w/ Excel 2010)
 ET$SRANK.CHANGE.DATE <- convertToDate(ET$SRANK.CHANGE.DATE, origin="1900-01-01")
@@ -105,19 +96,25 @@ dbDisconnect(db) # disconnect the db
 ETitalics <- unique(ETitalics)
 ETitalics <- ETitalics[!is.na(ETitalics)]
 
+# add in additional names that do not appear on the ET
+addnames <- c("Baylisascaris procyonis", "Endothecia parasitica", "Bacillis thuringiensis") # Raccoon roundworm, chestnut blight, BT
+ETitalics <- c(ETitalics, addnames)
+
 # abrecivate the genus names
 shortname <- do.call("rbind", strsplit(sub(" ", ";", ETitalics), ";")) #Replace the first space with a semicolon (using sub and not gsub), strsplit on the semicolon and then rbind it into a 2 column matrix:
 shortname <- as.data.frame.matrix(shortname)
 names(shortname) <- c("genus","theRest")
 shortname$gabbr <- substr(shortname$genus,1,1)
 shortname$shortname <- paste0(shortname$gabbr,". ",shortname$theRest)
-
 shortname <- shortname$shortname
 
 # genus names
 genusnames <- word(ETitalics, 1)
 genusnames <- as.character(genusnames)
 genusnames <- unique(genusnames)
+genusnameremove <- c("Virginia","Senna")
+genusnames <- genusnames[!genusnames %in% genusnameremove]
+
 
 # merge it all together
 ETitalics <- c(ETitalics, genusnames, shortname)

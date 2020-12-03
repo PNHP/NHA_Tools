@@ -1,12 +1,13 @@
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-  require(here)
-
+#if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+#  require(here)
+# clear the environment
+#rm(list = ls())
 # load in the paths and settings file
-source(here::here("scripts", "0_PathsAndSettings.r"))
+#source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
-nha_name <- "Allegheny River Pool #6"
+nha_name <- LauncherNHA
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
@@ -17,9 +18,15 @@ selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "A
 
 # find the NHA word file template that we want to use
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
-NHA_file
 # select the file number from the list below
-n <- 2
+if(length(NHA_file)==1) {
+  n <- 1
+} else {
+  print(NHA_file)
+  cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
+  n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))
+}
+print(paste0("using the ",NHA_file[n], " for input into the script!"))
 NHA_file <- NHA_file[n]
 # create the path to the whole file!
 NHAdest1 <- paste(NHAdest,"DraftSiteAccounts", nha_foldername, NHA_file, sep="/")

@@ -23,6 +23,8 @@ if (!requireNamespace("xtable", quietly = TRUE)) install.packages("xtable")
 require(xtable)
 if (!requireNamespace("flextable", quietly = TRUE)) install.packages("flextable")
 require(flextable)
+if (!requireNamespace("plyr", quietly = TRUE)) install.packages("plyr")
+require(plyr)
 if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")
 require(dplyr)
 if (!requireNamespace("dbplyr", quietly = TRUE)) install.packages("dbplyr")
@@ -31,8 +33,8 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) install.packages("rmarkdown"
 require(rmarkdown)
 if (!requireNamespace("tmap", quietly = TRUE)) install.packages("tmap")
 require(tmap)
-if (!requireNamespace("OpenStreetMap", quietly = TRUE)) install.packages("OpenStreetMap")
-require(OpenStreetMap)
+#if (!requireNamespace("OpenStreetMap", quietly = TRUE)) install.packages("OpenStreetMap")
+#require(OpenStreetMap)
 if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
@@ -45,8 +47,6 @@ if (!requireNamespace("textreadr", quietly = TRUE)) install.packages("textreadr"
 require(textreadr)
 if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
 require(arcgisbinding)
-if (!requireNamespace("plyr", quietly = TRUE)) install.packages("plyr")
-require(plyr)
 if (!requireNamespace("stringr", quietly = TRUE)) install.packages("stringr")
 require(stringr)
 if (!requireNamespace("DBI", quietly = TRUE)) install.packages("DBI")
@@ -93,13 +93,13 @@ NHAdest <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanni
 rnw_template <- "template_Formatted_NHA_PDF.rnw"
 
 # taxaicon lookup
-taxaicon <- data.frame(c("Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png"),c("AAAA","","AB","","","","AM","","AF","","","","","IMBIV","","","P","","","",""), stringsAsFactors = FALSE)
+taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png"), c("AAAA","AAAB","ILARA","AB","IILEP","IITRI","CGH","","","AF","","AM","","IILEY","IMBIV","IIODO","","P","","IMGAS","IZSPN","IICOL02","AR"), stringsAsFactors = FALSE)
 names(taxaicon) <- c("icon","ELEMENT_TYPE")
 
 # urls for the template
-url_PNHPrank <- "http://www.naturalheritage.state.pa.us/RankStatusDef.aspx"
+url_PNHPrank <- "http://www.naturalheritage.state.pa.us/rank.aspx"
 url_NSrank <- "http://www.natureserve.org/explorer/eorankguide.htm"
-url_NHApage <- "http://www.naturalheritage.state.pa.us/CNHI.aspx"
+url_NHApage <- "http://www.naturalheritage.state.pa.us/inventories.aspx"
 
 # load italicized names from database to italicize other species names in threats and stressors and description
 db <- dbConnect(SQLite(), dbname=TRdatabasename) # connect to the database
@@ -130,7 +130,7 @@ foldername <- function(x){
 #knit2pdf(here::here("scripts","template_Formatted_NHA_PDF.rnw"), output=paste(pdf_filename, ".tex", sep=""))
 makePDF <- function(rnw_template, pdf_filename) {
   knit(here::here("scripts", rnw_template), output=paste(pdf_filename, ".tex",sep=""))
-  call <- paste0("xelatex -interaction=nonstopmode ",pdf_filename , ".tex")
+  call <- paste0("xelatex -interaction=nonstopmode ", pdf_filename , ".tex")
   system(call)
   system(paste0("biber ",pdf_filename))
   system(call) # 2nd run to apply citation numbers
