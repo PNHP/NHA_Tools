@@ -13,7 +13,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Allegheny"
+nameCounty <- "Fayette"
 YearUpdate <- 2020
 YearPrevious <- 
   
@@ -89,9 +89,20 @@ eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
 
 CountyPhysProv <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysProv")
 CountyPhysProv <- arc.select(CountyPhysProv, c("COUNTY_NAM","PROVINCE","PROpSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep=""))  # 
+CountyPhysProv$PROpSect <- as.numeric(CountyPhysProv$PROpSect)
+CountyPhysProv <- CountyPhysProv[order(-CountyPhysProv$PROpSect),] 
 
 CountyPhysSect <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysSect")
 CountyPhysSect <- arc.select(CountyPhysSect, c("COUNTY_NAM","SECTION","propSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+CountyPhysSect$propSect <- as.numeric(CountyPhysSect$propSect)
+CountyPhysSect <- CountyPhysSect[order(-CountyPhysSect$propSect),] 
+
+# 
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+PhysSectDesc <- dbGetQuery(db_nha, "SELECT * FROM IntroData_PhysSect" )
+dbDisconnect(db_nha)
+
+
 
 
 #landcover
@@ -137,7 +148,10 @@ names(sigcount) <- c("sig","count")
 # editor formatting for citation
 editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
 
-
+# sources and funding
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
+dbDisconnect(db_nha)
 
 ##############################################################################################################
 ## Write the output document for the site ###############

@@ -260,11 +260,37 @@ Here is the 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nam
 
 \noindent Characteristic landscapes and distinctive geological formations define Physiographic Provinces (Figure 1). Physiography relates in part to a region’s topography and climate. These two factors, along with bedrock type, significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influences animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others.\\
 
-Allegheny Front\\
-\noindent The Allegheny Front Section of the Appalachian Plateaus Province consists of rounded to linear hills rising to an escarpment in the eastern portion and undulating hills that slope away to the west of an escarpment. The Allegheny Front is the major southeast-or east-facing escarpment in the Allegheny Mountains in southern Pennsylvania, western Maryland, and eastern West Virginia. The Allegheny Front forms the boundary between the Appalachians Mountains to its east and the Appalachian Plateau to its west.This region is broadly folded, composed of shale, siltstone, and sandstone.\\
+<<label=physio, echo=FALSE, results='asis'>>=
+if(nrow(CountyPhysProv)==1){
+  cat(paste("\\noident ",nameCounty," County lies entirely within the ", CountyPhysProv$PROVINCE," phsyiographic province. ", sep=""))
+  
+  if(nrow(CountyPhysSect)==1){
+    cat(paste("Its also all within the ", CountyPhysSect$SECTION[1], " section.", sep=""))
+  } else if(nrow(CountyPhysSect)==2){
+    cat(paste("The county is divided among the ",CountyPhysSect$SECTION[1], " (",round(CountyPhysSect$propSect[1],2)*100,"\\%) and ",CountyPhysSect$SECTION[2], " (",round(CountyPhysSect$propSect[2],2)*100,"\\%) physiographic sections.", sep=""))
+  } else if(nrow(CountyPhysSect)==3){
+    cat(paste("The county is divided among the ",CountyPhysSect$SECTION[1], " (",round(CountyPhysSect$propSect[1],2)*100,"\\%), ",CountyPhysSect$SECTION[2], " (",round(CountyPhysSect$propSect[2],2)*100,"\\%) and ",CountyPhysSect$SECTION[3], " (",round(CountyPhysSect$propSect[3],2)*100,"\\%) physiographic sections.", sep=""))
+  } else {}
 
-Appalachian Mountains\\
-\noindent The eastern two-thirds of \Sexpr{nameCounty} county lies in the Appalachian Mountain section of the Ridge and Valley Physiographic Province. This section is characterized by long, narrow ridges,broad to narrow valleys,and occasionally karst.The bedrock is composed of sandstone, siltstone, shale, conglomerate, limestone, and dolomite. 
+
+} else if(nrow(CountyPhysProv)==2){
+      cat(paste("The county is divided among the ",CountyPhysProv$PROVINCE[1], " (",round(CountyPhysProv$PROpSect[1],2)*100,"%) and ",CountyPhysProv$PROVINCE[2], " (",round(CountyPhysProv$PROpSect[2],2)*100,"%) provinces.", sep=""))
+}
+
+#cat(paste(, sep=""))
+
+# Description of Sections
+cat(" Descriptions of the", words(nrow(CountyPhysSect)), "physiographic sections are as follows:" )
+cat("\\begin{itemize}")
+for (p in 1:nrow(CountyPhysSect)) {
+  cat(paste("\\item{",CountyPhysSect$SECTION[p]," --- ",PhysSectDesc[which(PhysSectDesc$Section==CountyPhysSect$SECTION[p]),"reportText"],"}", sep=""))
+}
+cat("\\end{itemize}")
+
+@
+
+
+
 
 
 
