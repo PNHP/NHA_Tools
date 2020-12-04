@@ -290,14 +290,25 @@ cat("\\end{itemize}")
 @
 
 
-
-
-
-
-
-
 \subsection{Watersheds}
-\noindent The streams in \Sexpr{nameCounty} County are part of the Susquehanna and Potomac River drainage basins (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
+\noindent 
+<<label=watershedoverview, echo=FALSE, results='asis'>>=
+
+waterDest <- data.frame(HUC2=c("02","04","05"),dest=c("Atlantic Ocean","through the Great Lakes to the St. Lawrence","Mississippi River and ultimately to the Gulf of Mexico"))
+waterDest$HUC2  <- as.character(waterDest$HUC2)
+waterDest$dest  <- as.character(waterDest$dest)
+if(nrow(CountyHUC4)==1){
+  cat("All of the streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], "drainage basin. ")
+  cat("The",CountyHUC4$NAME,"is part of the",CountyHUC4$NAME_1,"system, which drains to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+  } else if(nrow(CountyHUC4)==2){
+  cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
+} else if(nrow(CountyHUC4)==3){
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2], ", and ", CountyHUC4$NAME[3], " drainage basins.", sep=""))
+} else {
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2],", ", CountyHUC4$NAME[3], ", and ", CountyHUC4$NAME[4], " drainage basins.", sep=""))
+}
+@
+ (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
 
 \noindent Floodplains are flat, often flooded, areas along streams and rivers. They are important terrestrial habitat areas tied to the flowing water system. Floodplains are typically inundated by water during the spring runoff and then remain dry after these floodwaters recede. The effects of water on these systems influence the vegetation communities that can persist there. These forested floodplains also serve as a protective buffer against erosion, provide cooling shade to the waterway, filter pollutants and excessive nutrients from runoff, and help alleviate flood damage along many of the area’s creeks. \\
 

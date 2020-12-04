@@ -103,7 +103,14 @@ PhysSectDesc <- dbGetQuery(db_nha, "SELECT * FROM IntroData_PhysSect" )
 dbDisconnect(db_nha)
 
 
+# watersheds
+CountyHUC4 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyHUC04")
+CountyHUC4 <- arc.select(CountyHUC4, c("COUNTY_NAM","HUC4","NAME","HUC2","NAME_1","propHUC4"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+CountyHUC4$propHUC4 <- as.numeric(CountyHUC4$propHUC4)
+CountyHUC4 <- CountyHUC4[order(-CountyHUC4$propHUC4),]
 
+
+tmp_CountyHUC04
 
 #landcover
 CountyNLCD16 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyNLCD16")
