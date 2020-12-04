@@ -297,11 +297,19 @@ cat("\\end{itemize}")
 waterDest <- data.frame(HUC2=c("02","04","05"),dest=c("Atlantic Ocean","through the Great Lakes to the St. Lawrence","Mississippi River and ultimately to the Gulf of Mexico"))
 waterDest$HUC2  <- as.character(waterDest$HUC2)
 waterDest$dest  <- as.character(waterDest$dest)
+
 if(nrow(CountyHUC4)==1){
   cat("All of the streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], "drainage basin. ")
   cat("The",CountyHUC4$NAME,"is part of the",CountyHUC4$NAME_1,"system, which drains to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
   } else if(nrow(CountyHUC4)==2){
-  cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
+    if(length(unique(CountyHUC4$HUC2))==1){
+      cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
+      cat("These rivers drain to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+    } else if(length(unique(CountyHUC4$HUC2))==2){
+        CountyHUC4a <- CountyHUC4[order(-CountyHUC4$propHUC4),]
+        cat(paste("Approximately",round(CountyHUC4$propHUC4[1],2)*100),"\\% of ", nameCounty, " County is drained throught the ",CountyHUC4$NAME_1[1]," basin to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],", whereas, a smaller portion (", round(CountyHUC4$propHUC4[2],2)*100,"\\%) drains through the ",CountyHUC4$NAME_1[2], " to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[2]),"dest"],".",sep="")
+    } else {}
+  #cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
 } else if(nrow(CountyHUC4)==3){
   cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2], ", and ", CountyHUC4$NAME[3], " drainage basins.", sep=""))
 } else {
