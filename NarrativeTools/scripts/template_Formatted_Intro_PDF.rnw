@@ -327,20 +327,6 @@ if(nrow(CountyHUC4)==1){
 %   \end{flushleft}
 %   \end{minipage}}
 % \end{wrapfigure}
-
-% call out box about invasive species!
-\begin{wrapfigure}{r}{.5\textwidth}
- \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-  \begin{center}
-   \includegraphics[width=0.69\textwidth]{iMapInvasivesPA}
-  \end{center}
- \begin{flushleft}
-   \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals by providing an online platform where invasive species sightings and management efforts can be recorded and shared. By providing data on invasive species distributions, the iMapInvasives program helps to facilitate both current and future endeavors to control and eradicate invasive species across Pennsylvania. The iMapInvasives program works with non-profit groups, institutions, and state government to compile information on aquatic and terrestrial invasive species occurrences and treatments. Information is then used by countless organizations to prioritize invasive species control projects. In addition to natural resource professionals, tools in iMapInvasives can be used by citizen scientists, land owners, and others wishing to contribute their invasive species findings and view species distributions.\\
-   \noindent Learn more about the Pennsylvania iMapinvasives at https://www.paimapinvasives.org/
-  \end{flushleft}
-  \end{minipage}}
-\end{wrapfigure}
-
 \noindent The interaction of geology and climate produces several critical functions in the landscape including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and ultimately wildlife habitat formation. The classification of plant communities typically revolves around the dominant species, habitat, and growth form. Boundaries between community types in the field are often gradual and indistinct. \\
 
 \noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate) associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
