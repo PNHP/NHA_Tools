@@ -17,6 +17,7 @@
 \usepackage{subcaption}
 \usepackage{url}
 \urlstyle{same}
+%\usepackage{siunitx}
 \usepackage{graphicx}
 \graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{../../z_BaseImages/introMaps/}{photos/}{../../DraftSiteAccounts/z_photos} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
@@ -55,46 +56,99 @@
 \catcode`\_=11
 
 % title page
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+  \raggedleft % Right align the title page
+	\rule{2pt}{\textheight} % Vertical line
+	\hspace{0.05\textwidth} % Whitespace between the vertical line and title page text
+	\parbox[b]{0.75\textwidth}{ % Paragraph box for holding the title page text, adjust the width to move the title page left or right on the page
+		{\Huge\bfseries \Sexpr{nameCounty} County \\Natural Heritage Inventory\\}\\[1\baselineskip] % Title
+		 {\Large\textit{\Sexpr{YearUpdate} Update}}\\[2\baselineskip] % Subtitle or further description
+		 {\Large\textsc{\Sexpr{editor1} and \Sexpr{editor2}, editors.}}\\[4\baselineskip] % Author name, lower case for consistent small caps
+		
+		\large\textit{Prepared for:}\\
+		\large\textbf{\Sexpr{projectClient}}\\ 
+    	\large\Sexpr{projectClientAdd1}\\
+    	\large Pittsburgh, PA 15219\\ %\large\Sexpr{projectClientAdd2}\\\\
+		
+		\large\textit{Prepared by:}\\
+		\large\textbf{Pennsylvania Natural Heritage Program}\\ 
+    	\large 800 Waterfront Drive\\
+    	\large Pittsburgh, PA 15222\\		
+		
+		\vspace{0.2\textheight} % Whitespace between the title block and the publisher
+		\includegraphics[width=0.45\textwidth]{PNHP_New_Logo_cmpact}\\
+		%{\noindent The Publisher~~\plogo}\\[\baselineskip] % Publisher and logo
+		%%  Recommended Citation %%%
+		\begin{flushleft}
+    Please cite this Natural Heritage Inventory report as:\\ 
+    \textit{\Sexpr{editor1a} and \Sexpr{editor2}. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.}
+    \end{flushleft}
+	}
+\end{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
 
-%%%  Recommended Citation %%% 
-% \setlength{\fboxsep}{5pt}
-% \fbox{
-% \begin{minipage}[c]{0.2\linewidth}
-% \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
-% \end{minipage}%
-% \begin{minipage}[c]{0.75\linewidth}
-% This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.
-% \\ \\ Please cite this Natural Heritage Area as: \\
-% Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
-% \end{minipage}
-% }
 
+%%% ACKNOWLEDGEMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\section{ACKNOWLEDGEMENTS}
+\noindent We would like to acknowledge the citizens and landowners of \Sexpr{nameCounty} County and surrounding areas who volunteered information, time, and effort to the inventory and granted permission to access land. A big thank you goes to those who suggested areas of interest, provided data, and assisted with field surveys. Additional thanks goes to \Sexpr{projectLead} of the \Sexpr{projectLeadOrg} for providing support for this project.\\
+
+\noindent Advisory Committee to the \Sexpr{YearUpdate} update to the \Sexpr{nameCounty} County Natural Heritage Inventory:
+\begin{itemize}
+\item{Laura Jackson, Woodland Owners of the Southern Alleghenies and Audubon Society}
+\item{Jennifer Lentz-Kowacs, Bedford County Conservation District}
+\item{Dave Scamardella, Bureau of Forestry District 2 Service Forester, Bedford County}
+\item{Don Schwartz, Bedford County Planning Commission, Director}
+\item{Ron Stanley, Ridge and Valley Streamkeepers}
+\item{Guy Stottlemyer, Bedford County Conservation District and Trout Unlimited}
+\item{Fred Temke, Bedford County Planning Commission}
+\item{Justin Vreeland, Wildlife Supervisor, Pennsylvania Game Commission, Southcentral Regional Wildlife Management}
+\item{Dave Young,Pennsylvania Bureau of State Parks}
+\end{itemize}
+\smallskip
+\noindent We want to recognize the Pennsylvania Natural Heritage Program and NatureServe for providing the foundation for the work that we perform for these studies. Current and former PNHP staff that contributed to this report includes \Sexpr{staffPNHP}. \\
+
+\noindent The species information utilized in the inventory came from many sources as well as our own field surveys. 
+We wish to acknowledge all of those who carried out botanical and zoological survey work over the years. Biologists, both on their own and from institutions and agencies such as the Carnegie Museum of Natural History, the Department of Conservation and Natural Resources, the Pennsylvania Game Commission, and the Pennsylvania Fish and Boat Commission have contributed numerous plantand animal records over the years. The task of inventorying the natural heritage of the county would have been much more difficult and incomplete without this tremendous pool of information gathered by many people over many years.Finally, we especially wish to thank the landowners who granted us permission to conduct inventories on their lands. Without their support, this report would have been far less complete.\\
+
+\noindent This project was funded through grants provided by the Pennsylvania Department of Conservation and Natural Resources, Wild Resources Conservation Program and the Pennsylvania Department of Community and Economic Development, Commonwealth Financing Authority.  Support was also provided by the Bedford County Board of Commissioners.We encourage comments and questions. \\
+
+\noindent The success of the report will be measured by the use it receives and the utility it serves to those making decisions about resources and land use throughout the county. Thank you for your interest. 
+
+
+%%% TOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
-
-
-
-
-
 \tableofcontents
 
+%%% PNHP Intro %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
 \section{THE PENNSYLVANIA NATURAL HERITAGE PROGRAM}
-\begin{wrapfigure}{R}{0.3\textwidth}
-\includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
-\end{wrapfigure}
-The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with over 20,000 detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.As part of the information maintained by PNHP, a system of global ranks and state ranks is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
-\bigskip
+% \begin{wrapfigure}{R}{0.3\textwidth}
+% \includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
+% \end{wrapfigure}
 
-%%%  NatureServe Callout %%% 
-
-\setlength{\fboxsep}{5pt}
-\fbox{
-\begin{minipage}[c]{0.75\linewidth}
-\includegraphics[width=.45\linewidth]{NS-logo_blue-short-tag_2019-09}
+% call out box about NatureServe!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+ \begin{flushleft}
+\includegraphics[width=.85\linewidth]{NS-logo_blue-short-tag_2019-09}
 \newline
-NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology to document the extent of biodiversity throughout the country, with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe. All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.   
-\end{minipage}
-}
+NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology to document the extent of biodiversity throughout the country, with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.\\
+\vspace{10}
+Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe.\\
+\vspace{10}
+All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.  
+  \end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
+The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).\\
+
+\noindent PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with almost \Sexpr{eo_count} detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.\\
+
+\noindent As part of the information maintained by PNHP, a system of \textit{global ranks} and \textit{state ranks} is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.\\
+
+\noindent PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
+
+
 
 \newpage
 \section{INTRODUCTION}
@@ -140,8 +194,15 @@ The natural resources of the region are continually changing. As habitats and la
 \subsubsection{Document layout}
 The 1998 \Sexpr{nameCounty} NAI was organized by USGS quadrangle. The \Sexpr{YearUpdate} Update is organized alphabetically by NHA name, with only one site depicted on each map. The scale of each map is based on the relative scale of the NHA.
 
-\subsection{Statewide Coverage}\
+\subsection{Statewide Coverage}
 The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
+\smallskip
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{PACE}}
+\caption{Pennsylvania Conservation Explorer (PACE) provides conservation planning and environmental review functions for PNHP.}
+\end{figure}
+
 
 \newpage
 \section{Biodiversity in Pennsylvania}
@@ -149,7 +210,7 @@ The information depicted in this report will be integrated into the \textbf{Penn
 
 \noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population allows a species to better adapt successfully to environmental changes. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations,through the migration of individual plants and animals across the landscape and the dispersal of pollen and seeds among populations (Thorne et al. 1996). Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
 
-\noindent A natural community is an interactive assemblage of plant and animal species that share a set of similar environmental tolerances or preferences,and occur together repeatedly across the landscape, such as a red maple swamp. Each type of natural community represents habitat for a different assemblage of species, and often indicates different environmental characteristics (for example, different natural communities prefer different ranges of moisture, temperature, or soil pH).Hence identification and stewardship of the full range of native community types is needed to meet the challenge of conserving habitat for all species.\\
+\noindent A natural community is an interactive assemblage of plant and animal species that share a set of similar environmental tolerances or preferences,and occur together repeatedly across the landscape, such as a red maple swamp. Each type of natural community represents habitat for a different assemblage of species, and often indicates different environmental characteristics (for example, different natural communities prefer different ranges of moisture, temperature, or soil pH). Hence identification and stewardship of the full range of native community types is needed to meet the challenge of conserving habitat for all species.\\
 
 \noindent From an ecological perspective, a landscape is a large area of land that includes a mosaic of natural community types and a variety of habitats for many species. At this scale, it is important to consider whether communities and habitats are isolated or connected by corridors of natural landscape traversable by wildlife, and whether the size of a natural landscape is sufficient to support viable populations and ecosystems which will be persistent long-term. Because the living and non-living elements of an ecosystem are interconnected and interdependent, it is essential to conserve native biodiversity at all of these scales, from genes through landscapes, if ecosystems are to continue functioning as habitat and providing the natural resources that humans rely upon.\\
 
@@ -199,18 +260,63 @@ Here is the 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nam
 
 \noindent Characteristic landscapes and distinctive geological formations define Physiographic Provinces (Figure 1). Physiography relates in part to a region’s topography and climate. These two factors, along with bedrock type, significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influences animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others.\\
 
-Allegheny Front\\
-\noindent The Allegheny Front Section of the Appalachian Plateaus Province consists of rounded to linear hills rising to an escarpment in the eastern portion and undulating hills that slope away to the west of an escarpment. The Allegheny Front is the major southeast-or east-facing escarpment in the Allegheny Mountains in southern Pennsylvania, western Maryland, and eastern West Virginia. The Allegheny Front forms the boundary between the Appalachians Mountains to its east and the Appalachian Plateau to its west.This region is broadly folded, composed of shale, siltstone, and sandstone.\\
+<<label=physio, echo=FALSE, results='asis'>>=
+if(nrow(CountyPhysProv)==1){
+  cat(paste("\\noident ",nameCounty," County lies entirely within the ", CountyPhysProv$PROVINCE," phsyiographic province. ", sep=""))
+  
+  if(nrow(CountyPhysSect)==1){
+    cat(paste("Its also all within the ", CountyPhysSect$SECTION[1], " section.", sep=""))
+  } else if(nrow(CountyPhysSect)==2){
+    cat(paste("The county is divided among the ",CountyPhysSect$SECTION[1], " (",round(CountyPhysSect$propSect[1],2)*100,"\\%) and ",CountyPhysSect$SECTION[2], " (",round(CountyPhysSect$propSect[2],2)*100,"\\%) physiographic sections.", sep=""))
+  } else if(nrow(CountyPhysSect)==3){
+    cat(paste("The county is divided among the ",CountyPhysSect$SECTION[1], " (",round(CountyPhysSect$propSect[1],2)*100,"\\%), ",CountyPhysSect$SECTION[2], " (",round(CountyPhysSect$propSect[2],2)*100,"\\%) and ",CountyPhysSect$SECTION[3], " (",round(CountyPhysSect$propSect[3],2)*100,"\\%) physiographic sections.", sep=""))
+  } else {}
 
-Appalachian Mountains\\
-\noindent The eastern two-thirds of \Sexpr{nameCounty} county lies in the Appalachian Mountain section of the Ridge and Valley Physiographic Province. This section is characterized by long, narrow ridges,broad to narrow valleys,and occasionally karst.The bedrock is composed of sandstone, siltstone, shale, conglomerate, limestone, and dolomite. 
 
+} else if(nrow(CountyPhysProv)==2){
+      cat(paste("The county is divided among the ",CountyPhysProv$PROVINCE[1], " (",round(CountyPhysProv$PROpSect[1],2)*100,"%) and ",CountyPhysProv$PROVINCE[2], " (",round(CountyPhysProv$PROpSect[2],2)*100,"%) provinces.", sep=""))
+}
 
+#cat(paste(, sep=""))
 
+# Description of Sections
+cat(" Descriptions of the", words(nrow(CountyPhysSect)), "physiographic sections are as follows:" )
+cat("\\begin{itemize}")
+for (p in 1:nrow(CountyPhysSect)) {
+  cat(paste("\\item{",CountyPhysSect$SECTION[p]," --- ",PhysSectDesc[which(PhysSectDesc$Section==CountyPhysSect$SECTION[p]),"reportText"],"}", sep=""))
+}
+cat("\\end{itemize}")
+
+@
 
 
 \subsection{Watersheds}
-\noindent The streams in \Sexpr{nameCounty} County are part of the Susquehanna and Potomac River drainage basins (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
+\noindent 
+<<label=watershedoverview, echo=FALSE, results='asis'>>=
+
+waterDest <- data.frame(HUC2=c("02","04","05"),dest=c("Atlantic Ocean","through the Great Lakes to the St. Lawrence","Mississippi River and ultimately to the Gulf of Mexico"))
+waterDest$HUC2  <- as.character(waterDest$HUC2)
+waterDest$dest  <- as.character(waterDest$dest)
+
+if(nrow(CountyHUC4)==1){
+  cat("All of the streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], "drainage basin. ")
+  cat("The",CountyHUC4$NAME,"is part of the",CountyHUC4$NAME_1,"system, which drains to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+  } else if(nrow(CountyHUC4)==2){
+    if(length(unique(CountyHUC4$HUC2))==1){
+      cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
+      cat("These rivers drain to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+    } else if(length(unique(CountyHUC4$HUC2))==2){
+        CountyHUC4a <- CountyHUC4[order(-CountyHUC4$propHUC4),]
+        cat(paste("Approximately",round(CountyHUC4$propHUC4[1],2)*100),"\\% of ", nameCounty, " County is drained throught the ",CountyHUC4$NAME_1[1]," basin to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],", whereas, a smaller portion (", round(CountyHUC4$propHUC4[2],2)*100,"\\%) drains through the ",CountyHUC4$NAME_1[2], " to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[2]),"dest"],".",sep="")
+    } else {}
+  #cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
+} else if(nrow(CountyHUC4)==3){
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2], ", and ", CountyHUC4$NAME[3], " drainage basins.", sep=""))
+} else {
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2],", ", CountyHUC4$NAME[3], ", and ", CountyHUC4$NAME[4], " drainage basins.", sep=""))
+}
+@
+ (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
 
 \noindent Floodplains are flat, often flooded, areas along streams and rivers. They are important terrestrial habitat areas tied to the flowing water system. Floodplains are typically inundated by water during the spring runoff and then remain dry after these floodwaters recede. The effects of water on these systems influence the vegetation communities that can persist there. These forested floodplains also serve as a protective buffer against erosion, provide cooling shade to the waterway, filter pollutants and excessive nutrients from runoff, and help alleviate flood damage along many of the area’s creeks. \\
 
@@ -219,9 +325,19 @@ Appalachian Mountains\\
 \noindent Streams that are dammed have modified habitats because of increased water temperatures and changes in the way sediment moves and is distributed in the river. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals,including human communities. 
 
 \subsection{Natural Communities}
+% call out box about community class!
+% \begin{wrapfigure}{r}{.5\textwidth}
+%  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+%  \begin{flushleft}
+%    \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans.
+% PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects. 
+%    \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
+%   \end{flushleft}
+%   \end{minipage}}
+% \end{wrapfigure}
 \noindent The interaction of geology and climate produces several critical functions in the landscape including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and ultimately wildlife habitat formation. The classification of plant communities typically revolves around the dominant species, habitat, and growth form. Boundaries between community types in the field are often gradual and indistinct. \\
 
-\noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate)associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
+\noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate) associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
 
 \noindent Little to none of the original forest cover still exists in \Sexpr{nameCounty} County. Much of the forest on the valley floors was cleared for agriculture and development and the forests that remain have been logged one or more times for fuel and lumber (Keever 1972). These factors have changed the extent and species composition of the forest. For example, the tulip poplar, a fast-growing early successional tree species,was considered to be a minor component of this forest region but has now become a co-dominant with the oaks in many places. Species composition in the understory has shifted as well,with native spicebush and viburnums becoming more dominant in some areas and exotic species such as Japanese honeysuckle, tree-of-heaven, common privet, bush honeysuckles, autumn olive, winged euonymus, Japanese stilt grass,and garlic mustard becoming established in other areas. In many woodlands, these exotics tend to crowd out the native species and reduce the overall biological diversity of the flora. In turn, this reduction in the diversity of the flora also leads to a reduced fauna.\\
 
@@ -251,13 +367,16 @@ Prior to European settlement, forest covered more than 90 percent of the area th
 
 \noindent Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively pristine habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, predator-prey interactions,and natural disturbances regimes. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass.
 
+\newpage
 \subsection{Invasive Species}
 % call out box about invasive species!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.69\textwidth]{iMapInvasivesPA}
+  \end{center}
  \begin{flushleft}
    \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals by providing an online platform where invasive species sightings and management efforts can be recorded and shared. By providing data on invasive species distributions, the iMapInvasives program helps to facilitate both current and future endeavors to control and eradicate invasive species across Pennsylvania. The iMapInvasives program works with non-profit groups, institutions, and state government to compile information on aquatic and terrestrial invasive species occurrences and treatments. Information is then used by countless organizations to prioritize invasive species control projects. In addition to natural resource professionals, tools in iMapInvasives can be used by citizen scientists, land owners, and others wishing to contribute their invasive species findings and view species distributions.\\
-   
    \noindent Learn more about the Pennsylvania iMapinvasives at https://www.paimapinvasives.org/
   \end{flushleft}
   \end{minipage}}

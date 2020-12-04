@@ -12,9 +12,23 @@ rm(list = ls())
 # load in the paths and settings file
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
-nameCounty <- "Allegheny"
+# Variables for the Intro!
+nameCounty <- "Fayette"
 YearUpdate <- 2020
 YearPrevious <- 
+  
+editor1 <- "Anna Johnson"
+editor2 <- "Christopher Tracey"
+
+staffPNHP <- "JoAnn Albert, Charlie Eichelberger, Kierstin Carlson, Rocky Gleason, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman."
+
+projectLead <- "Ryan Gordon"
+projectLeadOrg <- "Southwest Pennsylvania Commission"
+
+projectClient <- "Southwest Pennsylvania Commission"
+projectClientAdd1 <- "112 Washington Pl \\#500"
+projectClientAdd2 <- "Pittsburgh, PA 15219"
+
 
 #################################################################################################################
 # get NHA GIS data
@@ -58,20 +72,45 @@ speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
 
-
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])
 ETextipated <- nrow(ET[which(ET$SRANK=="SX"),])
+
+# get a count of the total EOs in Biotics
+eo_ptrep <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
+eo_ptrep <- arc.select(eo_ptrep) # , c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")
+eo_count <- nrow(eo_ptrep)
+eo_ptrep <- NULL
+eo_count <- ceiling(eo_count/1000)*1000
+eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
 
 #################################################################################################################
 # Background GIS Data for the County
 
 CountyPhysProv <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysProv")
 CountyPhysProv <- arc.select(CountyPhysProv, c("COUNTY_NAM","PROVINCE","PROpSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep=""))  # 
+CountyPhysProv$PROpSect <- as.numeric(CountyPhysProv$PROpSect)
+CountyPhysProv <- CountyPhysProv[order(-CountyPhysProv$PROpSect),] 
 
 CountyPhysSect <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysSect")
 CountyPhysSect <- arc.select(CountyPhysSect, c("COUNTY_NAM","SECTION","propSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+CountyPhysSect$propSect <- as.numeric(CountyPhysSect$propSect)
+CountyPhysSect <- CountyPhysSect[order(-CountyPhysSect$propSect),] 
 
+# 
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+PhysSectDesc <- dbGetQuery(db_nha, "SELECT * FROM IntroData_PhysSect" )
+dbDisconnect(db_nha)
+
+
+# watersheds
+CountyHUC4 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyHUC04")
+CountyHUC4 <- arc.select(CountyHUC4, c("COUNTY_NAM","HUC4","NAME","HUC2","NAME_1","propHUC4"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+CountyHUC4$propHUC4 <- as.numeric(CountyHUC4$propHUC4)
+CountyHUC4 <- CountyHUC4[order(-CountyHUC4$propHUC4),]
+
+
+tmp_CountyHUC04
 
 #landcover
 CountyNLCD16 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyNLCD16")
@@ -109,11 +148,17 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
 ###################################################################################################################
 
 # get a count of the different ranks of the NHAs
-
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
 
 
+# editor formatting for citation
+editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
+
+# sources and funding
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
+dbDisconnect(db_nha)
 
 ##############################################################################################################
 ## Write the output document for the site ###############
