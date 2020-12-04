@@ -79,8 +79,10 @@
 		\includegraphics[width=0.45\textwidth]{PNHP_New_Logo_cmpact}\\
 		%{\noindent The Publisher~~\plogo}\\[\baselineskip] % Publisher and logo
 		%%  Recommended Citation %%%
+		\begin{flushleft}
     Please cite this Natural Heritage Inventory report as:\\ 
-    \Sexpr{editor1a} and \Sexpr{editor2}. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.
+    \textit{\Sexpr{editor1a} and \Sexpr{editor2}. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.}
+    \end{flushleft}
 	}
 \end{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
 
@@ -119,22 +121,34 @@ We wish to acknowledge all of those who carried out botanical and zoological sur
 %%% PNHP Intro %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
 \section{THE PENNSYLVANIA NATURAL HERITAGE PROGRAM}
-\begin{wrapfigure}{R}{0.3\textwidth}
-\includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
-\end{wrapfigure}
-The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with almost \Sexpr{eo_count} detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.As part of the information maintained by PNHP, a system of global ranks and state ranks is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
-\bigskip
+% \begin{wrapfigure}{R}{0.3\textwidth}
+% \includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
+% \end{wrapfigure}
 
-%%%  NatureServe Callout %%% 
-
-\setlength{\fboxsep}{5pt}
-\fbox{
-\begin{minipage}[c]{0.75\linewidth}
-\includegraphics[width=.45\linewidth]{NS-logo_blue-short-tag_2019-09}
+% call out box about NatureServe!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+ \begin{flushleft}
+\includegraphics[width=.85\linewidth]{NS-logo_blue-short-tag_2019-09}
 \newline
-NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology to document the extent of biodiversity throughout the country, with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe. All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.   
-\end{minipage}
-}
+NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology to document the extent of biodiversity throughout the country, with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.\\
+\vspace{10}
+Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe.\\
+\vspace{10}
+All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.  
+  \end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
+The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).\\
+
+\noindent PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with almost \Sexpr{eo_count} detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.\\
+
+\noindent As part of the information maintained by PNHP, a system of \textit{global ranks} and \textit{state ranks} is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.\\
+
+\noindent PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
+
+
 
 \newpage
 \section{INTRODUCTION}
@@ -180,8 +194,15 @@ The natural resources of the region are continually changing. As habitats and la
 \subsubsection{Document layout}
 The 1998 \Sexpr{nameCounty} NAI was organized by USGS quadrangle. The \Sexpr{YearUpdate} Update is organized alphabetically by NHA name, with only one site depicted on each map. The scale of each map is based on the relative scale of the NHA.
 
-\subsection{Statewide Coverage}\
+\subsection{Statewide Coverage}
 The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
+\smallskip
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{PACE}}
+\caption{Pennsylvania Conservation Explorer (PACE) provides conservation planning and environmental review functions for PNHP.}
+\end{figure}
+
 
 \newpage
 \section{Biodiversity in Pennsylvania}
@@ -189,7 +210,7 @@ The information depicted in this report will be integrated into the \textbf{Penn
 
 \noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population allows a species to better adapt successfully to environmental changes. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations,through the migration of individual plants and animals across the landscape and the dispersal of pollen and seeds among populations (Thorne et al. 1996). Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
 
-\noindent A natural community is an interactive assemblage of plant and animal species that share a set of similar environmental tolerances or preferences,and occur together repeatedly across the landscape, such as a red maple swamp. Each type of natural community represents habitat for a different assemblage of species, and often indicates different environmental characteristics (for example, different natural communities prefer different ranges of moisture, temperature, or soil pH).Hence identification and stewardship of the full range of native community types is needed to meet the challenge of conserving habitat for all species.\\
+\noindent A natural community is an interactive assemblage of plant and animal species that share a set of similar environmental tolerances or preferences,and occur together repeatedly across the landscape, such as a red maple swamp. Each type of natural community represents habitat for a different assemblage of species, and often indicates different environmental characteristics (for example, different natural communities prefer different ranges of moisture, temperature, or soil pH). Hence identification and stewardship of the full range of native community types is needed to meet the challenge of conserving habitat for all species.\\
 
 \noindent From an ecological perspective, a landscape is a large area of land that includes a mosaic of natural community types and a variety of habitats for many species. At this scale, it is important to consider whether communities and habitats are isolated or connected by corridors of natural landscape traversable by wildlife, and whether the size of a natural landscape is sufficient to support viable populations and ecosystems which will be persistent long-term. Because the living and non-living elements of an ecosystem are interconnected and interdependent, it is essential to conserve native biodiversity at all of these scales, from genes through landscapes, if ecosystems are to continue functioning as habitat and providing the natural resources that humans rely upon.\\
 
