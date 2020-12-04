@@ -317,9 +317,33 @@ if(nrow(CountyHUC4)==1){
 \noindent Streams that are dammed have modified habitats because of increased water temperatures and changes in the way sediment moves and is distributed in the river. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals,including human communities. 
 
 \subsection{Natural Communities}
+% call out box about community class!
+% \begin{wrapfigure}{r}{.5\textwidth}
+%  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+%  \begin{flushleft}
+%    \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans.
+% PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects. 
+%    \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
+%   \end{flushleft}
+%   \end{minipage}}
+% \end{wrapfigure}
+
+% call out box about invasive species!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.69\textwidth]{iMapInvasivesPA}
+  \end{center}
+ \begin{flushleft}
+   \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals by providing an online platform where invasive species sightings and management efforts can be recorded and shared. By providing data on invasive species distributions, the iMapInvasives program helps to facilitate both current and future endeavors to control and eradicate invasive species across Pennsylvania. The iMapInvasives program works with non-profit groups, institutions, and state government to compile information on aquatic and terrestrial invasive species occurrences and treatments. Information is then used by countless organizations to prioritize invasive species control projects. In addition to natural resource professionals, tools in iMapInvasives can be used by citizen scientists, land owners, and others wishing to contribute their invasive species findings and view species distributions.\\
+   \noindent Learn more about the Pennsylvania iMapinvasives at https://www.paimapinvasives.org/
+  \end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
 \noindent The interaction of geology and climate produces several critical functions in the landscape including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and ultimately wildlife habitat formation. The classification of plant communities typically revolves around the dominant species, habitat, and growth form. Boundaries between community types in the field are often gradual and indistinct. \\
 
-\noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate)associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
+\noindent The vegetation of \Sexpr{nameCounty} County reflects the environmental conditions (e.g.,geology, topography, soils, and climate) associated with the physiographic sections, as well as the disturbance history of the county, both natural and anthropogenic. The Mixed Oak Forest Region (Monk et al., 1990)is the major forest cover in \Sexpr{nameCounty} County. This region extends from northern Georgia to southern New England and encompasses the three physiographic provinces that fall within the county. The Mixed Oak Forest was formerly called the Oak-Chestnut region \parencite{braun_deciduous_1951}. However, the introduction of the chestnut blight in 1904 obliterated a dominant species of the forest-type.In the 1970s an infestation of gypsy moths caused significant declines in the oak canopy and continues to impact the forests of \Sexpr{nameCounty} County, but is largely under control through implementation of pest management plans.\\
 
 \noindent Little to none of the original forest cover still exists in \Sexpr{nameCounty} County. Much of the forest on the valley floors was cleared for agriculture and development and the forests that remain have been logged one or more times for fuel and lumber (Keever 1972). These factors have changed the extent and species composition of the forest. For example, the tulip poplar, a fast-growing early successional tree species,was considered to be a minor component of this forest region but has now become a co-dominant with the oaks in many places. Species composition in the understory has shifted as well,with native spicebush and viburnums becoming more dominant in some areas and exotic species such as Japanese honeysuckle, tree-of-heaven, common privet, bush honeysuckles, autumn olive, winged euonymus, Japanese stilt grass,and garlic mustard becoming established in other areas. In many woodlands, these exotics tend to crowd out the native species and reduce the overall biological diversity of the flora. In turn, this reduction in the diversity of the flora also leads to a reduced fauna.\\
 
