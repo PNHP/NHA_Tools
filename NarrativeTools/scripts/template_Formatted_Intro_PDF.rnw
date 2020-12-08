@@ -93,15 +93,11 @@
 
 \noindent Advisory Committee to the \Sexpr{YearUpdate} update to the \Sexpr{nameCounty} County Natural Heritage Inventory:
 \begin{itemize}
-\item{Laura Jackson, Woodland Owners of the Southern Alleghenies and Audubon Society}
-\item{Jennifer Lentz-Kowacs, Bedford County Conservation District}
-\item{Dave Scamardella, Bureau of Forestry District 2 Service Forester, Bedford County}
-\item{Don Schwartz, Bedford County Planning Commission, Director}
-\item{Ron Stanley, Ridge and Valley Streamkeepers}
-\item{Guy Stottlemyer, Bedford County Conservation District and Trout Unlimited}
-\item{Fred Temke, Bedford County Planning Commission}
-\item{Justin Vreeland, Wildlife Supervisor, Pennsylvania Game Commission, Southcentral Regional Wildlife Management}
-\item{Dave Young,Pennsylvania Bureau of State Parks}
+<<label=adviscomm, echo=FALSE, results='asis'>>=
+for (p in 1:nrow(nha_AdvisComm)) {
+  cat(paste("\\item{",nha_AdvisComm$CommitteeMemberName[p]," --- ",nha_AdvisComm$CommitteeMemberOrg[p],"}", sep=""))
+}
+@
 \end{itemize}
 \smallskip
 \noindent We want to recognize the Pennsylvania Natural Heritage Program and NatureServe for providing the foundation for the work that we perform for these studies. Current and former PNHP staff that contributed to this report includes \Sexpr{staffPNHP}. \\

@@ -13,10 +13,9 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Armstrong"
+nameCounty <- "Westmoreland"
 YearUpdate <- 2020
-YearPrevious <- 
-  
+
 editor1 <- "Anna Johnson"
 editor2 <- "Christopher Tracey"
 
@@ -163,6 +162,12 @@ names(sigcount) <- c("sig","count")
 
 # editor formatting for citation
 editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
+
+
+#advisory committee
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+nha_AdvisComm <- dbGetQuery(db_nha, paste("SELECT * FROM AdvisoryCommittees WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha)
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
