@@ -13,7 +13,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Greene"
+nameCounty <- "Armstrong"
 YearUpdate <- 2020
 YearPrevious <- 
   
@@ -147,6 +147,12 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
   
 ###################################################################################################################
 
+# get some county background information
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+  infoCNHI <- dbGetQuery(db_nha, paste("SELECT * FROM CNHI_data WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha) 
+  
+  
 # get a count of the different ranks of the NHAs
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
