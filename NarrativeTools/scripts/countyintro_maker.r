@@ -152,11 +152,14 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
   infoCNHI <- dbGetQuery(db_nha, paste("SELECT * FROM CNHI_data WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha) 
   
-  
+# get some Natural History background information
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+ NatHistOverview <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_NatHistOverview WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha) 
+
 # get a count of the different ranks of the NHAs
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
-
 
 # editor formatting for citation
 editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
