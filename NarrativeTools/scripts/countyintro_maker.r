@@ -108,9 +108,6 @@ CountyHUC4 <- arc.select(CountyHUC4, c("COUNTY_NAM","HUC4","NAME","HUC2","NAME_1
 CountyHUC4$propHUC4 <- as.numeric(CountyHUC4$propHUC4)
 CountyHUC4 <- CountyHUC4[order(-CountyHUC4$propHUC4),]
 
-
-tmp_CountyHUC04
-
 #landcover
 CountyNLCD16 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyNLCD16")
 CountyNLCD16 <- arc.select(CountyNLCD16, c("COUNTY_NAM","NLCD_Land_Cover_Class","Count","Area"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
@@ -121,6 +118,10 @@ CountyNLCD16$NLCD_Land_Cover_Class <- factor(CountyNLCD16$NLCD_Land_Cover_Class,
 CountyNLCD16$group <- factor(CountyNLCD16$group, levels=c("Forest","Developed","Agriculture","Water","Wetland","Other"))
 
 CountyNLCD16$Acres <- CountyNLCD16$Area * 0.000247105
+
+CountyNLCD16sumgroup <- CountyNLCD16 %>% group_by(group) %>% summarize(sum=sum(Acres))
+CountyNLCD16sumgroup$percent <- round((CountyNLCD16sumgroup$sum / sum(CountyNLCD16sumgroup$sum))*100,1)
+CountyNLCD16sumgroup <- CountyNLCD16sumgroup[order(-CountyNLCD16sumgroup$sum),]
 
 
 # make graph for land cover
