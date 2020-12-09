@@ -228,7 +228,7 @@ The information depicted in this report will be integrated into the \textbf{Penn
 \noident The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased development. Wise planning, however,can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
 
 \subsection{Land Cover}
-The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])}. \Sexpr{tolower(CountyNLCD16sumgroup$group[2])} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]})\% of \Sexpr{nameCounty} County's land area. 
+The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])}. \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are an important for habitat and water quality.
 
 \begin{figure}[h]
     \centering

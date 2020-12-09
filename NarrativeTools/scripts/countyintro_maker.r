@@ -5,6 +5,7 @@ require(here)
 library(english)
 library(ggplot2)
 require(scales)
+library(textclean)
 
 # clear the environment
 rm(list = ls())
