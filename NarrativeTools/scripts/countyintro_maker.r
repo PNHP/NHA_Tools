@@ -178,6 +178,11 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(projectCode), sep="") )
 dbDisconnect(db_nha)
 
+# images
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+IntroPhotos <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_Photos WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha) 
+
 ##############################################################################################################
 ## Write the output document for the site ###############
 setwd(paste(NHAdest,"CountyIntros", nameCounty, sep="/")) #, "countyIntros", nameCounty, sep="/")
