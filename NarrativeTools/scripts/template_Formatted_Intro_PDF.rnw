@@ -112,12 +112,12 @@ This project was funded through a grant provided by the \Sexpr{nha_Sources$Fundi
 
 \noindent The success of the report will be measured by the use it receives and the utility it serves to those making decisions about resources and land use throughout the county. Thank you for your interest. \\ \\
 
-\noindent\Sexpr{editor1}\\
+\noindent \Sexpr{editor1}\\
 \Sexpr{editor1title}\\
 \Sexpr{editor1email}\\
 \Sexpr{editor1phone}\\
 
-\Sexpr{editor2}\\
+\noindent \Sexpr{editor2}\\
 \Sexpr{editor2title}\\
 \Sexpr{editor2email}\\
 \Sexpr{editor2phone}\\
@@ -173,7 +173,7 @@ The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the We
 \noindent Landowners will also find this inventory useful in managing and planning for the use of their land; it gives them the opportunity to explore alternatives that will provide for their needs and still protect the species and habitats that occur on their land. For example, the Forest Stewardship Program, coordinated by the Pennsylvania Department of Conservation and Natural Resource’s Bureau of Forestry, assists landowners in creating management plans. These plans incorporate landowner objectives (e.g.,wildlife or timber management). Other programs include the USDA’s Forest Legacy Program and the Pennsylvania Department of Agriculture’s Agricultural Land Preservation Program. Land managers may wish to consult with this report and the environmental review tool found on the Pennsylvania Natural Heritage Program’s website (www.naturalheritage.state.pa.us)in an effort to avoid potential conflicts in areas with species of concern and/or identify ways of enhancing or protecting these resources.
 
 \subsection{\Sexpr{nameCounty} CNHI Update Changes}
-The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in 1998. The original 1998 report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate} update followed the basic model of the original 1998 project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report.\\ 
+The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in 1998. The original 1998 report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate} update followed the basic model of the original 1998 project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report. 
 
 \subsubsection{Natural Heritage Area (NHA) Name Changes} 
 Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).
@@ -209,7 +209,7 @@ The information depicted in this report will be integrated into the \textbf{Penn
 \end{figure}
 
 \newpage
-\section{Biodiversity in Pennsylvania}
+\section{BIODIVERSITY IN PENNSYLVANIA}
 \noindent An ecosystem is the combination of a community of organisms and their environment, operating as a system. All the parts of an ecosystem are interconnected,and the survival of any species or the continuation of a given natural process (e.g. decomposition, carbon sequestration, or the filtration of pollutants from surface water) largely depends upon the system as a whole. Conversely, individual species and natural processes contribute towards maintaining the system. An important consideration in assessing overall ecosystem health is the concept of biodiversity. Biodiversity can be defined as the full variety of life that occurs in a given place, and is measured at several scales: genetic diversity within a single species, species diversity, natural communities, and landscapes. We know that biodiversity has a direct connection to ecosystem functioning and a healthy environment \parencite{hooper_global_2012}. And, while there is often not a direct and obvious connection between the loss of an individual species from an ecosystem and its functional health, the loss of a single component of an ecosystem may have unexpected and unintended consequences. \\
 
 \noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population is more likely to be able to successfully adapt to environmental changes \parencite{jump_environmental_2009}. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations, through the migration of individual plants and animals across the landscape, as well as the dispersal of pollen and seeds among populations \parencite{bacles_effective_2006}. Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
@@ -621,7 +621,9 @@ for(t in taxa){
 @
 \end{longtable}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \subsection{Natural Heritage Areas of \Sexpr{nameCounty} County}
 This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table 3). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="Global"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="Regional"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="State"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="Local"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
 

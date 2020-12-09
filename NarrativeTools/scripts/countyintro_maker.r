@@ -94,21 +94,18 @@ eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
 #################################################################################################################
 # Background GIS Data for the County
 
+# phys provinces
 CountyPhysProv <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysProv")
 CountyPhysProv <- arc.select(CountyPhysProv, c("COUNTY_NAM","PROVINCE","PROpSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep=""))  # 
 CountyPhysProv$PROpSect <- as.numeric(CountyPhysProv$PROpSect)
 CountyPhysProv <- CountyPhysProv[order(-CountyPhysProv$PROpSect),] 
-
 CountyPhysSect <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyPhysSect")
 CountyPhysSect <- arc.select(CountyPhysSect, c("COUNTY_NAM","SECTION","propSect"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
 CountyPhysSect$propSect <- as.numeric(CountyPhysSect$propSect)
 CountyPhysSect <- CountyPhysSect[order(-CountyPhysSect$propSect),] 
-
-# 
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 PhysSectDesc <- dbGetQuery(db_nha, "SELECT * FROM IntroData_PhysSect" )
 dbDisconnect(db_nha)
-
 
 # watersheds
 CountyHUC4 <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyHUC04")
@@ -125,7 +122,7 @@ CountyNLCD16 <- merge(CountyNLCD16,NLCDgroup)
 CountyNLCD16$NLCD_Land_Cover_Class <- factor(CountyNLCD16$NLCD_Land_Cover_Class, levels = c("Open Water","Developed, Open Space","Developed, Low Intensity","Developed, Medium Intensity","Developed, High Intensity","Barren Land","Deciduous Forest","Evergreen Forest","Mixed Forest","Shrub/Scrub","Herbaceuous","Hay/Pasture","Cultivated Crops","Woody Wetlands","Emergent Herbaceuous Wetlands"))
 CountyNLCD16$group <- factor(CountyNLCD16$group, levels=c("Forest","Developed","Agriculture","Water","Wetland","Other"))
 
-CountyNLCD16$Acres <- CountyNLCD16$Area * 0.000247105
+CountyNLCD16$Acres <- CountyNLCD16$Area * 0.000247105 # convert to acres
 
 CountyNLCD16sumgroup <- CountyNLCD16 %>% group_by(group) %>% summarize(sum=sum(Acres))
 CountyNLCD16sumgroup$percent <- round((CountyNLCD16sumgroup$sum / sum(CountyNLCD16sumgroup$sum))*100,1)
@@ -151,8 +148,7 @@ CountyLandTrust <- arc.select(CountyLandTrust , c("COUNTY_NAM","ORG_NAME","ORG_P
 # watershed service areas for the conclusions
 CountyWatershed <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyWatershedServiceArea ")
 CountyWatershed <- arc.select(CountyWatershed , c("COUNTY_NAM","Name","Profile","Weblink"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
-  
-  
+
 ###################################################################################################################
 
 # get some county background information
