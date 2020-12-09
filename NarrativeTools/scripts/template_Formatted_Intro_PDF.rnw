@@ -636,37 +636,37 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 <<label=speciestable, echo=FALSE, results='asis'>>=
 for(t in taxa){
   if(t=="AM"){
-    cat(paste0('\\multicolumn{4}{l}{','{Mammals}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Mammals}}}', '\\\\ \n'))
   }
   else if(t=="AB"){
-    cat(paste0('\\multicolumn{4}{l}{','{Birds}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Birds}}}', '\\\\ \n'))
   }
   else if(t=="AAAA"){
-    cat(paste0('\\multicolumn{4}{l}{','{Amphibians}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Amphibians}}}', '\\\\ \n'))
   }
   else if(t=="AR"){
-    cat(paste0('\\multicolumn{4}{l}{','{Reptiles}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Reptiles}}}', '\\\\ \n'))
   }
   else if(t=="AF"){
-    cat(paste0('\\multicolumn{4}{l}{','{Fish}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Fish}}}', '\\\\ \n'))
   }
   else if(t=="IMBIV"){
-    cat(paste0('\\multicolumn{4}{l}{','{Freshwater Mussels}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Freshwater Mussels}}}', '\\\\ \n'))
   }
   else if(t=="P"){
-    cat(paste0('\\multicolumn{4}{l}{','{Plants}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Plants}}}', '\\\\ \n'))
   }
   else if(t=="IMGAS"){
-    cat(paste0('\\multicolumn{4}{l}{','{IMGAS}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{IMGAS}}}', '\\\\ \n'))
   }
   else if(t=="IILEP"){
-    cat(paste0('\\multicolumn{4}{l}{','{Butterflies and Moths}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Butterflies and Moths}}}', '\\\\ \n'))
   }
   else if(t=="CGH"){
-    cat(paste0('\\multicolumn{4}{l}{','{CGH}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{CGH}}}', '\\\\ \n'))
   }
   else if(t=="IICOL"){
-    cat(paste0('\\multicolumn{4}{l}{','{IICOL}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{IICOL}}}', '\\\\ \n'))
   }
   else{
     cat(paste0('\\multicolumn{4}{l}{',t,'}', '\\\\ \n'))
