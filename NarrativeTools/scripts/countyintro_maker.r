@@ -18,12 +18,19 @@ nameCounty <- "Westmoreland"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
+editor1title <- "Connservation Planner"
+editor1email <- "ajohnson@paconserve.org"
+editor1phone <- ""
 editor2 <- "Christopher Tracey"
+editor2title <- "Conservation Planning Manager"
+editor2email <- "ctracey@paconserve.org"
+editor2phone <- "412-586-2326"
 
 staffPNHP <- "JoAnn Albert, Charlie Eichelberger, Kierstin Carlson, Rocky Gleason, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman."
 
 projectLead <- "Ryan Gordon"
 projectLeadOrg <- "Southwest Pennsylvania Commission"
+projectCode <- "SPC"
 
 projectClient <- "Southwest Pennsylvania Commission"
 projectClientAdd1 <- "112 Washington Pl \\#500"
@@ -173,7 +180,7 @@ dbDisconnect(db_nha)
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
+nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(projectCode), sep="") )
 dbDisconnect(db_nha)
 
 ##############################################################################################################
