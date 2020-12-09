@@ -636,40 +636,40 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 <<label=speciestable, echo=FALSE, results='asis'>>=
 for(t in taxa){
   if(t=="AM"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Mammals}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Mammals}}', '\\\\ \n'))
   }
   else if(t=="AB"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Birds}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Birds}}', '\\\\ \n'))
   }
   else if(t=="AAAA"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Amphibians}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Amphibians}}', '\\\\ \n'))
   }
   else if(t=="AR"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Reptiles}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Reptiles}}', '\\\\ \n'))
   }
   else if(t=="AF"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Fish}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Fish}}', '\\\\ \n'))
   }
   else if(t=="IMBIV"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Freshwater Mussels}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Freshwater Mussels}}', '\\\\ \n'))
   }
   else if(t=="P"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Plants}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Plants}}', '\\\\ \n'))
   }
   else if(t=="IMGAS"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{IMGAS}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{IMGAS}}', '\\\\ \n'))
   }
   else if(t=="IILEP"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{Butterflies and Moths}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{Butterflies and Moths}}', '\\\\ \n'))
   }
   else if(t=="CGH"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{CGH}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{CGH}}', '\\\\ \n'))
   }
   else if(t=="IICOL"){
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}','{IICOL}}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{','{IICOL}}', '\\\\ \n'))
   }
   else{
-    cat(paste0('\\multicolumn{4}{l}{\\rowcolor[gray]{.85}',t,'}', '\\\\ \n'))
+    cat(paste0('\\multicolumn{4}{l}{',t,'}', '\\\\ \n'))
   }
   for(i in 1:nrow(speciestable)){
     if(speciestable$ELEMENT_TYPE[i] == t){
