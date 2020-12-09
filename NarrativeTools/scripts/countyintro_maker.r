@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Westmoreland"
+nameCounty <- "Fayette"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -63,6 +63,8 @@ nha_relatedSpecies <- arc.select(nha_relatedSpecies, where_clause=paste("NHA_JOI
 nha_relatedSpecies <- nha_relatedSpecies[c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE")]
 nha_relatedSpecies <- unique(nha_relatedSpecies)
 
+nha_relatedSpecies <- nha_relatedSpecies[which(!is.na(nha_relatedSpecies$ELEMENT_TYPE)),]  # temp to remove issues !!!!!!!!!!!!!!!!!!!!!!!!!
+
 ET <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/ET")
 ET <- arc.select(ET, c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")) 
 
@@ -76,8 +78,13 @@ speciestable$OrderVec <- speciestable$ELEMENT_TYPE
 speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
 speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 
+# speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE", all.x=TRUE)  # join the taxa icons
+
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
+ taxa[is.na(taxa)] <- "P"
+# taxa[taxa=="O"] <- "CGH"
+ taxa <- unique(taxa)
 
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])

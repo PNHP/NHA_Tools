@@ -620,7 +620,7 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 \textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
 \midrule
 
- \endfirsthead
+\endfirsthead
 \textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
 \midrule
 \endhead
@@ -636,40 +636,52 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 <<label=speciestable, echo=FALSE, results='asis'>>=
 for(t in taxa){
   if(t=="AM"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Mammals}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mammals }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="AB"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Birds}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Birds }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
-  else if(t=="AAAA"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Amphibians}}}', '\\\\ \n'))
+  else if(t=="AAAA"|t=="AAAB"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Amphibians }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="AR"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Reptiles}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Reptiles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="AF"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Fish}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Fish }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IMBIV"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Freshwater Mussels}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Freshwater Mussels }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="P"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Plants}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Plants }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IMGAS"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{IMGAS}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{IMGAS }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }
+  else if(t=="IIODO"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Dragonflies and Damselflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IILEP"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{Butterflies and Moths}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Butterflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
-  else if(t=="CGH"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{CGH}}}', '\\\\ \n'))
+  else if(t=="IILEY"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Moths }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
+  else if(t=="IIPLE"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Stoneflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }
+  else if(t=="ICMAL"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Isopods }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }  
   else if(t=="IICOL"){
-    cat(paste0('\\multicolumn{4}{l}{','{\\textbf{IICOL}}}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{IICOL }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }
+else if(t=="CGH"|t=="O"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Communities and Natural Features }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else{
-    cat(paste0('\\multicolumn{4}{l}{',t,'}', '\\\\ \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{',t,'}', '\\\\ \n'))
   }
   for(i in 1:nrow(speciestable)){
     if(speciestable$ELEMENT_TYPE[i] == t){
@@ -678,13 +690,7 @@ for(t in taxa){
   }
 }  
   
-  
 
-
-# 
-# for(i in 1:nrow(speciestable)){
-#        cat(paste0(paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="") , " & ", speciestable$GRANK[i], " & ", speciestable$SRANK[i], " & ", paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")," \\\\") )
-# }
 @
 \end{longtable}
 
@@ -716,12 +722,12 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 
 <<label=nhatable, echo=FALSE, results='asis'>>=
 for(i in 1:nrow(nha_list)){
-       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
+       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i],"  \\\\") )
+      cat(" \\midrule")
 #       cat("\\hline")
 }
 @
 \end{longtable}
-
 
 \newpage
 \section{CONCLUSIONS AND RECOMMENDATIONS}
