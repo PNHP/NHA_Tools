@@ -157,19 +157,18 @@ The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the We
 \noindent PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
 
 \newpage
-\section{INTRODUCTION}
+\section{INTRODUCTION} 
+\noindent 
 % image
 <<label=image_intro, echo=FALSE, results='asis'>>=
-if(isTRUE(IntroPhotos$photoType=="image_intro")){
-  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+if(any(IntroPhotos$photoType=="image_intro")){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} \n")
   cat(paste0("\\includegraphics[width=0.5\\textwidth]{", IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoFilename"],"} %  \n"))
   cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
   capfun <- as.character(paste(IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoCaption"], "\\textcolor{gray}{","Photo:", IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoCredit"],"}\\\\", sep=" "))
   cat(paste0("\\caption{",capfun,"} \n"))
   cat("\\end{wrapfigure} \n")
-} else if(isFALSE(IntroPhotos$photoType=="image_intro")){
- cat("% no image present so nothing is added")#do nothing
-}
+} else {}
 @
 \noindent This project is a comprehensive update to the earlier \Sexpr{nameCounty} County Natural Areas Inventory project of \Sexpr{infoCNHI$yearPublished}. This current project was initiated to update the documentation of previously known species of concern (those considered at risk of local or global extinction), to identify additional habitats supporting species of concern, and to provide conservation recommendations to help ensure their continued survival within the region. The ability of a community to fulfill its vision for the future depends on its capacity to assemble information that will enable it to act effectively and wisely. Since 1989, County Natural Heritage Inventories (CNHIs) have served as a way to both gather and pass along new and existing information to those responsible for land use decisions, as well as to all residents who wish to know more about the natural heritage of their county. The \Sexpr{nameCounty} County Natural Heritage Inventory focuses on the best examples of living ecological resources in the county. The Western Pennsylvania Conservancy (WPC) served as the principal investigator, prepared the report, and created the maps for this study. The Pennsylvania Natural Heritage Program (PNHP), of which WPC is a partner, is responsible for collecting, tracking, and interpreting information regarding the state’s biological diversity. \\
 
@@ -177,7 +176,7 @@ if(isTRUE(IntroPhotos$photoType=="image_intro")){
 
 \noindent Planning for long-term sustainability can maintain open space, including natural environments and the plants and animals associated with them. Using this Natural Heritage Inventory as a conservation tool can steer development away from environmentally sensitive areas, creating a needed balance between economic growth and the conservation of natural resources. It is important that county and municipal governments, the public, developers, and planners know the location of such environmentally sensitive areas in order to maintain and protect these areas. Knowing where these areas are located can help prevent potential land use conflicts, and help focus conservation efforts and limited funds on the most vulnerable areas.The Pennsylvania Natural Heritage Program, in cooperation with the \Sexpr{nameCounty} County Planning Commission, has undertaken this project to provide a document and maps that will aid in the identification of these important areas. \\
 
-\noindent The \tectit{\Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) Update \Sexpr{YearUpdate}} represents the known species of concern, including plants, animals, and natural communities in \Sexpr{nameCounty} County. The inventory provides maps of the best natural communities (habitats) and the locations of animal and plant species of concern (rare, threatened, and endangered)in \Sexpr{nameCounty} County. These maps do not pinpoint the exact location of the species of concern but rather represent a conservation zone that is critical to the preservation of the site (Core Habitat) and a surrounding zone of potential impacts (Supporting Landscape), where applicable. In an effort to focus management and preservation efforts to the most critical portions of the habitat of species of concern, PNHP now primarily focuses on Core Habitat in both our spatial data and written conservation recommendations. A written description including threats and disturbances, conservation recommendations, and a summary table of the species of concern, including degree of rarity, last-observed date, and quality rank accompany each map. Potential threats and stresses, and suggestions for protection of the rare communities, plants, or animals at the site are included in the individual site descriptions. \\
+\noindent The \textit{\Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) Update \Sexpr{YearUpdate}} represents the known species of concern, including plants, animals, and natural communities in \Sexpr{nameCounty} County. The inventory provides maps of the best natural communities (habitats) and the locations of animal and plant species of concern (rare, threatened, and endangered)in \Sexpr{nameCounty} County. These maps do not pinpoint the exact location of the species of concern but rather represent a conservation zone that is critical to the preservation of the site (Core Habitat) and a surrounding zone of potential impacts (Supporting Landscape), where applicable. In an effort to focus management and preservation efforts to the most critical portions of the habitat of species of concern, PNHP now primarily focuses on Core Habitat in both our spatial data and written conservation recommendations. A written description including threats and disturbances, conservation recommendations, and a summary table of the species of concern, including degree of rarity, last-observed date, and quality rank accompany each map. Potential threats and stresses, and suggestions for protection of the rare communities, plants, or animals at the site are included in the individual site descriptions. \\
 
 \noindent The information and maps presented in this report provide a useful guide for planning residential or commercial developments, recreational parks or trails, for conserving natural areas, and for setting priorities for the preservation of the most vulnerable habitats. All of the sites in this report were evaluated for their importance in protecting biological diversity on a state and local level, but many also have scenic value, provide water quality protection, and are potential sites for low-impact passive recreation, nature observation, and/or environmental education. \\
 
@@ -243,9 +242,21 @@ The information depicted in this report will be integrated into the \textbf{Penn
 
 \newpage
 \section{NATURAL HISTORY OVERVIEW OF \Sexpr{toupper(nameCounty)} COUNTY}
-\Sexpr{nameCounty} County is rich in history, and scenic and natural resources. However, its rural character, natural resources, and farmland are all seriously threatened by the conversion of farmland and natural habitats to suburban and commercial uses, a trend common throughout southwestern Pennsylvania. Major interstate highways linking \Sexpr{nameCounty} County to metropolitan centers have made commuting to Pittsburgh feasible.\\
+\noindent
+% image
+<<label=image_NatHist, echo=FALSE, results='asis'>>=
+if(any(IntroPhotos$photoType=="image_NatHist")){
+  cat("\\begin{wrapfigure}{r}{0.5\\textwidth} \n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{", IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoFilename"],"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
+  capfun <- as.character(paste(IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoCaption"], "\\textcolor{gray}{","Photo:", IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoCredit"],"}\\\\", sep=" "))
+  cat(paste0("\\caption{",capfun,"} \n"))
+  cat("\\end{wrapfigure} \n")
+} else {}
+@
+\noindent \Sexpr{nameCounty} County is rich in history, and scenic and natural resources. However, its rural character, natural resources, and farmland are all seriously threatened by the conversion of farmland and natural habitats to suburban and commercial uses, a trend common throughout southwestern Pennsylvania. Major interstate highways linking \Sexpr{nameCounty} County to metropolitan centers have made commuting to Pittsburgh feasible.\\
 
-\noident The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased development. Wise planning, however,can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
+\noindent The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased development. Wise planning, however,can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
 
 \subsection{Land Cover}
 The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])}. \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are an important for habitat and water quality.
@@ -264,16 +275,8 @@ The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty}
     \end{minipage}
 \end{figure}
 
-
+\newpage
 \subsection{Physiography \& Geology}
-
-\begin{wrapfigure}{R}{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=0.5\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
-\caption{third figure}
-\end{figure}
-\end{wrapfigure}
-
 \noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure 1). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. \\
 
 <<label=physio, echo=FALSE, results='asis'>>=
@@ -288,12 +291,9 @@ if(nrow(CountyPhysProv)==1){
     cat(paste("The county is divided among the ",CountyPhysSect$SECTION[1], " (",round(CountyPhysSect$propSect[1],2)*100,"\\%), ",CountyPhysSect$SECTION[2], " (",round(CountyPhysSect$propSect[2],2)*100,"\\%) and ",CountyPhysSect$SECTION[3], " (",round(CountyPhysSect$propSect[3],2)*100,"\\%) physiographic sections.", sep=""))
   } else {}
 
-
 } else if(nrow(CountyPhysProv)==2){
       cat(paste("The county is divided among the ",CountyPhysProv$PROVINCE[1], " (",round(CountyPhysProv$PROpSect[1],2)*100,"%) and ",CountyPhysProv$PROVINCE[2], " (",round(CountyPhysProv$PROpSect[2],2)*100,"%) provinces.", sep=""))
 }
-
-
 #cat(paste(, sep=""))
 
 # Description of Sections
@@ -303,10 +303,19 @@ for (p in 1:nrow(CountyPhysSect)) {
   cat(paste("\\item{",CountyPhysSect$SECTION[p]," --- ",PhysSectDesc[which(PhysSectDesc$Section==CountyPhysSect$SECTION[p]),"reportText"],"}", sep=""))
 }
 cat("\\end{itemize}")
-
 @
 
+%\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
+\caption{third figure}
+\end{figure}
+%\end{wrapfigure}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \subsection{Watersheds}
 \noindent 
 <<label=watershedoverview, echo=FALSE, results='asis'>>=
@@ -342,17 +351,17 @@ if(nrow(CountyHUC4)==1){
 \noindent Streams that are dammed have modified habitats compared to streams that maintain a natural flow pattern. Dam-induced changes include increased water temperatures and alterations to the way sediment moves and is distributed in the river, which can impact shoreline and stream bottom habitat. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals, including human communities.
 
 \subsection{Natural Communities}
-
+\noindent
 % call out box about community class!
-% \begin{wrapfigure}{r}{.5\textwidth}
-%  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-%  \begin{flushleft}
-%    \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans.
-% PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects. 
-%    \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
-%   \end{flushleft}
-%   \end{minipage}}
-% \end{wrapfigure}
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+ \begin{flushleft}
+   \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans. 
+   \noindent PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects.
+   \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
+  \end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
 \noindent The interaction of geology and climate produces the pattern of vegetation expressed on the landscape. Vegetation provides several critical ecological functions, including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and provision of wildlife habitat \parencite{anderson_conserving_2010}. The classification of vegetation communities typically revolves around the dominant species, habitat, and their growth form. Discussion of vegetation communities in this report is divided between terrestrial forested communities and wetland communities. Boundaries between community types in the field are generally less distinct. \\
 
 \noindent \Sexpr{NatHistOverview$NatHistBraun} \\
@@ -371,13 +380,11 @@ The natural communities in \Sexpr{nameCounty} County vary in size, number, and q
 \subsection{Regional Disturbances}
 Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today.\\
 
-\noindent Natural Disturbances \\
-\noindent Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of human interventions. Floodplain forests benefit from the periodic scouring and deposition of sediments as streams overtop their banks. At the same time, streamside wetland communities retain excess water, thus reducing the scale of downstream flooding. \\
+\noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of human interventions. Floodplain forests benefit from the periodic scouring and deposition of sediments as streams overtop their banks. At the same time, streamside wetland communities retain excess water, thus reducing the scale of downstream flooding. \\
 
 \noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species (Rhoads and Klein 1993; Latham et al. 2005). Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct lossof rare plants (Yahner 1995). \\
 
-\noindent Human Disturbances \\
-\noindent Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively unfragmented and undisturbed habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, and predator-prey interactions. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass. While human disturbances are semi-permanent parts of the landscape, decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations. Careful land use planning can protect the most sensitive ecological areas from disturbance and also allow working landscapes to continue to support biodiversity while also fulfilling societal needs. \\
+\noindent \underline{Human Disturbances} --- Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively unfragmented and undisturbed habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, and predator-prey interactions. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass. While human disturbances are semi-permanent parts of the landscape, decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations. Careful land use planning can protect the most sensitive ecological areas from disturbance and also allow working landscapes to continue to support biodiversity while also fulfilling societal needs. \\
 
 \subsection{Forest Fragmentation}
 Prior to European colonizatoin, forest covered more than 90 percent of the area that became Pennsylvania (Goodrich et al., 2003). Today 62 percent of the state is forested, comprising an area of over 17 million acres (Figure 3a; Goodrich et al., 2003; Myers et al., 2000). Figure 3b shows the division of these forests by major fragmenting features such as interstate highways and major rivers; however, much of this forest exists as relatively small islands isolated by surrounding linear features such as roads, utility rights-of-way, all-terrain vehicle trails, snowmobile trails, railroads, and patches of non-forested lands (habitat patch areas from 1-250 acres). The forest blocks of the county are presented in Figure 4, classified by size. Forest blocks greater than 25 acres represent potential contiguous habitat for animals sensitive to all scales of fragmenting features, such as amphibians and interior forest birds.\\
