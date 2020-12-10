@@ -82,9 +82,9 @@ speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
- taxa[is.na(taxa)] <- "P"
-# taxa[taxa=="O"] <- "CGH"
- taxa <- unique(taxa)
+#  taxa[is.na(taxa)] <- "P"
+# # taxa[taxa=="O"] <- "CGH"
+#  taxa <- unique(taxa)
 
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])

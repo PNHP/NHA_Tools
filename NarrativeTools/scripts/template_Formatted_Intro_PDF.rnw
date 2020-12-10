@@ -510,13 +510,14 @@ As some data that PNHP collects is considered sensitive, due to threats to the f
 \noindent An account describing the site and outlining the conservation priorities, threats and stresses, and conservation recommendations is presented for each NHA. Each site account includes a table listing the species tracked by PNHP documented at that site. This table includes the species common and scientific names. A species listed as a “Sensitive Species of Concern” is unnamed by request of the jurisdictional agency responsible for its protection, due to factors such as illegal collection, intentional destruction, or potential to be disturbed by people. Additional information noted in the table includes PNHP element ranks, State Status, quality rank and the last year this species was officially observed (see below). Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via the PNHP website at http://www.naturalheritage.state.pa.us/. Conservation Rank information is also presented in tables for each NHA and a basic of overview of field values is presented below.
 
 \subsubsection{PNHP Element Ranks}
-\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational). The numbers have the following meaning: 
+\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{table:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  
 
 \begin{table}[h!]
   \begin{center}
     \caption{Quality Ranks.}
-    \label{tab:table4}
-    \begin{tabular}{|p{2cm}|p{12cm}|} 
+    \label{tab:rankEO}
+    \begin{tabular}{C{2cm}p{12cm}} 
+      \hline
       \textbf{G/S Ranks} & \textbf{Description}\\
       \hline
       1 & Critically Imperiled: at very high risk of extinction due to extreme rarity (often 5 or fewer populations), very steep declines, or other factors.  \\
@@ -524,6 +525,7 @@ As some data that PNHP collects is considered sensitive, due to threats to the f
       3 & Vulnerable: at moderate risk of extinction or elimination due to a restricted range, relatively few populations, recent and widespread declines, or other factors. \\
       4 & Apparently Secure: uncommon but not rare; some cause for long-term concern due to declines or other factors. \\
       5 & Secure: common; widespread and abundant. \\
+      \hline
      \end{tabular}
   \end{center}
 \end{table}
@@ -531,47 +533,52 @@ As some data that PNHP collects is considered sensitive, due to threats to the f
 \noindent  For example, G1 would indicate that a species is critically imperiled across its entire range (i.e., globally). In this example, the species as a whole is regarded as being at very high risk of extinction. A rank of S3 would indicate the species is vulnerable and at moderate risk within a particular state or province, even though it may be more secure elsewhere. Species and ecosystems are designated with either an "X" (presumed extinct or extirpated) if there is no expectation that they still survive, or an "H" (possibly extinct or extirpated)if they are known only from historical records but there is a chance they may still exist. Other variants and qualifiers are used to add information or indicate any range of uncertainty. Additional information regarding PNHP element rank definitions, as well as complete descriptions of ranks and qualifiers can be found at http://www.naturalheritage.state.pa.us/RankStatusDef.aspx or http://www.natureserve.org/explorer/ranking.htm. PNHP typically tracks all species ranked S1-S3 in Pennsylvania. Some less-rare species are also tracked if they are thought to be of conservation concern. Still other species which are not currently tracked are actually rare, but due to a lack of scientific information, they are not yet ranked and recognized as rare.
 
 \subsubsection{Federal and State Status} 
-\noindent Federally listed species are under the jurisdiction of the US Fish and Wildlife Service and have the following status definition: 
+\noindent Federally listed species are under the jurisdiction of the US Fish and Wildlife Service and have the status definition as described in Table~\ref{table:statusFed}. 
 
 \begin{table}[h!]
   \begin{center}
     \caption{Quality Ranks.}
-    \label{tab:table3}
-    \begin{tabular}{|p{2cm}|p{12cm}|} 
+    \label{tab:statusFed}
+    \begin{tabular}{C{2cm}p{12cm}} 
+      \hline
       \textbf{Federal Legal Status} & \textbf{Description}\\
       \hline
       LE & Listed Endangered --- a species which is in danger of extinction throughout all or a significant portion of its range. \\
       LT & Listed Threatened --- any species which is likely to become an endangered species within the foreseeable future throughout all or a significant portion of its range.  \\
+      \hline
      \end{tabular}
   \end{center}
 \end{table}
 Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a precise and expanded list of Federal and State Status definitions. 
 
-\noindent The three state jurisdictional agencies (DCNR, PGC, and PFBC) each have slightly different definitions that define status ranks of species under their jurisdiction. Therefore, for the purposes of this report, the following general definitions are used to indicate the degree of rarity of each species. 
+\noindent The three state jurisdictional agencies (DCNR, PGC, and PFBC) each have slightly different definitions that define status ranks of species under their jurisdiction. Therefore, for the purposes of this report, the following general definitions presented in Table ~\ref{table:statusPA} are used to indicate the degree of rarity of each species. 
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Quality Ranks.}
-    \label{tab:table1}
-    \begin{tabular}{|p{2cm}|p{12cm}|} 
+    \caption{Pennsylvania Legal Status.}
+    \label{tab:statusPA}
+    \begin{tabular}{C{2cm}p{12cm}} 
+      \hline
       \textbf{PA Legal Status} & \textbf{Description}\\
       \hline
       PE & Pennsylvania Endangered --- species in imminent danger of extinction or extirpation throughout their range in Pennsylvania if the deleterious factors affecting them continue to operate. \\
       PT & Pennsylvania Threatened --- species that may become endangered within the foreseeable future throughout their range in Pennsylvania unless the casual factors affecting the organism are abated.  \\
       N & No Status --- no current legal status, but the species is under study for listing consideration in the future. \\
+      \hline
     \end{tabular}
   \end{center}
 \end{table}
 Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a precise and expanded list of Federal and State Status definitions. 
 
 \subsubsection{Quality Ranks}
-\noindent Each population of a species of concern is assigned a quality rank, based on the estimated probability that it will persist over time at the site. The most commonly assigned ranks are summarized below: 
+\noindent Each population of a species of concern is assigned a quality rank, based on the estimated probability that it will persist over time at the site. The most commonly assigned ranks are summarized in Table ~\ref{table:rankQuality}. 
 
 \begin{table}[h!]
   \begin{center}
     \caption{Quality Ranks.}
-    \label{tab:table2}
-    \begin{tabular}{|p{2cm}|p{12cm}|} 
+    \label{tab:rankQuality}
+    \begin{tabular}{C{2cm}p{12cm}} 
+      \hline
       \textbf{Quality Rank} & \textbf{Description}\\
       \hline
       A & Excellent Viability –-- very likely to persist for 20-30 years in current condition or better. \\
@@ -582,6 +589,7 @@ Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a 
       H & Historical –-- recent field information is lacking, but might still be present.  \\
       F & Failed to Find –-- recent field surveys have failed to locate the species, but habitat still exists and there is a possibility of persistence. \\
       X & Extirpated –surveys demonstrate persuasively that the species is no longer present. \\
+      \hline
     \end{tabular}
   \end{center}
 \end{table}
@@ -589,19 +597,21 @@ Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a 
 Combination ranks (such as AB or CD)are used to indicate a range of uncertainty associated with a population’s viability. Please refer to http://www.natureserve.org/explorer/eorankguide.htm for expanded definitions and application of quality ranks.
 
 \subsection{Site Ranking}
-\noindent Each Natural Heritage Area is assigned a significance rank that represents the site’s biodiversity importance. Ranks are calculated by a score that represents the G-ranks and S-ranks of each species present at the site, weighted by the Quality ranks for those populations. These scores are summed for each site to produce an overall site score. These scores were used to guide the ranking of the site by expert review. Site scores are assigned categorical ranks based on score thresholds and criteria defined by PNHP biologists.
+\noindent Each Natural Heritage Area is assigned a significance rank that represents the site’s biodiversity importance. Ranks are calculated by a score that represents the G-ranks and S-ranks of each species present at the site, weighted by the Quality ranks for those populations. These scores are summed for each site to produce an overall site score. These scores were used to guide the ranking of the site by expert review. Site scores are assigned categorical ranks based on score thresholds and criteria defined by PNHP biologists (Table ~\ref{table:rankNHA}).
 
 \begin{table}[h!]
   \begin{center}
     \caption{Your first table.}
-    \label{tab:table1}
-    \begin{tabular}{|p{2cm}|p{12cm}|} 
+    \label{tab:rankNHA}
+    \begin{tabular}{C{2cm}p{12cm}}
+      \hline
       \textbf{Rank} & \textbf{Description}\\
       \hline
       Global & Sites which have global importance for biological diversity and Pennsylvania hasa primary role to maintain (e.g.,most of the known occurrences are within Pennsylvania). Sites in this category generally contain one or more occurrences of species of global concern (e.g.,G2and G1) or large concentrations of species of lower significance. \\
       Regional & Sites which have regional importance for biological diversity and these Pennsylvania sites are important for maintaining representation of those species in the greater Northeast /mid-Atlantic region. Sites in this category generally contain one or more occurrences of species of global concern (e.g., G3) or concentrations of species of lower significance. \\
       State & Sites which are important for the biological diversity and ecological integrity at the state scale. Sites have occurrences of elements of concern with lower ranks (G and S rank see above), smaller populations or extent, or generally lower biodiversity scores than Global or Regional ranked areas. \\
      Local & Sites which have importance to biological diversity at the county scale, but are not, as yet,known to contain species of concern or state significant natural communities. Often recognized because of their relative size, undisturbed character, or proximity to areas of known significance, these sites may be targeted with future surveys. \\
+     \hline
     \end{tabular}
   \end{center}
 \end{table}
@@ -611,18 +621,18 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 \noindent To update this County Natural Heritage Inventory, the botanists, ecologists, and zoologists of the Pennsylvania Natural Heritage Program, and partner organizations, have explored the natural resources of \Sexpr{nameCounty} County. This work represents an organized effort to inventory the biodiversity present throughout the county. Some of the earliest formal natural history study in this area was completed in the early part of the 19th century. These early explorers provided records that, whenever possible, have been updated in this report. In the surveys conducted for this inventory, researchers have not only identified rare, threatened, and endangered plants and animals, but also many common species, for which no formal records previously existed in museum and agency records. 
 
 \subsection{Species and Communities of Concern in \Sexpr{nameCounty} County}
-\noindent \Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report (Table 2).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/ under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
+\noindent \Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report (Table ~\ref{tab:countySpecies}).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/ under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
 
 \begin{longtable}{p{10.8cm}C{1.6cm}C{1.6cm}C{1.6cm}}
 \caption{Species and Natural Communities of Concern in \Sexpr{nameCounty} County.}
-%\label{tab:table3}\\
+\label{tab:countySpecies}\\
 \hline
 \textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
-\midrule
-
+% \midrule
 \endfirsthead
+
 \textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
-\midrule
+\midrule[\heavyrulewidth]
 \endhead
 
 \midrule[\heavyrulewidth]
@@ -689,8 +699,6 @@ else if(t=="CGH"|t=="O"){
      }
   }
 }  
-  
-
 @
 \end{longtable}
 
@@ -698,12 +706,12 @@ else if(t=="CGH"|t=="O"){
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \subsection{Natural Heritage Areas of \Sexpr{nameCounty} County}
-This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table 3). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="Global"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="Regional"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="State"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="Local"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
+This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table ~\ref{tab:countyNHA}). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="Global"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="Regional"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="State"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="Local"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
 
 
 \begin{longtable}{C{0.5in}p{2in}C{1in}p{3in}}
 \caption{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are Global, Regional, State, and Local.}
-\label{tab:table3}\\
+\label{tab:countyNHA}\\
 \hline
 \textbf{Map ID} & \textbf{Site Name} & \textbf{Significance Rank} & \textbf{Brief Description} \\
 \midrule
