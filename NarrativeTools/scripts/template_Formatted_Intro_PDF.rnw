@@ -568,7 +568,7 @@ Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a 
     \end{tabular}
   \end{center}
 \end{table}
-Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a precise and expanded list of Federal and State Status definitions. 
+Please refer to \Sexpr{url_PNHPrank} for a precise and expanded list of Federal and State Status definitions. 
 
 \subsubsection{Quality Ranks}
 \noindent Each population of a species of concern is assigned a quality rank, based on the estimated probability that it will persist over time at the site. The most commonly assigned ranks are summarized in Table ~\ref{tab:rankQuality}. 
@@ -594,7 +594,7 @@ Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a 
   \end{center}
 \end{table}
 
-Combination ranks (such as AB or CD)are used to indicate a range of uncertainty associated with a population’s viability. Please refer to http://www.natureserve.org/explorer/eorankguide.htm for expanded definitions and application of quality ranks.
+Combination ranks (such as AB or CD)are used to indicate a range of uncertainty associated with a population’s viability. Please refer to \Sexpr{url_NSrank} for expanded definitions and application of quality ranks.
 
 \subsection{Site Ranking}
 \noindent Each Natural Heritage Area is assigned a significance rank that represents the site’s biodiversity importance. Ranks are calculated by a score that represents the G-ranks and S-ranks of each species present at the site, weighted by the Quality ranks for those populations. These scores are summed for each site to produce an overall site score. These scores were used to guide the ranking of the site by expert review. Site scores are assigned categorical ranks based on score thresholds and criteria defined by PNHP biologists (Table ~\ref{tab:rankNHA}).
