@@ -260,24 +260,26 @@ if(any(IntroPhotos$photoType=="image_NatHist")){
 
 \subsection{Land Cover}
 The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])}. \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are an important for habitat and water quality.
+Figure ~\ref{fig:Landcover}
 
 \begin{figure}[h]
     \centering
     \begin{minipage}{0.65\textwidth}
         \centering
         \includegraphics[width=.95\linewidth]{\Sexpr{paste("Landcovergraph_",nameCounty,sep="")}} % first figure itself
-        \caption{first figure}
-    \end{minipage}\hfill
+        \end{minipage}\hfill
     \begin{minipage}{0.35\textwidth}
         \centering
         \includegraphics[width=.95\linewidth]{\Sexpr{paste("Layout_Landcover_",toupper(nameCounty),sep="")}} % second figure itself
-        \caption{second figure}
+        
     \end{minipage}
+    \caption{second figure}
+    \label{fig:Landcover}
 \end{figure}
 
 \newpage
 \subsection{Physiography \& Geology}
-\noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure 1). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. \\
+\noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure ~\ref{fig:PhysProv}). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. \\
 
 <<label=physio, echo=FALSE, results='asis'>>=
 if(nrow(CountyPhysProv)==1){
@@ -308,7 +310,8 @@ cat("\\end{itemize}")
 %\begin{wrapfigure}{R}{0.5\textwidth}
 \begin{figure}
 \includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
-\caption{third figure}
+\caption{Physiographic provinces and sections of \Sexpr{nameCounty} County.}
+\label{fig:PhysProv}
 \end{figure}
 %\end{wrapfigure}
 
