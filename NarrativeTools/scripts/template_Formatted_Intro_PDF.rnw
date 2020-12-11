@@ -642,7 +642,7 @@ for(t in taxa){
   else if(t=="P"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Plants }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
-  else if(t=="T"){
+  else if(t=="N"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mosses, LIverworts, and Hornworts }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IMGAS"){
