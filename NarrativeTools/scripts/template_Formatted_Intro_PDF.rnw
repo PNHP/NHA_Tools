@@ -642,6 +642,9 @@ for(t in taxa){
   else if(t=="P"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Plants }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
+  else if(t=="T"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mosses, LIverworts, and Hornworts }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }
   else if(t=="IMGAS"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Snails and Slugs }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
@@ -659,9 +662,12 @@ for(t in taxa){
   }
   else if(t=="ICMAL"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Isopods }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
-  }  
+  }
+   else if(t=="IICOL02"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Tiger Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  } 
   else if(t=="IICOL"){
-    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Other Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
 else if(t=="CGH"|t=="O"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Communities and Natural Features }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
@@ -671,10 +677,12 @@ else if(t=="CGH"|t=="O"){
   }
   for(i in 1:nrow(speciestable)){
     if(speciestable$ELEMENT_TYPE[i] == t){
-      # check to see if the SNAME is the same asthe SCOMNAME and if so, please drop the SNAME
-      if(speciestable$SCOMNAME[i]==speciestable$SNAME[i]){
+      # check to see if the SNAME is the same as the SCOMNAME and if so, please drop the SNAME
+      if(is.na(speciestable$SCOMNAME[i])){
+        speciesstring <- paste("no common name (\\textit{", speciestable$SNAME[i], "}) ", sep="")
+      } else if(speciestable$SCOMNAME[i]==speciestable$SNAME[i]){
         speciesstring <- paste0(speciestable$SCOMNAME[i])
-      } else {
+      } else {  
         speciesstring <- paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="")
       }
       # clean up the status display
