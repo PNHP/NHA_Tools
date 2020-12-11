@@ -277,9 +277,17 @@ Figure ~\ref{fig:Landcover}
     \label{fig:Landcover}
 \end{figure}
 
+
 \newpage
 \subsection{Physiography \& Geology}
-\noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure ~\ref{fig:PhysProv}). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. \\
+\noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure ~\ref{fig:PhysProv}). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
+\caption{Physiographic provinces and sections of \Sexpr{nameCounty} County.}
+\label{fig:PhysProv}
+\end{figure}
 
 <<label=physio, echo=FALSE, results='asis'>>=
 if(nrow(CountyPhysProv)==1){
@@ -307,13 +315,6 @@ for (p in 1:nrow(CountyPhysSect)) {
 cat("\\end{itemize}")
 @
 
-%\begin{wrapfigure}{R}{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
-\caption{Physiographic provinces and sections of \Sexpr{nameCounty} County.}
-\label{fig:PhysProv}
-\end{figure}
-%\end{wrapfigure}
 
 
 
@@ -346,6 +347,15 @@ if(nrow(CountyHUC4)==1){
 }
 @
  (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
+
+%\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.90\textwidth]{\Sexpr{paste("Layout_Watershed_",toupper(nameCounty),sep="")}}
+\caption{Watersheds of \Sexpr{nameCounty} County.}
+\label{fig:Watersheds}
+\end{figure}
+%\end{wrapfigure}
 
 \noindent Floodplains are flat, often flooded, areas along streams and rivers. They are important terrestrial habitat areas tied to the flowing water system. Floodplains are typically inundated by water during the spring runoff and then remain dry after these floodwaters recede. The effects of water on these systems influence the vegetation communities that can persist there. These forested floodplains also serve as a protective buffer against erosion, provide cooling shade to the waterway, filter pollutants and excessive nutrients from runoff, and help alleviate flood damage along many of the area’s creeks. \\
 
@@ -405,14 +415,15 @@ Prior to European colonizatoin, forest covered more than 90 percent of the area 
 % call out box about invasive species!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-  \begin{wrapfigure}{l}{.5\textwidth}
+  \begin{center}
    \includegraphics[width=0.5\textwidth]{iMapInvasivesPA}
-  \end{wrapfigure}
+  \end{center}
  \begin{flushleft}
    \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals, citizen scientists, and land owners by providing a free-to-use online platform where invasive species sightings and management efforts can be recorded and shared. All records submitted to the iMapInvasives database are vetted by trusted experts for species identification and mapping location accuracy prior to being confirmed in the database. \\
+   
  \noindent The iMapInvasives program works with non-profit groups, state and federal agencies, academia, and many others to compile information on aquatic and terrestrial plants, animals, and insects by documenting where they occur and efforts to manage them. This information is then available for use by countless individuals and organizations to prioritize invasive species control projects. \\
+ 
  \noindent Sign up for your free iMapInvasives user account today by going to https://www.paimapinvasives.org and clicking on the “Login” button. \\
-
   \end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
@@ -473,7 +484,7 @@ As some data that PNHP collects is considered sensitive, due to threats to the f
 \noindent An account describing the site and outlining the conservation priorities, threats and stresses, and conservation recommendations is presented for each NHA. Each site account includes a table listing the species tracked by PNHP documented at that site. This table includes the species common and scientific names. A species listed as a “Sensitive Species of Concern” is unnamed by request of the jurisdictional agency responsible for its protection, due to factors such as illegal collection, intentional destruction, or potential to be disturbed by people. Additional information noted in the table includes PNHP element ranks, State Status, quality rank and the last year this species was officially observed (see below). Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via the PNHP website at http://www.naturalheritage.state.pa.us/. Conservation Rank information is also presented in tables for each NHA and a basic of overview of field values is presented below.
 
 \subsubsection{PNHP Element Ranks}
-\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  
+\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  \\
 
 \begin{table}[h!]
   \begin{center}
@@ -631,8 +642,11 @@ for(t in taxa){
   else if(t=="P"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Plants }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
+  else if(t=="N"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mosses, LIverworts, and Hornworts }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }
   else if(t=="IMGAS"){
-    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{IMGAS }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Snails and Slugs }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IIODO"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Dragonflies and Damselflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
@@ -648,9 +662,12 @@ for(t in taxa){
   }
   else if(t=="ICMAL"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Isopods }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
-  }  
+  }
+   else if(t=="IICOL02"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Tiger Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  } 
   else if(t=="IICOL"){
-    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{IICOL }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Other Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
 else if(t=="CGH"|t=="O"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Communities and Natural Features }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
@@ -660,20 +677,44 @@ else if(t=="CGH"|t=="O"){
   }
   for(i in 1:nrow(speciestable)){
     if(speciestable$ELEMENT_TYPE[i] == t){
-      cat(paste0(paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="") , " & ", speciestable$GRANK[i], " & ", speciestable$SRANK[i], " & ", paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")," \\\\") )
+      # check to see if the SNAME is the same as the SCOMNAME and if so, please drop the SNAME
+      if(is.na(speciestable$SCOMNAME[i])){
+        speciesstring <- paste("no common name (\\textit{", speciestable$SNAME[i], "}) ", sep="")
+      } else if(speciestable$SCOMNAME[i]==speciestable$SNAME[i]){
+        speciesstring <- paste0(speciestable$SCOMNAME[i])
+      } else {  
+        speciesstring <- paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="")
+      }
+      # clean up the status display
+      if(is.na(speciestable$SPROT[i]) & is.na(speciestable$PBSSTATUS[i])){
+        statusstring <- ""
+      } else if(is.na(speciestable$SPROT[i])){
+        statusstring <- paste("(",speciestable$PBSSTATUS[i],")",sep="")
+      } else {
+        statusstring <- paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")
+      }
+      
+      # make the row
+      cat(paste0(speciesstring , " & ", speciestable$GRANK[i], " & ", speciestable$SRANK[i], " & ", statusstring ," \\\\") )
      }
   }
 }  
 @
 \end{longtable}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \subsection{Natural Heritage Areas of \Sexpr{nameCounty} County}
 This inventory of rare species has resulted in the designation of \Sexpr{nrow(nha_list)} Natural Heritage Areas in \Sexpr{nameCounty} County (Table ~\ref{tab:countyNHA}). Both Core Habitat and Supporting Landscape are shown below. Brief site descriptions and their significance ranks are presented in Table 3. \Sexpr{stringr::str_to_sentence(words(sigcount[which(sigcount$sig=="Global"),]$count))} of the sites are ranked as having Global Significance, \Sexpr{sigcount[which(sigcount$sig=="Regional"),]$count} have Regional Significance, \Sexpr{sigcount[which(sigcount$sig=="State"),]$count} have State Significance, and \Sexpr{sigcount[which(sigcount$sig=="Local"),]$count} has Local Significance. Criteria for these significance ranks are discussed in more detail in the Methods section of this document. %Seventeen
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_NHA_",toupper(nameCounty),sep="")}}
+\caption{Natural Heritage Areas of \Sexpr{nameCounty} County.}
+\label{fig:NHAmap}
+\end{figure}
 
+\newpage
 \begin{longtable}{C{0.5in}p{2in}C{1in}p{3in}}
 \caption{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are \textit{Global}, \textit{Regional}, \textit{State}, and \textit{Local}.}
 \label{tab:countyNHA}\\
