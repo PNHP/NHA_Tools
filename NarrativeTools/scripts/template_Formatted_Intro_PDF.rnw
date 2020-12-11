@@ -405,14 +405,15 @@ Prior to European colonizatoin, forest covered more than 90 percent of the area 
 % call out box about invasive species!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-  \begin{wrapfigure}{l}{.5\textwidth}
+  \begin{center}
    \includegraphics[width=0.5\textwidth]{iMapInvasivesPA}
-  \end{wrapfigure}
+  \end{center}
  \begin{flushleft}
    \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals, citizen scientists, and land owners by providing a free-to-use online platform where invasive species sightings and management efforts can be recorded and shared. All records submitted to the iMapInvasives database are vetted by trusted experts for species identification and mapping location accuracy prior to being confirmed in the database. \\
+   
  \noindent The iMapInvasives program works with non-profit groups, state and federal agencies, academia, and many others to compile information on aquatic and terrestrial plants, animals, and insects by documenting where they occur and efforts to manage them. This information is then available for use by countless individuals and organizations to prioritize invasive species control projects. \\
+ 
  \noindent Sign up for your free iMapInvasives user account today by going to https://www.paimapinvasives.org and clicking on the “Login” button. \\
-
   \end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
@@ -473,7 +474,7 @@ As some data that PNHP collects is considered sensitive, due to threats to the f
 \noindent An account describing the site and outlining the conservation priorities, threats and stresses, and conservation recommendations is presented for each NHA. Each site account includes a table listing the species tracked by PNHP documented at that site. This table includes the species common and scientific names. A species listed as a “Sensitive Species of Concern” is unnamed by request of the jurisdictional agency responsible for its protection, due to factors such as illegal collection, intentional destruction, or potential to be disturbed by people. Additional information noted in the table includes PNHP element ranks, State Status, quality rank and the last year this species was officially observed (see below). Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via the PNHP website at http://www.naturalheritage.state.pa.us/. Conservation Rank information is also presented in tables for each NHA and a basic of overview of field values is presented below.
 
 \subsubsection{PNHP Element Ranks}
-\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  
+\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  \\
 
 \begin{table}[h!]
   \begin{center}
