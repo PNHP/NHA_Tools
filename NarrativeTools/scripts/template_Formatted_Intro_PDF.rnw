@@ -384,11 +384,9 @@ if(nrow(CountyHUC4)==1){
 
 \noindent \Sexpr{NatHistOverview$NatHistChange} \\ 
 
-%\noindent The hills within the county are often covered with a mix of oak, Virginia pine, pitch pine, black gum, black birch, tulip poplar, and maple,with varying amounts of beech and hickory. Viburnum species are prevalent shrub components. The cooler north-facing slopes and ravines are often distinctive because they are dominated by hemlock and white pine. White oak, red maple, and beech are also common canopy species. \\
+\noindent \Sexpr{NatHistOverview$NatHistCommunities} \\
 
-%\noindent Two notable but limited plant communities within the county are the shale barren woodlands and wetlands. The shale barren woodlands were best developed on steep south to southwest facing slopes above major creeks and rivers, but only remnants still exist today.Chestnut oak, red oak, Virginia pine, pitch pine, andblack gumare common tree components. Because of variations in microtopography, a wide assortment of shrubs and herbs may be found in the least disturbed examples of this community, and many of the species found in these barrens are endemicto these typesof communities—that is,they are rarely found outside of these communities. Wetlands are scattered throughout the county and range from wooded,with red maple as the dominant tree,to marshes with cattails orwet meadows with a variety of grasses and sedges. The type of wetland depends on disturbance, soils, and hydrology (depth and length of time of flooding).
-
-The natural communities in \Sexpr{nameCounty} County vary in size, number, and quality. The highest quality forest communities have large trees, a well-developed understory, a diversity of spring wildflowers, and minimal invasive species. Some of these forests may also contain vernal pools or other wetland types making them priority targets for conservation. Likewise, headwater wetlands, vegetated riparian buffers, and scour grasslands are important for a vast number of wildlife species and need protection from disturbances and land use changes. Land trusts, conservation groups, and local and state agencies play crucial and important roles in protecting the natural heritage of Armstrong County for the enjoyment of future generations. 
+\noindent The natural communities in \Sexpr{nameCounty} County vary in size, number, and quality. The highest quality forest communities have large trees, a well-developed understory, a diversity of spring wildflowers, and minimal invasive species. Some of these forests may also contain vernal pools or other wetland types making them priority targets for conservation. Likewise, headwater wetlands, vegetated riparian buffers, and scour grasslands are important for a vast number of wildlife species and need protection from disturbances and land use changes. Land trusts, conservation groups, and local and state agencies play crucial and important roles in protecting the natural heritage of Armstrong County for the enjoyment of future generations. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Regional Disturbances}
@@ -643,7 +641,7 @@ for(t in taxa){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Plants }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="N"){
-    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mosses, LIverworts, and Hornworts }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Mosses, Liverworts, and Hornworts }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="IMGAS"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Snails and Slugs }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
