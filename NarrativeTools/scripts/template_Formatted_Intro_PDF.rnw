@@ -156,6 +156,15 @@ The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the We
 
 \noindent PNHP is valuable for its ability to supply technically sound data that can be applied to natural resource decisions. Information on the occurrences of elements of special concern (species and natural communities)gathered from museums, universities, colleges, and recent fieldwork by professionals throughout the state is used by PNHP to identify the areas of highest natural integrity and significance in \Sexpr{nameCounty} County. The \Sexpr{nameCounty} County Natural Heritage Inventory (CNHI) report presents the known outstanding natural features in the county. The CNHI provides maps of the best natural communities (habitats) and all the known locations of animal and plant species of concern (endangered, threatened, or rare)in the county. A written description and a summary table of each of the sites, including quality and degree of rarity are included. 
 
+\subsection{Statewide Coverage}
+The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
+\smallskip
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{PACE}}
+\caption{Pennsylvania Conservation Explorer (PACE) provides conservation planning and environmental review functions for PNHP.}
+\end{figure}
+
 \newpage
 \section{INTRODUCTION} 
 \noindent 
@@ -183,42 +192,6 @@ if(any(IntroPhotos$photoType=="image_intro")){
 \noindent The \Sexpr{nameCounty} County Natural Heritage Inventory – Update \Sexpr{YearUpdate} will be made available to each municipality through the \Sexpr{nameCounty} County Planning Commission. The Natural Heritage Inventory is a conservation tool that will aid in the creation of municipal and county comprehensive plans. Its emphasis on biological diversity should inform county and regional open space plans already underway, or updates to those plans already completed. \Sexpr{nameCounty} County, its municipalities, land trusts, and other organizations can also use the Natural Heritage Inventory to identify potential protection projects that may be eligible for funding through state or community grant programs. \\
 
 \noindent Landowners will also find this inventory useful in managing and planning for the use of their land; it gives them the opportunity to explore alternatives that will provide for their needs and still protect the species and habitats that occur on their land. For example, the Forest Stewardship Program, coordinated by the Pennsylvania Department of Conservation and Natural Resource’s Bureau of Forestry, assists landowners in creating management plans. These plans incorporate landowner objectives (e.g.,wildlife or timber management). Other programs include the USDA’s Forest Legacy Program and the Pennsylvania Department of Agriculture’s Agricultural Land Preservation Program. Land managers may wish to consult with this report and the environmental review tool found on the Pennsylvania Natural Heritage Program’s website (www.naturalheritage.state.pa.us)in an effort to avoid potential conflicts in areas with species of concern and/or identify ways of enhancing or protecting these resources.
-
-\subsection{\Sexpr{nameCounty} CNHI Update Changes}
-The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in 1998. The original 1998 report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate} update followed the basic model of the original 1998 project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report. 
-
-\subsubsection{Natural Heritage Area (NHA) Name Changes} 
-Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).
-
-\subsubsection{Changes in number of significant ecological features and shape of NHA mapping} 
-The natural resources of the region are continually changing. As habitats and land use patterns change, so do the species that occupy them. Periodic updates to the \Sexpr{nameCounty} County Natural Heritage Inventory will be necessary to reflect these changes. The Natural Heritage Areas depicted in this report in many cases differ significantly from the previous report. There are several reasons why this has occurred:
-\begin{itemize}
- \item The primary cause for changes in shapes of Natural Heritage Areas is the use of a different protocol for mapping the species of concern. The sites developed in past reports were drawn by different biologists at different times for many different species using best professional judgment. This often resulted in vast discrepancies between sites drawn for the same species by different biologists. In order to achieve a more standardized approach to NHA depiction, the Pennsylvania Natural Heritage Program has developed a more formulaic method for identifying areas of concern around each species present at any one location. This approach includes representing “Core Habitat”and “Supporting Landscape” separately rather than combined as in previous reports, and focusing primarily on Core Habitat when providing specific management or maintenance suggestions. Please see the methods section for a description of “Core Habitat” and “Supporting Landscape.”
- \item Some species documented in the previous report, through additional fieldwork across the state, have been found to be more common than previously thought and have been delisted, and are no longer considered to be species of concern for which special mapping and management is required. If an area documented in the previous report only contained a species of concern that has since been delisted, it will no longer be represented in this report, which focuses on those species considered to be currently at risk of global extinction or local extirpation.
- \item Several areas that were in close proximity to each other have been combined into one NHA.
- \item Some large sites have been split into smaller, more discrete NHAs, especially when each new, smaller NHA constitutes a separate habitat type or faces unique management challenges. Some areas were enlarged if additional fieldwork expanded the known extent of a population of species of concern at a location. 
- \item Some areas were eliminated if the habitat at the location was considered no longer able to support the species formerly documented at the location. This may have resulted from significant changes to, or destruction of, the suitable habitat.
- \item Former “Significant Geologic Features” were not considered for this report as they are not living resources.
- \item Many new NHAs have been added for several reasons: 
- \begin{itemize}
-   \item New field work resulted in the documentation of new locations for species of concern. 
-   \item Species formerly not tracked have been added to the species of concern list due to declines in known populations (e.g. wood turtle).
-   \item Use of a longer time frame from which to draw data. The past cutoff date beyond which records were not considered for these reports was 1980. Now employed is a “rolling window” of ~40 years for plants and ~30 years for animals, to more closely reflect what is considered in the environmental review process, while providing only information about habitats which PNHP believes are likely to support extant populations of species of concern.
-   \item Some entire groups of organisms were not previously considered for reports and now are (e.g.,dragonflies). The PNHP previously lacked sufficient taxonomic expertise, or comprehensive species distribution data, to consider groups of organisms which are now included in the report.
-\end{itemize}
-\end{itemize}
-
-\subsubsection{Document layout}
-The 1998 \Sexpr{nameCounty} NAI was organized by USGS quadrangle. The \Sexpr{YearUpdate} Update is organized alphabetically by NHA name, with only one site depicted on each map. The scale of each map is based on the relative scale of the NHA.
-
-\subsection{Statewide Coverage}
-The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
-\smallskip
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.9\textwidth]{PACE}}
-\caption{Pennsylvania Conservation Explorer (PACE) provides conservation planning and environmental review functions for PNHP.}
-\end{figure}
 
 \newpage
 \section{BIODIVERSITY IN PENNSYLVANIA}
@@ -593,6 +566,35 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 \newpage
 \section{RESULTS}
 \noindent To update this County Natural Heritage Inventory, the botanists, ecologists, and zoologists of the Pennsylvania Natural Heritage Program, and partner organizations, have explored the natural resources of \Sexpr{nameCounty} County. This work represents an organized effort to inventory the biodiversity present throughout the county. Some of the earliest formal natural history study in this area was completed in the early part of the 19th century. These early explorers provided records that, whenever possible, have been updated in this report. In the surveys conducted for this inventory, researchers have not only identified rare, threatened, and endangered plants and animals, but also many common species, for which no formal records previously existed in museum and agency records. 
+
+\subsection{\Sexpr{nameCounty} CNHI Update Changes}
+The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in 1998. The original 1998 report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate} update followed the basic model of the original 1998 project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report. 
+
+\subsubsection{Natural Heritage Area (NHA) Name Changes} 
+Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).
+
+\subsubsection{Changes in number of significant ecological features and shape of NHA mapping} 
+The natural resources of the region are continually changing. As habitats and land use patterns change, so do the species that occupy them. Periodic updates to the \Sexpr{nameCounty} County Natural Heritage Inventory will be necessary to reflect these changes. The Natural Heritage Areas depicted in this report in many cases differ significantly from the previous report. There are several reasons why this has occurred:
+\begin{itemize}
+ \item The primary cause for changes in shapes of Natural Heritage Areas is the use of a different protocol for mapping the species of concern. The sites developed in past reports were drawn by different biologists at different times for many different species using best professional judgment. This often resulted in vast discrepancies between sites drawn for the same species by different biologists. In order to achieve a more standardized approach to NHA depiction, the Pennsylvania Natural Heritage Program has developed a more formulaic method for identifying areas of concern around each species present at any one location. This approach includes representing “Core Habitat”and “Supporting Landscape” separately rather than combined as in previous reports, and focusing primarily on Core Habitat when providing specific management or maintenance suggestions. Please see the methods section for a description of “Core Habitat” and “Supporting Landscape.”
+ \item Some species documented in the previous report, through additional fieldwork across the state, have been found to be more common than previously thought and have been delisted, and are no longer considered to be species of concern for which special mapping and management is required. If an area documented in the previous report only contained a species of concern that has since been delisted, it will no longer be represented in this report, which focuses on those species considered to be currently at risk of global extinction or local extirpation.
+ \item Several areas that were in close proximity to each other have been combined into one NHA.
+ \item Some large sites have been split into smaller, more discrete NHAs, especially when each new, smaller NHA constitutes a separate habitat type or faces unique management challenges. Some areas were enlarged if additional fieldwork expanded the known extent of a population of species of concern at a location. 
+ \item Some areas were eliminated if the habitat at the location was considered no longer able to support the species formerly documented at the location. This may have resulted from significant changes to, or destruction of, the suitable habitat.
+ \item Former “Significant Geologic Features” were not considered for this report as they are not living resources.
+ \item Many new NHAs have been added for several reasons: 
+ \begin{itemize}
+   \item New field work resulted in the documentation of new locations for species of concern. 
+   \item Species formerly not tracked have been added to the species of concern list due to declines in known populations (e.g. wood turtle).
+   \item Use of a longer time frame from which to draw data. The past cutoff date beyond which records were not considered for these reports was 1980. Now employed is a “rolling window” of ~40 years for plants and ~30 years for animals, to more closely reflect what is considered in the environmental review process, while providing only information about habitats which PNHP believes are likely to support extant populations of species of concern.
+   \item Some entire groups of organisms were not previously considered for reports and now are (e.g.,dragonflies). The PNHP previously lacked sufficient taxonomic expertise, or comprehensive species distribution data, to consider groups of organisms which are now included in the report.
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Document layout}
+The 1998 \Sexpr{nameCounty} NAI was organized by USGS quadrangle. The \Sexpr{YearUpdate} Update is organized alphabetically by NHA name, with only one site depicted on each map. The scale of each map is based on the relative scale of the NHA.
+
+
 
 \subsection{Species and Communities of Concern in \Sexpr{nameCounty} County}
 \noindent \Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report (Table ~\ref{tab:countySpecies}).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/ under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
