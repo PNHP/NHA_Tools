@@ -688,6 +688,8 @@ else if(t=="CGH"|t=="O"){
         statusstring <- ""
       } else if(is.na(speciestable$SPROT[i])){
         statusstring <- paste("(",speciestable$PBSSTATUS[i],")",sep="")
+      } else if(!is.na(speciestable$SPROT[i]) & is.na(speciestable$PBSSTATUS[i])){
+        statusstring <- paste(speciestable$SPROT[i], sep="")
       } else {
         statusstring <- paste(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")",sep="")
       }
