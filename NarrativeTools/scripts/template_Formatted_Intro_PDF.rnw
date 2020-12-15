@@ -621,8 +621,14 @@ Combination ranks (such as AB or CD)are used to indicate a range of uncertainty 
 \subsection{\Sexpr{nameCounty} CNHI Update Changes}
 The \Sexpr{nameCounty} CNHI \Sexpr{YearUpdate} Update report is meant to replace the original \Sexpr{nameCounty} County Natural Areas Inventory that was completed in \Sexpr{infoCNHI$yearPublished}. The original \Sexpr{infoCNHI$yearPublished} report was based on two years of field work supplemented by existing data to inform the report. The \Sexpr{YearUpdate} update followed the basic model of the original \Sexpr{infoCNHI$yearPublished} project with two years of field work and existing data in the PNHP database used to inform the \Sexpr{YearUpdate} Update report. 
 
-\subsubsection{Natural Heritage Area (NHA) Name Changes} 
-Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).
+<<label=nha_or_bda, echo=FALSE, results='asis'>>=
+if(infoCNHI$siteType=="BDA"){
+  cat("\\subsubsection{Natural Heritage Area (NHA) Name Changes}")
+  cat("Sites in the previous report were referred to Biological Diversity Areas (BDAs), Landscape Conservation Areas (LCAs), Dedicated Areas (DAs), and Other Heritage Areas (OHAs). All of these sites of ecological significance are now referred to as Natural Heritage Areas (NHAs).")
+} else {
+  cat()
+}
+@
 
 \subsubsection{Changes in number of significant ecological features and shape of NHA mapping} 
 The natural resources of the region are continually changing. As habitats and land use patterns change, so do the species that occupy them. Periodic updates to the \Sexpr{nameCounty} County Natural Heritage Inventory will be necessary to reflect these changes. The Natural Heritage Areas depicted in this report in many cases differ significantly from the previous report. There are several reasons why this has occurred:

@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Westmoreland"
+nameCounty <- "Lawrence"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -165,7 +165,7 @@ CountyWatershed <- arc.select(CountyWatershed , c("COUNTY_NAM","Name","Profile",
 
 ###################################################################################################################
 
-# get some county background information
+# get some county inventory background information
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
   infoCNHI <- dbGetQuery(db_nha, paste("SELECT * FROM CNHI_data WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha) 
