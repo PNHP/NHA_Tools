@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Westmoreland"
+nameCounty <- "Allegheny"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -93,10 +93,17 @@ ETextipated <- nrow(ET[which(ET$SRANK=="SX"),])
 # get a count of the total EOs in Biotics
 eo_ptrep <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 eo_ptrep <- arc.select(eo_ptrep) # , c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")
-eo_count <- nrow(eo_ptrep)
-eo_ptrep <- NULL
-eo_count <- ceiling(eo_count/1000)*1000
-eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
+eo_count <- length(unique(eo_ptrep$EO_ID))
+
+Round <- function(x,y) {
+  if((y - x %% y) <= x %% y) { x + (y - x %% y)}
+  else { x - (x %% y)}
+}
+eo_countrnd <- Round(eo_count, 1000)
+eo_count <- paste(ifelse(eo_count<=eo_countrnd, "almost", "more than"), format(round(as.numeric(eo_countrnd)), big.mark=","), sep=" ")
+
+
+ 
 
 #################################################################################################################
 # Background GIS Data for the County

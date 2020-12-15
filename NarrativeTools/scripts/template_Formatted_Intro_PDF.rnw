@@ -64,7 +64,7 @@
 	\parbox[b]{0.75\textwidth}{ % Paragraph box for holding the title page text, adjust the width to move the title page left or right on the page
 		{\Huge\bfseries \Sexpr{nameCounty} County \\Natural Heritage Inventory\\}\\[1\baselineskip] % Title
 		 {\Large\textit{\Sexpr{YearUpdate} Update}}\\[2\baselineskip] % Subtitle or further description
-		 {\Large\textsc{\Sexpr{editor1} and \Sexpr{editor2}, editors.}}\\[4\baselineskip] % Author name, lower case for consistent small caps
+		 {\Large\textsc{\Sexpr{editor1} and \Sexpr{editor2}, editors}}\\[4\baselineskip] % Author name, lower case for consistent small caps
 		
 		\large\textit{Prepared for:}\\
 		\large\textbf{\Sexpr{projectClient}}\\ 
@@ -159,7 +159,7 @@ All programs in the heritage network use a common data management system outline
 
 The Pennsylvania Natural Heritage Program (PNHP) is a partnership between the Western Pennsylvania Conservancy (WPC), the Pennsylvania Department of Conservation and Natural Resources (DCNR), the Pennsylvania Game Commission (PGC), and the Pennsylvania Fish and Boat Commission (PFBC). Founded in 1982, PNHP is part of a network of Natural Heritage Programs that utilizes common methodology developed by Heritage Programs and The Nature Conservancy, and refined through NatureServe – the organization that represents the network of Natural Heritage Programs (see the box at right).\\
 
-\noindent PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with almost \Sexpr{eo_count} detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.\\
+\noindent PNHP collects and stores location and baseline ecological information about rare plants, rare animals, unique plant communities, significant habitats, and geologic features in Pennsylvania. The PNHP database is Pennsylvania's chief storehouse of such information with \Sexpr{eo_count} detailed digital occurrence records. Though not a regulatory organization, as part of its function PNHP provides expert input on species impacted by projects that require permits as issued by the Pennsylvania Department of Environmental Protection (DEP). Although data from PNHP feed into the environmental review tool known as the Pennsylvania Natural Diversity Inventory (PNDI), the process of environmental review is housed within DCNR, PFBC, and PGC.\\
 
 \noindent As part of the information maintained by PNHP, a system of \textit{global ranks} and \textit{state ranks} is used to describe the relative degree of rarity for species and natural communities. This system is especially useful in understanding how imperiled a resource is throughout its range, as well as understanding the rarity of resources that do not have official state status, such as invertebrate animals and natural communities. A summary of global and state ranks can be found in the methods section.\\
 
