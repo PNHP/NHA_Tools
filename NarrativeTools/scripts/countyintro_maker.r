@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Lawrence"
+nameCounty <- "Beaver"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -53,7 +53,14 @@ nha_list <- arc.select(nha, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, "
 # change abbreviations to full words
 nha_list$SIG_RANK <- ifelse(nha_list$SIG_RANK=="G", "Global", ifelse(nha_list$SIG_RANK=="R", "Regional", ifelse(nha_list$SIG_RANK=="S", "State", ifelse(nha_list$SIG_RANK=="L", "Local", NA))))
 
+# get and calculate the map id form the temp layer
+NHA_MapID <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_NHACounty")
+NHA_MapID <- arc.select(NHA_MapID, c("COUNTY_NAM","NHA_Join_ID","SITE_NAME","MAP_ID"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+colnames(NHA_MapID)[4] <- "MAP_ID1"
+nha_list <- merge(nha_list, NHA_MapID[c("NHA_Join_ID","MAP_ID1")], by.x="NHA_JOIN_ID", by.y="NHA_Join_ID")
+nha_list$MAP_ID <- nha_list$MAP_ID1
 
+# make a list of the NHAs in the county extract add data!
 ListJoinID <- nha_list$NHA_JOIN_ID
 ListJoinID <- paste(toString(sQuote(ListJoinID)), collapse = ",")
 

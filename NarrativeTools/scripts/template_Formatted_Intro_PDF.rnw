@@ -797,9 +797,11 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 \endlastfoot
 
 <<label=nhatable, echo=FALSE, results='asis'>>=
+
+nha_list <- nha_list[order(nha_list$SITE_NAME),]
 for(i in 1:nrow(nha_list)){
-       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i],"  \\\\") )
-      cat(" \\midrule")
+       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
+      cat(" \\midrule ")
 #       cat("\\hline")
 }
 @
