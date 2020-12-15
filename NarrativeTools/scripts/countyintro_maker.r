@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Allegheny"
+nameCounty <- "Westmoreland"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -72,7 +72,7 @@ speciestable <- merge(nha_relatedSpecies, ET, by="ELCODE", all.x=TRUE)
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 
 
-TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IICOL","IIORT","IIPLE","IITRI","ILARA","ICMAL","CGH","S")
 speciestable$OrderVec <- speciestable$ELEMENT_TYPE
 #speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
 speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)

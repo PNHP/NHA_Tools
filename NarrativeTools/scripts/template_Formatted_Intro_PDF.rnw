@@ -711,6 +711,9 @@ for(t in taxa){
   else if(t=="IIPLE"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Stoneflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
+  else if(t=="IITRI"){
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Caddisflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+  }  
   else if(t=="ICMAL"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Isopods }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
@@ -849,7 +852,7 @@ The following are general recommendations for the protection of the Natural Heri
 
 \subsubsection{Protect bodies of water}
 \noindent 
-% call out box about land trusts!
+% call out box about watershed orgs!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
  \begin{flushleft}
@@ -878,6 +881,26 @@ The following are general recommendations for the protection of the Natural Heri
 
 \subsubsection{Encourage conservation work by grassroots organizations}
 \noindent County and municipal governments can do much of the work necessary to plan for the protection and management of natural areas identified in this report; however, grassroots organizations are needed to assist with obtaining funding, identifying landowners who wish to protect their land, and providing information about easements, land acquisition, management, and stewardship of protected sites. Increasingly, local watershed organizations and land trusts are taking proactive steps to accomplish conservation at the local level. When activities threaten to impact ecological features, the responsible agency should be contacted. If no agency exists, private groups such as conservancies, land trusts, and watershed associations should be sought for ecological consultation and specific protection recommendations.
+
+
+\noindent
+% call out box about WAP/COA!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.5\textwidth]{waplogo}
+  \end{center}
+ \begin{flushleft}
+   \noindent The Pennsylvani awildlife Action Plan...\\
+   
+ \noindent Stuff stuff. \\
+ 
+ \noindent Sign up for your free iMapInvasives user account today by going to https://wildlifeactionmap.pa.gov and clicking on the “Login” button. \\
+  \end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
+
 
 \newpage
 \section{REFERENCES AND LITERATURE CITED}
