@@ -44,10 +44,10 @@
 % %add footers
  \lfoot{
   \small   %small font. The double slashes is newline in fancyhdr
-  \textcolor{gray}{\Sexpr{paste(as.character(nameCounty), "County Natural Heritage Inventory", sep=" ")} --- \leftmark \\ Pennsylvania Natural Heritage Program } }
+  \textcolor{gray}{\leftmark \\ \Sexpr{paste(as.character(nameCounty), "County Natural Heritage Inventory", sep=" ")} } }
  \rfoot{
   \small  
-  \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
+  \textcolor{gray}{page \thepage }
  }
 
 \pagenumbering{roman} % Start roman numbering
@@ -82,7 +82,7 @@
 		%%  Recommended Citation %%%
 		\begin{flushleft}
     Please cite this Natural Heritage Inventory report as:\\ 
-    \textit{\Sexpr{editor1a} and \Sexpr{editor2}. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.}
+    \textit{\Sexpr{editor1a} and \Sexpr{editor2}, editors. \Sexpr{YearUpdate}. \Sexpr{nameCounty} County Natural Heritage Inventory. Pennsylvania Natural Heritage Program. Pittsburgh, PA.}
     \end{flushleft}
 	}
 \end{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
