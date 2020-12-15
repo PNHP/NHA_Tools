@@ -721,7 +721,7 @@ for(t in taxa){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Caddisflies }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }  
   else if(t=="ICMAL"){
-    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Isopods }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
+    cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Crustaceans }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
    else if(t=="IICOL02"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Tiger Beetles }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
