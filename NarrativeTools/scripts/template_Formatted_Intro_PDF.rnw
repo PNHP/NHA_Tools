@@ -368,7 +368,7 @@ if(nrow(CountyHUC4)==1){
 
 \noindent \Sexpr{NatHistOverview$NatHistChange} \\
 
-\noindent \Sexpr{NatHistOverview$NatHistChange} \\ 
+\noindent \Sexpr{NatHistOverview$NatHistRestore} \\ 
 
 \noindent \Sexpr{NatHistOverview$NatHistCommunities} \\
 
