@@ -138,7 +138,7 @@ makePDF <- function(rnw_template, pdf_filename) {
 
 # function to delete .txt, .log etc if pdf is created successfully.
 deletepdfjunk <- function(pdf_filename){
-  fn_ext <- c(".aux",".out",".run.xml",".bcf",".blg",".tex",".log",".bbl") #
+  fn_ext <- c(".aux",".out",".run.xml",".bcf",".blg",".tex",".log",".bbl",".toc") #
   if (file.exists(paste(pdf_filename, ".pdf",sep=""))){
     for(i in 1:NROW(fn_ext)){
       fn <- paste(pdf_filename, fn_ext[i],sep="")
