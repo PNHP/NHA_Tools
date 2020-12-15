@@ -50,6 +50,8 @@
   \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
  }
 
+\pagenumbering{roman} % Start roman numbering
+
 \begin{document}
 %\RaggedRight
 \catcode`\_=11
@@ -134,6 +136,7 @@ This project was funded through a grant provided by the \Sexpr{nha_Sources$Fundi
 
 %%% PNHP Intro %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage
+\pagenumbering{arabic} % Switch to normal numbers
 \section{THE PENNSYLVANIA NATURAL HERITAGE PROGRAM}
 % \begin{wrapfigure}{R}{0.3\textwidth}
 % \includegraphics[width=0.29\textwidth]{PNHP_New_Logo_cmpact}
