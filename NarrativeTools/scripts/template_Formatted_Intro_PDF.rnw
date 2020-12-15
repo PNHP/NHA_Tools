@@ -111,16 +111,23 @@ This project was funded through a grant provided by the \Sexpr{nha_Sources$Fundi
 %Support was also provided by the Bedford County Board of Commissioners. We encourage comments and questions. \\
 
 \noindent The success of the report will be measured by the use it receives and the utility it serves to those making decisions about resources and land use throughout the county. Thank you for your interest. \\ \\
+\begin{center}
+ \begin{minipage}{.4\textwidth}
+  \noindent \Sexpr{editor1}\\
+  \Sexpr{editor1title}\\
+  \Sexpr{editor1email}\\
+  \Sexpr{editor1phone}\\
+ \end{minipage}% This must go next to `\end{minipage}`
+ \begin{minipage}{.4\textwidth}
+  \noindent \Sexpr{editor2}\\
+  \Sexpr{editor2title}\\
+  \Sexpr{editor2email}\\
+  \Sexpr{editor2phone}\\
+ \end{minipage}
+\end{center}
 
-\noindent \Sexpr{editor1}\\
-\Sexpr{editor1title}\\
-\Sexpr{editor1email}\\
-\Sexpr{editor1phone}\\
 
-\noindent \Sexpr{editor2}\\
-\Sexpr{editor2title}\\
-\Sexpr{editor2email}\\
-\Sexpr{editor2phone}\\
+
 
 %%% TOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 \newpage

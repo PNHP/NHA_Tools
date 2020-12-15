@@ -20,7 +20,7 @@ YearUpdate <- 2020
 editor1 <- "Anna Johnson"
 editor1title <- "Connservation Planner"
 editor1email <- "ajohnson@paconserve.org"
-editor1phone <- ""
+editor1phone <- "412-586-2389"
 editor2 <- "Christopher Tracey"
 editor2title <- "Conservation Planning Manager"
 editor2email <- "ctracey@paconserve.org"
