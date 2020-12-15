@@ -197,6 +197,17 @@ if(any(IntroPhotos$photoType=="image_intro")){
 
 \newpage
 \section{BIODIVERSITY IN PENNSYLVANIA}
+\noindent
+% % hellbender photo
+\begin{wrapfigure}{r}{0.5\textwidth}
+% \begin{figure}[h]
+%\centering
+\includegraphics[width=0.50\textwidth]{Cryptobranchus_alleganiensis.jpg}
+ \caption{Eastern hellbender is the state amphibian of Pennsylvania. Photographer: Pete Woods, PNHP}
+ \label{fig:Biodversity}
+% \end{figure}
+\end{wrapfigure}
+
 \noindent An ecosystem is the combination of a community of organisms and their environment, operating as a system. All the parts of an ecosystem are interconnected,and the survival of any species or the continuation of a given natural process (e.g. decomposition, carbon sequestration, or the filtration of pollutants from surface water) largely depends upon the system as a whole. Conversely, individual species and natural processes contribute towards maintaining the system. An important consideration in assessing overall ecosystem health is the concept of biodiversity. Biodiversity can be defined as the full variety of life that occurs in a given place, and is measured at several scales: genetic diversity within a single species, species diversity, natural communities, and landscapes. We know that biodiversity has a direct connection to ecosystem functioning and a healthy environment \parencite{hooper_global_2012}. And, while there is often not a direct and obvious connection between the loss of an individual species from an ecosystem and its functional health, the loss of a single component of an ecosystem may have unexpected and unintended consequences. \\
 
 \noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population is more likely to be able to successfully adapt to environmental changes \parencite{jump_environmental_2009}. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations, through the migration of individual plants and animals across the landscape, as well as the dispersal of pollen and seeds among populations \parencite{bacles_effective_2006}. Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
@@ -369,7 +380,17 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
 
 \noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of human interventions. Floodplain forests benefit from the periodic scouring and deposition of sediments as streams overtop their banks. At the same time, streamside wetland communities retain excess water, thus reducing the scale of downstream flooding. \\
 
-\noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species (Rhoads and Klein 1993; Latham et al. 2005). Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct lossof rare plants (Yahner 1995). \\
+\noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species (Rhoads and Klein 1993; Latham et al. 2005). Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct loss of rare plants (Yahner 1995). \\
+
+% % disturbance photo
+\begin{wrapfigure}{r}{0.5\textwidth}
+% \begin{figure}[h]
+%\centering
+\includegraphics[width=0.50\textwidth]{AMDdischarge.jpg}
+ \caption{Abandoned mine drainage (AMD) is polluted water that leaches out of mines, often turning streams a characteristic orange color from iron oxides. Photographer: PNHP}
+ \label{fig:Disturbance}
+% \end{figure}
+\end{wrapfigure}
 
 \noindent \underline{Human Disturbances} --- Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively unfragmented and undisturbed habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, and predator-prey interactions. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass. While human disturbances are semi-permanent parts of the landscape, decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations. Careful land use planning can protect the most sensitive ecological areas from disturbance and also allow working landscapes to continue to support biodiversity while also fulfilling societal needs. \\
 
@@ -412,6 +433,17 @@ Invasive plants reproduce rapidly, spread quickly over the landscape, and have f
  \end{itemize}
  
 \subsubsection{Invasive Animal Species}
+
+% invasive photo
+\begin{wrapfigure}{R}{0.5\textwidth}
+% \begin{figure}[h]
+%\centering
+\includegraphics[width=0.5\textwidth]{Spotted_Lanternfly_CreativeCommons.jpg}
+\caption{Spotted lanternfly, a rapidly spreading invasive insect in southwestern Pennsylvania. Photographer: MTSOfan, Creative Commons}
+\label{fig:invasive}
+% \end{figure}
+\end{wrapfigure}
+
 In addition to invasive plants, Pennsylvania is now home to several exotic species of animals including mammals, birds, fish, and reptiles along with a suite of invertebrates, fungi, and bacteria. These species can directly threaten populations of native animals through direct competition or predation. Other invasive exotic animals can alter habitats and ecosystems by changing plant cover or diversity. 
 \begin{itemize}
  \item Chestnut blight (\textit{Cryphonectria parasitica}), a fungus, was probably introduced to North America from infected nursery stock from China in the 1890s. First detected in New York City in 1904, it has all but wiped out the American chestnut (\textit{Castanea dentata}) from Maine to Alabama to the Mississippi River. American chestnut once comprised one-fourth to one-half of eastern U.S. forests and was prized as a food for humans, livestock, and wildlife and for its beautiful and durable wood. Today, only stump sprouts from killed trees remain and the canopy composition has been filled by the chestnut’s associate species of oaks and hickories.
@@ -786,6 +818,16 @@ The following are general recommendations for the protection of the Natural Heri
 \noindent Conservation easements protect land while leaving it in private ownership. An easement is a legal agreement between a landowner and a conservation or government agency that permanently limits a property’s use in order to protect its conservation values. It can be tailored to the needs of both the landowner and the conservation organization, and it will not be extinguished with new ownership. Tax incentives may apply to conservation easements donated for conservation purposes.Lease and management agreements also allow the landowner to retain ownership and temporarily ensure protection of land. There are no tax incentives for these conservation methods. A lease to a land trust or government agency can protect land temporarily and ensure that its conservation values will be maintained. This can be a first step to help a landowner decide if they want to pursue more permanent protection methods. Management agreements require landowners and land trusts to work together to develop a plan for managing resources (such as plant or animal habitat, watersheds, forested areas, or agricultural lands) with the land trust offering technical expertise. Land acquisition by a conservation organization can be at fair market value or as a bargain sale where a purchase price is set below fair market value with tax benefits that reduce or eliminate the disparity. One strategy is to identify areas that may be excellent locations for new county or township parks. Sites that can serve more than one purpose such as wildlife habitat, flood and sediment control, water supply, recreation, and environmental education are ideal. Private lands adjacent to public lands should be examined for acquisition when a natural heritage area is present on either property, and there is a need of additional land to complete protection of the associated natural features.Unrestricted donations of land are welcomed by land trusts. The donation of land entitles the donor to a charitable deduction for the full market value, and it releases the donor from the responsibility of managing the land. If the land is donated because of its conservation value, the land will be permanently protected. A donation of land that is not of high biological significance may be sold, with or without restrictions, to a conservation buyer, and the funds used to further the land trust’s conservation mission. Local zoning ordinances are one of the best-known regulatory tools available to municipalities. Examples of zoning ordinances a municipality can adopt include: overlay districts where the boundary is tied to a specific resource or interest such as riverfront protection and floodplains, and zoning to protect stream corridors and other drainage areas using buffer zones. Often it is overlooked that zoning can prevent municipal or county-wide development activities which are undesirable to the majority of the residents, and allow for planning that can meet the goals of the county residents.
 
 \subsubsection{Prepare management plans that address species of concern and natural communities}
+\noindent 
+% % hellbender photo
+\begin{wrapfigure}{r}{0.5\textwidth}
+% \begin{figure}[h]
+%\centering
+\includegraphics[width=0.50\textwidth]{Steve Grund, wildflower walk, Great Gorge Trail Ohiopyle.jpg}
+ \caption{Conversation and community engagement are important conservation tools. Photographer: Christopher Tracey, PNHP}
+ \label{fig:Biodversity}
+% \end{figure}
+\end{wrapfigure}
 \noindent Many of the natural heritage areas that are already protected are in need of additional management plans to ensure the continued existence of the associated natural elements. Site-specific recommendations should be added to existing management plans or new plans should be prepared. Recommendations may include: removal of invasive plant species; leaving the area alone to mature and recover from previous disturbance; creating natural areas within existing parks; limiting land-use practices such as mineral extraction, residential or industrial development, and agriculture; or implementing sustainable forestry practices. For example, some species simply require continued availability of a natural community while others may need specific management practices such as canopy thinning, mowing,or burning to maintain their habitat requirements. Existing parks and conservation lands provide important habitat for plants and animals at both the county level and on a regional scale. For example, these lands may serve as nesting or wintering areas for birds,or as stopover areas during migration. Management plans for these areas should emphasize a reduction in activities that fragment habitat. Adjoining landowners should be educated about the importance of their land as it relates to habitat value, especially for species of concern, and agreements should be worked out to minimize activities that may threaten native flora and fauna.
 
 \subsubsection{Protect bodies of water}
