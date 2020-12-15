@@ -78,8 +78,14 @@ ET <- arc.select(ET, c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SEN
 speciestable <- merge(nha_relatedSpecies, ET, by="ELCODE", all.x=TRUE)
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 
+# replace values where there are multiple taxa groups
 
-TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IICOL","IIORT","IIPLE","IITRI","ILARA","ICMAL","CGH","S")
+speciestable[which(speciestable$ELEMENT_TYPE=="AAAA"),"ELEMENT_TYPE"] <- "AA"
+speciestable[which(speciestable$ELEMENT_TYPE=="AAAB"),"ELEMENT_TYPE"] <- "AA"
+speciestable[which(speciestable$ELEMENT_TYPE=="O"),"ELEMENT_TYPE"] <- "CGH"
+
+
+TaxOrder <- c("AM","AB","AA","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IICOL","IIORT","IIPLE","IITRI","ILARA","ICMAL","CGH","S")
 speciestable$OrderVec <- speciestable$ELEMENT_TYPE
 #speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
 speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)

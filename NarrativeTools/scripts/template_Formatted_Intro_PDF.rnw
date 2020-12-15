@@ -684,7 +684,7 @@ for(t in taxa){
   else if(t=="AB"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Birds }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
-  else if(t=="AAAA"|t=="AAAB"){
+  else if(t=="AA"){
     cat(paste0(' \\midrule \\multicolumn{4}{l}{','{\\textbf{Amphibians }}',"\\includegraphics[width=0.15in]{",taxaicon[which(taxaicon$ELEMENT_TYPE==t),"icon"],"}}", '\\\\ \\midrule \n'))
   }
   else if(t=="AR"){
