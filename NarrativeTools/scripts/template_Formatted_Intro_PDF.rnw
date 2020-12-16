@@ -175,7 +175,7 @@ if(any(IntroPhotos$photoType=="image_intro")){
   cat(paste0("\\includegraphics[width=0.5\\textwidth]{", IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoFilename"],"} %  \n"))
   cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
   capfun <- as.character(paste(IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoCaption"], "\\textcolor{gray}{","Photo:", IntroPhotos[which(IntroPhotos$photoType=="image_intro"),"photoCredit"],"}\\\\", sep=" "))
-  cat(paste0("\\caption{",capfun,"} \n"))
+  cat(paste0("\\caption{\\textit{",capfun,"}} \n"))
   cat("\\end{wrapfigure} \n")
 } else {}
 @
@@ -211,7 +211,7 @@ if(any(IntroPhotos$photoType=="image_intro")){
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{Cryptobranchus_alleganiensis.jpg}
- \caption{Eastern hellbender is the state amphibian of Pennsylvania. Photographer: Pete Woods, PNHP}
+ \caption{\textit{Eastern hellbender is the state amphibian of Pennsylvania. Photographer: Pete Woods, PNHP}}
  \label{fig:Biodversity}
 % \end{figure}
 \end{wrapfigure}
@@ -243,7 +243,7 @@ if(any(IntroPhotos$photoType=="image_NatHist")){
   cat(paste0("\\includegraphics[width=0.5\\textwidth]{", IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoFilename"],"} %  \n"))
   cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
   capfun <- as.character(paste(IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoCaption"], "\\textcolor{gray}{","Photo:", IntroPhotos[which(IntroPhotos$photoType=="image_NatHist"),"photoCredit"],"}\\\\", sep=" "))
-  cat(paste0("\\caption{",capfun,"} \n"))
+  cat(paste0("\\caption{\\textit{",capfun,"}} \n"))
   cat("\\end{wrapfigure} \n")
 } else {cat("")}
 @
@@ -252,8 +252,7 @@ if(any(IntroPhotos$photoType=="image_NatHist")){
 \noindent The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased development. Wise planning, however, can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
 
 \subsection{Land Cover}
-The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])}. \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are important for habitat and water quality.
-Figure ~\ref{fig:Landcover}
+The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])} (Figure ~\ref{fig:Landcover}). \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are important for habitat and water quality.
 
 \begin{figure}[h]
     \centering
@@ -266,7 +265,7 @@ Figure ~\ref{fig:Landcover}
         \includegraphics[width=.95\linewidth]{\Sexpr{paste("Layout_Landcover_",toupper(nameCounty),sep="")}} % second figure itself
         
     \end{minipage}
-    \caption{second figure}
+    \caption{\textit{Land cover distribution for \Sexpr{nameCounty} County.}}
     \label{fig:Landcover}
 \end{figure}
 
@@ -278,12 +277,11 @@ Figure ~\ref{fig:Landcover}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.9\textwidth]{\Sexpr{paste("Layout_PhysProv_",toupper(nameCounty),sep="")}}
-\caption{Physiographic provinces and sections of \Sexpr{nameCounty} County.}
+\caption{\textit{Physiographic provinces and sections of \Sexpr{nameCounty} County.\\}}
 \label{fig:PhysProv}
 \end{figure}
 
-
-\noindent 
+\medskip
 <<label=physio, echo=FALSE, results='asis'>>=
 if(nrow(CountyPhysProv)==1){
   cat(paste("\\noindent ",nameCounty," County lies entirely within the ", CountyPhysProv$PROVINCE," phsyiographic province. ", sep=""))
@@ -314,7 +312,8 @@ cat("\\end{itemize}")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \subsection{Watersheds}
-\noindent 
+\noindent A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. These pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching the oceans.  % an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay.
+Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the ____ River, or small scales, like that of the ____, but all land is part of a watershed. % Susquehanna Raystown Branch of the Juniata River
 <<label=watershedoverview, echo=FALSE, results='asis'>>=
 
 waterDest <- data.frame(HUC2=c("02","04","05"),dest=c("Atlantic Ocean","through the Great Lakes to the St. Lawrence","Mississippi River and ultimately to the Gulf of Mexico"))
@@ -323,29 +322,29 @@ waterDest$dest  <- as.character(waterDest$dest)
 
 if(nrow(CountyHUC4)==1){
   cat("All of the streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], "drainage basin. ")
-  cat("The",CountyHUC4$NAME,"is part of the",CountyHUC4$NAME_1,"system, which drains to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+  cat("The",CountyHUC4$NAME,"is part of the",CountyHUC4$NAME_1,"system, which drains to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"" )
   } else if(nrow(CountyHUC4)==2){
     if(length(unique(CountyHUC4$HUC2))==1){
       cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
-      cat("These rivers drain to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"." )
+      cat("These rivers drain to the",waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],"" )
     } else if(length(unique(CountyHUC4$HUC2))==2){
         CountyHUC4a <- CountyHUC4[order(-CountyHUC4$propHUC4),]
-        cat(paste("Approximately",round(CountyHUC4$propHUC4[1],2)*100),"\\% of ", nameCounty, " County is drained throught the ",CountyHUC4$NAME_1[1]," basin to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],", whereas, a smaller portion (", round(CountyHUC4$propHUC4[2],2)*100,"\\%) drains through the ",CountyHUC4$NAME_1[2], " to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[2]),"dest"],".",sep="")
+        cat(paste("Approximately",round(CountyHUC4$propHUC4[1],2)*100),"\\% of ", nameCounty, " County is drained throught the ",CountyHUC4$NAME_1[1]," basin to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[1]),"dest"],", whereas, a smaller portion (", round(CountyHUC4$propHUC4[2],2)*100,"\\%) drains through the ",CountyHUC4$NAME_1[2], " to the ", waterDest[which(waterDest$HUC2==CountyHUC4$HUC2[2]),"dest"],"",sep="")
     } else {}
   #cat("The streams in", nameCounty, "County are part of the", CountyHUC4$NAME[1], " and", CountyHUC4$NAME[2], " drainage basins.")
 } else if(nrow(CountyHUC4)==3){
-  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2], ", and ", CountyHUC4$NAME[3], " drainage basins.", sep=""))
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2], ", and ", CountyHUC4$NAME[3], " drainage basins", sep=""))
 } else {
-  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2],", ", CountyHUC4$NAME[3], ", and ", CountyHUC4$NAME[4], " drainage basins.", sep=""))
+  cat(paste("The streams in ", nameCounty, " County are part of the ", CountyHUC4$NAME[1],", ", CountyHUC4$NAME[2],", ", CountyHUC4$NAME[3], ", and ", CountyHUC4$NAME[4], " drainage basins", sep=""))
 }
 @
- (Figure 2). A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. Generally, these pathways converge into streams and rivers, which become progressively larger as the water moves downstream, eventually reaching an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay. Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the Susquehanna River, or small scales, like that of the Raystown Branch of the Juniata River, but all land is part of a watershed.\\
+ (Figure ~\ref{fig:Watersheds}).  
 
 %\begin{wrapfigure}{R}{0.5\textwidth}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.90\textwidth]{\Sexpr{paste("Layout_Watershed_",toupper(nameCounty),sep="")}}
-\caption{Watersheds of \Sexpr{nameCounty} County.}
+\caption{\textit{Watersheds of \Sexpr{nameCounty} County.}}
 \label{fig:Watersheds}
 \end{figure}
 %\end{wrapfigure}
@@ -354,7 +353,7 @@ if(nrow(CountyHUC4)==1){
 
 \noindent In addition to naturally vegetated floodplains, vegetated riparian buffers along streams and other bodies of water provide vital benefits including protection of water quality, reduced erosion, flood control,and wildlife habitat. Elimination of riparian vegetation removes the capacity of this region to buffer the effects of the surrounding landscape and consequently reduces the water quality in the stream, as well as increasing the risk of flooding to developments near water bodies. Two major negative effects of the loss of riparian buffers are sedimentation and nutrient enrichment. \\
 
-\noindent Streams and rivers that are dammed have modified habitats compared to waterways that maintain a natural flow pattern. Dam-induced changes include increased water temperatures and alterations to the way sediment moves and is distributed in the river, which can impact shoreline and stream bottom habitat. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals, including human communities.
+\noindent Streams and rivers that are dammed are modified habitats compared to waterways that maintain natural flow patterns. Dam-induced changes include increased water temperatures and alterations to the way sediment moves and is distributed in the river, which can impact shoreline and stream bottom habitat. Dams also act as barriers to fish migration. Protecting the quality and purity of surface and groundwater resources from degradation contributes to the future well-being of all plants and animals, including human communities.
 
 \newpage
 \subsection{Natural Communities}
@@ -394,7 +393,7 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{AMDdischarge.jpg}
- \caption{Abandoned mine drainage (AMD) is polluted water that leaches out of mines, often turning streams a characteristic orange color from iron oxides. Photographer: PNHP}
+ \caption{\textit{Abandoned mine drainage (AMD) is polluted water that leaches out of mines, often turning streams a characteristic orange color from iron oxides. Photographer: PNHP}}
  \label{fig:Disturbance}
 % \end{figure}
 \end{wrapfigure}
@@ -407,8 +406,8 @@ Figure ~\ref{fig:ForestPatch} shows the division of these forests by fragmenting
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.9\textwidth]{\Sexpr{paste("Layout_ForestPatches_",toupper(nameCounty),sep="")}}
-\caption{Forest patches of \Sexpr{nameCounty} County.}
-\label{fig:Landcover}
+\caption{\textit{Forest patches of \Sexpr{nameCounty} County.}}
+\label{fig:ForestPatch}
 \end{figure}
 
 \noindent Fragmentation of contiguous forested landscapes into smaller, isolated tracts has an effect on plant and animal distribution and community composition. When a large piece of forest tract is fragmented, or split into pieces, the resulting forest islands may lack some of the habitats that existed in the original tract, or may be smaller than the minimum area required by a given species (Lynch and Whigham, 1984). For example, the Louisiana waterthrush (\textit{Parkesia motacilla}) is rarely found in small woodlots because they require upland forest streams within their territory and most small woodlots lack this necessary component (Robbins, 1980; Robinson, et al., 1995). Area-sensitive species such as the northern goshawk (\textit{Accipiter gentilis}), barred owl (\textit{Strix varia}), bobcat (\textit{Lynx rufus}), and timber rattlesnake (\textit{Crotalus horridus}) require interior forest areas in excess of 6,000 acres to accommodate breeding and foraging territories (Ciszek, 2002; Mazur and James, 2000; Squires and Reynolds, 1997).\\
@@ -452,7 +451,7 @@ Invasive plants reproduce rapidly, spread quickly over the landscape, and have f
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.5\textwidth]{Spotted_Lanternfly_CreativeCommons.jpg}
-\caption{Spotted lanternfly, a rapidly spreading invasive insect in southwestern Pennsylvania. Photographer: MTSOfan, Creative Commons}
+\caption{\textit{Spotted lanternfly, a rapidly spreading invasive insect in southwestern Pennsylvania. Photographer: MTSOfan, Creative Commons}}
 \label{fig:invasive}
 % \end{figure}
 \end{wrapfigure}
@@ -483,7 +482,7 @@ The spread of invasive species within the region presents a significant hurdle t
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{NHA_Example}
- \caption{Definition of an Natural Heritage Area}
+ \caption{\textit{Definition of an Natural Heritage Area}}
  \label{fig:NHAdef}
 % \end{figure}
 \end{wrapfigure}
@@ -500,7 +499,7 @@ The spread of invasive species within the region presents a significant hurdle t
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{NHA_siteacct_Page_1.jpg}
- \caption{Example of an Natural Heritage Area site account.}
+ \caption{\textit{Example of an Natural Heritage Area site account.}}
  \label{fig:NHAact}
 % \end{figure}
 \end{wrapfigure}
@@ -513,7 +512,7 @@ The spread of invasive species within the region presents a significant hurdle t
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Quality Ranks.}
+    \caption{\textit{Quality Ranks.}}
     \label{tab:rankEO}
     \begin{tabular}{C{2cm}p{12cm}} 
       \hline
@@ -536,7 +535,7 @@ The spread of invasive species within the region presents a significant hurdle t
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Quality Ranks.}
+    \caption{\textit{Federal legal status.}}
     \label{tab:statusFed}
     \begin{tabular}{C{2cm}p{12cm}} 
       \hline
@@ -555,7 +554,7 @@ The spread of invasive species within the region presents a significant hurdle t
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Pennsylvania Legal Status.}
+    \caption{\textit{Pennsylvania Legal Status.}}
     \label{tab:statusPA}
     \begin{tabular}{C{2cm}p{12cm}} 
       \hline
@@ -576,7 +575,7 @@ The spread of invasive species within the region presents a significant hurdle t
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Quality Ranks.}
+    \caption{\textit{Quality Ranks.}}
     \label{tab:rankQuality}
     \begin{tabular}{C{2cm}p{12cm}} 
       \hline
@@ -602,7 +601,7 @@ The spread of invasive species within the region presents a significant hurdle t
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Your first table.}
+    \caption{\textit{Natural Heritage Area significance ranks.}}
     \label{tab:rankNHA}
     \begin{tabular}{C{2cm}p{12cm}}
       \hline
@@ -673,7 +672,7 @@ The \Sexpr{infoCNHI$yearPublished} \Sexpr{nameCounty} NHI was organized by USGS 
 \noindent \Sexpr{stringr::str_to_sentence(words(nrow(speciestable)))} species and natural communities of concern were documented in \Sexpr{nameCounty} County for this report (Table ~\ref{tab:countySpecies}).  Many of these have multiple occurrences across several Natural Heritage Areas across the county. Factsheets describing habitats, threats,and conservation recommendations for many of these species may be found on the PNHP website at http://www.naturalheritage.state.pa.us/ under Species Lists. Species names followed by an asterisk are sensitive species, which are not identified at the site level.  %One hundred and eighty-nine
 
 \begin{longtable}{p{10.8cm}C{1.6cm}C{1.6cm}C{1.6cm}}
-\caption{Species and Natural Communities of Concern in \Sexpr{nameCounty} County.}
+\caption{\textit{Species and Natural Communities of Concern in \Sexpr{nameCounty} County.}}
 \label{tab:countySpecies}\\
 \hline
 \textbf{Species Common Name (Scientific Name)} & \textbf{Global Rank} & \textbf{State Rank} & \textbf{PA Legal Status} \\
@@ -788,16 +787,15 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_NHA_",toupper(nameCounty),sep="")}}
-\caption{Natural Heritage Areas of \Sexpr{nameCounty} County.}
+\caption{\textit{Natural Heritage Areas of \Sexpr{nameCounty} County.}}
 \label{fig:NHAmap}
 \end{figure}
 
-\noindent The total area of NHA overlapping \Sexpr{nameCounty} County is \Sexpr{nha_area} acres. \Sexpr{stringr::str_to_sentence(words(nrow(NHA_ProtectedLands_sum)))} NHAs have a portion of their area protected; totaling \Sexpr{format(sum(NHA_ProtectedLands_sum$ACRESprotected), big.mark=",")} acres. \Sexpr{stringr::str_to_sentence(words(nrow(NHA_ProtectedLands_sum[which(NHA_ProtectedLands_sum$Percent>=90),])))} NHAs have 90\% of their area under some form of protection. Please consult an individual NHA for more detailed information about protection status.
-
+\noindent The total area of NHA within \Sexpr{nameCounty} County is \Sexpr{nha_area} acres. \Sexpr{stringr::str_to_sentence(words(nrow(NHA_ProtectedLands_sum)))} NHAs have a portion of their area protected; totaling \Sexpr{format(round(sum(NHA_ProtectedLands_sum$ACRESprotected)), big.mark=",")} acres. \Sexpr{stringr::str_to_sentence(words(nrow(NHA_ProtectedLands_sum[which(NHA_ProtectedLands_sum$Percent>=90),])))} NHAs have 90\% of their area under some form of protection. Please consult an individual NHA for more detailed information about protection status.
 
 \newpage
 \begin{longtable}{C{0.5in}p{2in}C{1in}p{3in}}
-\caption{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are \textit{Global}, \textit{Regional}, \textit{State}, and \textit{Local}.}
+\caption{\textit{Natural Heritage Areas categorized by significance. The results of the Natural Heritage Inventory are summarized in order of their ecological significance based on the number and degree of rarity of species they support. Significance ranks are \textit{Global}, \textit{Regional}, \textit{State}, and \textit{Local}.}}
 \label{tab:countyNHA}\\
 \hline
 \textbf{Map ID} & \textbf{Site Name} & \textbf{Significance Rank} & \textbf{Brief Description} \\
@@ -873,7 +871,7 @@ The following are general recommendations for the protection of the Natural Heri
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{Steve Grund, wildflower walk, Great Gorge Trail Ohiopyle.jpg}
- \caption{Conversation and community engagement are important conservation tools. Photographer: Christopher Tracey, PNHP}
+ \caption{\textit{Conversation and community engagement are important conservation tools. Photographer: Christopher Tracey, PNHP}}
  \label{fig:Biodversity}
 % \end{figure}
 \end{wrapfigure}
