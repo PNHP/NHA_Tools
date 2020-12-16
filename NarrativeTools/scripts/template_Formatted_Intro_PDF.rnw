@@ -197,7 +197,6 @@ if(any(IntroPhotos$photoType=="image_intro")){
   \end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
-
 \noindent The information and maps presented in this report provide a useful guide for planning residential or commercial developments, recreational parks or trails, for conserving natural areas, and for setting priorities for the preservation of the most vulnerable habitats. All of the sites in this report were evaluated for their importance in protecting biological diversity on a state and local level, but many also have scenic value, provide water quality protection, and are potential sites for low-impact passive recreation, nature observation, and/or environmental education. \\
 
 \noindent The \Sexpr{nameCounty} County Natural Heritage Inventory – Update \Sexpr{YearUpdate} will be made available to each municipality through the \Sexpr{nameCounty} County Planning Commission. The Natural Heritage Inventory is a conservation tool that will aid in the creation of municipal and county comprehensive plans. Its emphasis on biological diversity should inform county and regional open space plans already underway, or updates to those plans already completed. \Sexpr{nameCounty} County, its municipalities, land trusts, and other organizations can also use the Natural Heritage Inventory to identify potential protection projects that may be eligible for funding through state or community grant programs. \\
@@ -216,7 +215,6 @@ if(any(IntroPhotos$photoType=="image_intro")){
  \label{fig:Biodversity}
 % \end{figure}
 \end{wrapfigure}
-
 \noindent An ecosystem is the combination of a community of organisms and their environment, operating as a system. All the parts of an ecosystem are interconnected,and the survival of any species or the continuation of a given natural process (e.g. decomposition, carbon sequestration, or the filtration of pollutants from surface water) largely depends upon the system as a whole. Conversely, individual species and natural processes contribute towards maintaining the system. An important consideration in assessing overall ecosystem health is the concept of biodiversity. Biodiversity can be defined as the full variety of life that occurs in a given place, and is measured at several scales: genetic diversity within a single species, species diversity, natural communities, and landscapes. We know that biodiversity has a direct connection to ecosystem functioning and a healthy environment \parencite{hooper_global_2012}. And, while there is often not a direct and obvious connection between the loss of an individual species from an ecosystem and its functional health, the loss of a single component of an ecosystem may have unexpected and unintended consequences. \\
 
 \noindent Genetic diversity refers to the variation in genetic makeup between individuals and populations of organisms. A genetically diverse population is more likely to be able to successfully adapt to environmental changes \parencite{jump_environmental_2009}. In order to conserve genetic diversity, it is important to maintain individual populations of adequate size, as well as allowing for natural patterns of gene flow between populations, through the migration of individual plants and animals across the landscape, as well as the dispersal of pollen and seeds among populations \parencite{bacles_effective_2006}. Individual species play a role in sustaining ecosystem processes such as nutrient cycling, decomposition, and plant productivity, because each species interacts with the environment in slightly different ways; declines in native species diversity alter these processes. \\
@@ -400,7 +398,6 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
  \label{fig:Disturbance}
 % \end{figure}
 \end{wrapfigure}
-
 \noindent \underline{Human Disturbances} --- Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively unfragmented and undisturbed habitat cannot be overestimated. Not only are they potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, and predator-prey interactions. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass. While human disturbances are semi-permanent parts of the landscape, decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations. Careful land use planning can protect the most sensitive ecological areas from disturbance and also allow working landscapes to continue to support biodiversity while also fulfilling societal needs. \\
 
 \subsection{Forest Fragmentation}
@@ -438,7 +435,6 @@ Figure ~\ref{fig:ForestPatch} shows the division of these forests by fragmenting
   \end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
-
 \noindent The introduction of non-native species into Pennsylvania began with the initial introduction of Europeans in the 17th century (Thompson 2002) and continues today. Plants and animals have been deliberately introduced for a variety of purposes including food sources, erosion control, landscaping, and game for hunting and fishing. Other species have been accidentally introduced as ‘stowaways’ through increases in global trade and transportation. These introductions have had drastic effects on Pennsylvania’s biodiversity over time. For example, over 37\% of the plant species now found in the state did not occur here during the first period of European settlement (Thompson 2002). While many introduced species do not spread aggressively or have strong influences on native species, a subset of introduced species—those classified as “invasive”—have a variety of negative impacts on native species and natural communities. As a standard definition, an invasive species is one that is non-native to an area and is known to cause harm to the environment, economy, and/or human health.\\
 
 \subsubsection{Invasive Plants} 
@@ -450,7 +446,7 @@ Invasive plants reproduce rapidly, spread quickly over the landscape, and have f
  \end{itemize}
  
 \subsubsection{Invasive Animal Species}
-
+\noindent 
 % invasive photo
 \begin{wrapfigure}{R}{0.5\textwidth}
 % \begin{figure}[h]
@@ -460,8 +456,7 @@ Invasive plants reproduce rapidly, spread quickly over the landscape, and have f
 \label{fig:invasive}
 % \end{figure}
 \end{wrapfigure}
-
-In addition to invasive plants, Pennsylvania is now home to several exotic species of animals including mammals, birds, fish, and reptiles along with a suite of invertebrates, fungi, and bacteria. These species can directly threaten populations of native animals through direct competition or predation. Other invasive exotic animals can alter habitats and ecosystems by changing plant cover or diversity. 
+\noindent In addition to invasive plants, Pennsylvania is now home to several exotic species of animals including mammals, birds, fish, and reptiles along with a suite of invertebrates, fungi, and bacteria. These species can directly threaten populations of native animals through direct competition or predation. Other invasive exotic animals can alter habitats and ecosystems by changing plant cover or diversity. 
 \begin{itemize}
  \item Chestnut blight (\textit{Cryphonectria parasitica}), a fungus, was probably introduced to North America from infected nursery stock from China in the 1890s. First detected in New York City in 1904, it has all but wiped out the American chestnut (\textit{Castanea dentata}) from Maine to Alabama to the Mississippi River. American chestnut once comprised one-fourth to one-half of eastern U.S. forests and was prized as a food for humans, livestock, and wildlife and for its beautiful and durable wood. Today, only stump sprouts from killed trees remain and the canopy composition has been filled by the chestnut’s associate species of oaks and hickories.
  \item Emerald ash borer (\textit{Agrilus planipennis})is a beetle that kills all species of ash trees (\textit{Fraxinus} spp.). Accidentally introduced into North America from Asia in 2002, it was first detected in Pennsylvania in 2007 in \Sexpr{nameCounty} County and has spread rapidly across the state since then. It is expected that in coming years ash trees will be functionally extirpated in Pennsylvania. 
@@ -474,7 +469,7 @@ In addition to invasive plants, Pennsylvania is now home to several exotic speci
 \subsubsection{Overall Invasive Species Recommendations}
 The spread of invasive species within the region presents a significant hurdle to the reestablishment of native plants and animals. Additionally, new invasive species continue to be introduced, further degrading natural habitat and displacing native species. This continuous disturbance from invasive species mandates their active management for any native vegetation restoration plan to be successful. Successful control of invasive species is a time-, labor-, and resource-intensive process, but it is also necessary in order to protect and preserve areas where native species are present and providing essential ecological services. Prevention or control during the early stages of an infestation is the best strategy. In areas where invasive plants are well established, multiple control strategies and follow-up treatments may be necessary. After the infestation has been eliminated, regular “maintenance” of the site to prevent a new infestation may also be needed. Specific treatment depends on the target species' biological characteristics and population size. Invasive plants can be controlled using biological, mechanical,and/or chemical methods. 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{METHODS}
 \noindent The following are an overview of the general methods used to create this Natural Heritage Inventory.  For more detail about any of these methods, please contact the Pennsylvania Natural Heritage Program. A Natural Heritage Area (NHA) is an area containing one or more plant or animal species of concern at state or federal levels, exemplary natural communities, or exceptional native biological diversity. NHAs include both the immediate habitat and surrounding lands important in the support of these elements. They are mapped according to their sensitivity to human activities, with designations of Core Habitat and Supporting Landscape areas. The sensitivity of each designation varies significantly according to the particular plant, animal, or natural community habitat that the area represents and is discussed in detail in each NHA Site Description. \\
@@ -492,7 +487,6 @@ We consider a Natural Heritage Area to consist of two parts: 1) Spatial data tha
  \label{fig:NHAdef}
 % \end{figure}
 \end{wrapfigure}
-
 \noindent Core Habitat is defined as the area representing critical habitat that cannot absorb significant levels of activity without substantial negative impacts to elements of concern. The Supporting Landscape is defined as an area directly connected to Core Habitat that maintains vital ecological processes and/or secondary habitat that may be able to withstand some lower level of activity without substantial negative impacts to elements of concern. In recent years, PNHP has moved away from emphasizing Supporting Landscapes, which are often quite large and not as straightforward to include in conservation planning efforts as Core Habitat. In most cases, the Supporting Landscape is not drawn in the NHA maps included with the reports. Supporting landscapes associated with the NHA’s can be viewed, however, in the online Conservation Explorer mapping tool: http://conservationexplorer.dcnr.pa.gov/content/map.\\
 
 \noindent Data obtained on species of concern and natural communities during the field work for this inventory was combined with existing data on species of concern and exemplary natural communities in the PNHP database back to 50 years before present and summarized. Plant and animal nomenclatures follow those adopted by the Pennsylvania Biological Survey. Natural community descriptions follow Zimmerman et al. (2012), which is a revision of Fike (1999). All sites with rare species and/or natural communities were selected for inclusion in Natural Heritage Areas (NHAs; see definition about). 
@@ -502,7 +496,7 @@ We consider a Natural Heritage Area to consist of two parts: 1) Spatial data tha
 \subsection{Site Accounts} 
 \noindent 
 % nha site acct example
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}{r}{0.5\textwidth}[h]
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{NHA_siteacct_Page_1.jpg}
