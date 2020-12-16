@@ -168,6 +168,23 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
   print(p)
   dev.off()
 
+  
+# protected amounts
+  nha_area <- sum(nha_list$ACRES)
+  nha_arearnd <- Round(nha_area, 100)
+  nha_area <- paste(ifelse(nha_area<=nha_arearnd, "almost", "more than"), format(round(as.numeric(nha_arearnd)), big.mark=","), sep=" ")
+  
+  
+  NHA_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
+  NHA_ProtectedLands <- arc.select(NHA_ProtectedLands, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, ")")) 
+  NHA_ProtectedLands  <- NHA_ProtectedLands[c("PROTECTED_LANDS","PERCENT_","NHA_JOIN_ID")]
+  
+  NHA_ProtectedLands_sum <- NHA_ProtectedLands %>%
+    group_by(NHA_JOIN_ID) %>%
+    summarise(Percent=sum(PERCENT_), n = n())
+  NHA_ProtectedLands_sum <- merge(NHA_ProtectedLands_sum, nha_list[c("SITE_NAME","NHA_JOIN_ID","ACRES")])
+  NHA_ProtectedLands_sum$ACRESprotected <- NHA_ProtectedLands_sum$ACRES *(NHA_ProtectedLands_sum$Percent/100)
+  
 # land trust service areas for the conclusions
 CountyLandTrust <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyLandTrustServiceArea ")
 CountyLandTrust <- arc.select(CountyLandTrust , c("COUNTY_NAM","ORG_NAME","ORG_PROFIL","ORG_WEB"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
