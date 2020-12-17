@@ -482,12 +482,19 @@ The spread of invasive species within the region presents a significant hurdle t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{METHODS}
-\noindent The following are an overview of the general methods used to create this Natural Heritage Inventory.  For more detail about any of these methods, please contact the Pennsylvania Natural Heritage Program. A Natural Heritage Area (NHA) is an area containing one or more plant or animal species of concern at state or federal levels, exemplary natural communities, or exceptional native biological diversity. NHAs include both the immediate habitat and surrounding lands important in the support of these elements. They are mapped according to their sensitivity to human activities, with designations of Core Habitat and Supporting Landscape areas. The sensitivity of each designation varies significantly according to the particular plant, animal, or natural community habitat that the area represents and is discussed in detail in each NHA Site Description. \\
+\noindent The following are an overview of the general methods used to create this Natural Heritage Inventory.  For more detail about any of these methods, please contact the Pennsylvania Natural Heritage Program. 
+
+\subsection{Field Work and Data Management}
+
+\noindent We do some fieldwork
+
+\noindent Data is entered into a database
+
+\subsection{Natural Heritage Area Mapping}
+\noindent A Natural Heritage Area (NHA) is an area containing one or more plant or animal species of concern at state or federal levels, exemplary natural communities, or exceptional native biological diversity. NHAs include both the immediate habitat and surrounding lands important in the support of these elements. They are mapped according to their sensitivity to human activities, with designations of Core Habitat and Supporting Landscape areas. The sensitivity of each designation varies significantly according to the particular plant, animal, or natural community habitat that the area represents and is discussed in detail in each NHA Site Description. \\
 
 \noindent We consider a Natural Heritage Area to consist of two parts: 1) Spatial data that delineates the site; and 2) a site account with descriptive information about the site.
 
-\subsection{Natural Heritage Area Mapping}
-\noindent 
 % nha definition photo
 \begin{wrapfigure}{r}{0.5\textwidth}
 % \begin{figure}[h]
@@ -888,7 +895,7 @@ The following are general recommendations for the protection of the Natural Heri
   \begin{itemize}
    <<label=landtrust, echo=FALSE, results='asis'>>=
    for(i in 1:nrow(CountyLandTrust)){
-    cat(paste("\\item{",CountyLandTrust$ORG_NAME[i]," (", CountyLandTrust$ORG_WEB[i],")}",sep=""))
+     cat(paste("\\item\\href{",CountyLandTrust$ORG_WEB[i],"}{",CountyLandTrust$ORG_NAME[i],"} \\   ", sep=""))
    }
    @
   \end{itemize}
@@ -923,7 +930,7 @@ The following are general recommendations for the protection of the Natural Heri
   \begin{itemize}
    <<label=watershed, echo=FALSE, results='asis'>>=
    for(i in 1:nrow(CountyWatershed)){
-    cat(paste("\\item{",CountyWatershed$Name[i]," (", CountyWatershed$Weblink[i],")}",sep=""))
+    cat(paste("\\item\\href{",CountyWatershed$Weblink[i],"}{",CountyWatershed$Name[i],"} \\   ", sep=""))
    }
    @
   \end{itemize}
