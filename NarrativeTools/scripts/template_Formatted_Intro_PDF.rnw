@@ -840,8 +840,8 @@ for(i in 1:nrow(SUSN)){
   cat(paste("\\label{fig:SUSN",i,"}", sep=""))
   cat("\\end{wrapfigure}")
   cat(paste("\\noindent ", SUSN$Description[i], " \\ ", sep=""))
-  cat(paste("\\noindent ", SUSN$ThreatRec[i], " \\ ", sep=""))
-  #cat("\\medskip")
+  cat(paste("\\noindent ", SUSN$ThreatRec[i], " \\\\ ", sep=""))
+  cat("\\medskip")
 }
 @
 
