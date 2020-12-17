@@ -819,7 +819,7 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 
 nha_list <- nha_list[order(nha_list$SITE_NAME),]
 for(i in 1:nrow(nha_list)){
-       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], "NHA & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
+       cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " NHA & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
       cat(" \\midrule ")
 #       cat("\\hline")
 }
@@ -839,9 +839,9 @@ for(i in 1:nrow(SUSN)){
   cat(paste("\\caption{\\textit{Range map for ",paste(SUSN$SCOMNAME[i], " (", SUSN$SNAME[i],") ", sep=""), "indicating where environmental review conflicts may be encountered.}} \\ ", sep=""))
   cat(paste("\\label{fig:SUSN",i,"}", sep=""))
   cat("\\end{wrapfigure}")
-  cat(paste("\\noindent ", SUSN$Description[i], " \\ ", sep=""))
+  cat(paste("\\noindent ", SUSN$Description[i], " \\\\ ", sep=""))
   cat(paste("\\noindent ", SUSN$ThreatRec[i], " \\\\ ", sep=""))
-  cat("\\medskip")
+  cat("\\medskip ")
 }
 @
 
