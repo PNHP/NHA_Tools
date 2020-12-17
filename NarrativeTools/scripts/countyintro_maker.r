@@ -64,7 +64,19 @@ nha_list$MAP_ID <- nha_list$MAP_ID1
 ListJoinID <- nha_list$NHA_JOIN_ID
 ListJoinID <- paste(toString(sQuote(ListJoinID)), collapse = ",")
 
+#################################
 # species lists
+
+# get a list of SUSNs
+SUSN <- arc.open("E:/NHA_SUSN/NHA_SUSN.gdb/SUSN_multipart")
+SUSN <- arc.select(SUSN, c("ELCODE","ELSUBID","SNAME","SCOMNAME"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+SUSN <- unique(SUSN)
+SUSN <- SUSN[order(SUSN$SNAME),]
+SUSN_type <- data.frame("SNAME"=c("Crotalus horridus","Glyptemys insculpta","Myotis sodalis","Terrapene carolina carolina","Nocomis biguttatus","Alosa chrysochloris"),"ELEMENT_TYPE"=c("AR","AR","AM","AR","AF","AF"))
+SUSN <- merge(SUSN,SUSN_type, by="SNAME")
+SUSN <- SUSN[c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE")]
+
+# NHA species
 nha_relatedSpecies <- arc.open(paste(serverPath,"PNHP.DBO.NHA_SpeciesTable", sep=""))
 nha_relatedSpecies <- arc.select(nha_relatedSpecies, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, ")")) 
 nha_relatedSpecies <- nha_relatedSpecies[c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE")]
@@ -72,6 +84,11 @@ nha_relatedSpecies <- unique(nha_relatedSpecies)
 
 nha_relatedSpecies <- nha_relatedSpecies[which(!is.na(nha_relatedSpecies$ELEMENT_TYPE)),]  # temp to remove issues !!!!!!!!!!!!!!!!!!!!!!!!!
 
+# merge in the SUSNs
+nha_relatedSpecies <- rbind(nha_relatedSpecies, SUSN)
+nha_relatedSpecies <- unique(nha_relatedSpecies)
+
+# join to the ET
 ET <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/ET")
 ET <- arc.select(ET, c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")) 
 
@@ -92,6 +109,15 @@ speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
 speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 
 # speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE", all.x=TRUE)  # join the taxa icons
+
+
+# get a list of SUSNs
+SUSN <- arc.open("E:/NHA_SUSN/NHA_SUSN.gdb/SUSN_multipart")
+SUSN <- arc.select(SUSN, c("COUNTY_NAM","SNAME","SCOMNAME","ELCODE"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+SUSN <- unique(SUSN)
+SUSN <- SUSN[order(SUSN$SNAME),]
+
+
 
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
