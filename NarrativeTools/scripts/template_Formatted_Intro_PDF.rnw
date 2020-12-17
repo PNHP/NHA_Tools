@@ -826,6 +826,21 @@ for(i in 1:nrow(nha_list)){
 @
 \end{longtable}
 
+\subsection{Planning for Sensitive Species}
+
+<<label=SUSN, echo=FALSE, results='asis'>>=
+
+SUSN <- SUSN[order(SUSN$ELEMENT_TYPE, SUSN$SNAME),]
+for(i in 1:nrow(SUSN)){
+  cat(paste(SUSN$SCOMNAME[i], " (\\textit{", SUSN$SNAME[i],"}) \\\\", sep=""))
+  cat(paste("\\includegraphics[width=0.50\\textwidth]{", paste("Layout_SUSN_", gsub(" ", "",  SUSN$SNAME[i], fixed=TRUE), sep="")   ,"} \\", sep=""))
+  cat(paste("\\caption{\\textit{Range map for ",paste(SUSN$SCOMNAME[i], " (", SUSN$SNAME[i],") ", sep=""), "indicating where environmental review conflicts may be encountered.}}\\", sep=""))
+  cat(paste("\\label{fig:SUSN",i,"}"))
+  cat(paste(SUSN$Description[i]))
+  cat(paste(SUSN$ThreatRec[i]))
+}
+@
+
 \newpage
 \section{CONCLUSIONS AND RECOMMENDATIONS}
 

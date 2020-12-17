@@ -111,13 +111,6 @@ speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 # speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE", all.x=TRUE)  # join the taxa icons
 
 
-# get a list of SUSNs
-SUSN <- arc.open("E:/NHA_SUSN/NHA_SUSN.gdb/SUSN_multipart")
-SUSN <- arc.select(SUSN, c("COUNTY_NAM","SNAME","SCOMNAME","ELCODE"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
-SUSN <- unique(SUSN)
-SUSN <- SUSN[order(SUSN$SNAME),]
-
-
 
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
@@ -239,6 +232,15 @@ editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_AdvisComm <- dbGetQuery(db_nha, paste("SELECT * FROM AdvisoryCommittees WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha)
+
+# SUSN data
+
+SUSNJoinID <- paste(toString(sQuote(SUSN$SNAME)), collapse = ",")
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+SUSN_data <- dbGetQuery(db_nha, paste("SELECT * FROM SUSN WHERE SNAME IN (" , SUSNJoinID,")", sep="") )
+dbDisconnect(db_nha)
+SUSN <- merge(SUSN, SUSN_data, by="SNAME")
+rm(SUSN_data)
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
