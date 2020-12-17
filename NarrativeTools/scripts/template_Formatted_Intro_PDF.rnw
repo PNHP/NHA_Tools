@@ -519,27 +519,31 @@ The spread of invasive species within the region presents a significant hurdle t
 \noindent Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via Pennsylvania Conservation Explorer available through http://www.naturalheritage.state.pa.us/. 
 
 \subsubsection{PNHP Element Ranks}
-\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number from 1 to 5 (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment (G = Global and S = Subnational).  \\
+\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number (rangin from 1 to 5) or letter (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment.  \\
 
 \begin{table}[h!]
   \begin{center}
-    \caption{\textit{Quality Ranks.}}
+    \caption{\textit{Quality Ranks. G = Global and S = Subnational/State}}
     \label{tab:rankEO}
     \begin{tabular}{C{2cm}p{12cm}} 
       \hline
       \textbf{G/S Ranks} & \textbf{Description}\\
       \hline
-      1 & Critically Imperiled --- at very high risk of extinction due to extreme rarity (often 5 or fewer populations), very steep declines, or other factors.  \\
-      2 & Imperiled --- at high risk of extinction or elimination due to very restricted range, very few populations, steep declines, or other factors. \\
-      3 & Vulnerable --- at moderate risk of extinction or elimination due to a restricted range, relatively few populations, recent and widespread declines, or other factors. \\
-      4 & Apparently Secure --- uncommon but not rare; some cause for long-term concern due to declines or other factors. \\
-      5 & Secure --- common; widespread and abundant. \\
+      G1/S1 & Critically Imperiled --- at very high risk of extinction due to extreme rarity (often 5 or fewer populations), very steep declines, or other factors.  \\
+      G2/S2 & Imperiled --- at high risk of extinction or elimination due to very restricted range, very few populations, steep declines, or other factors. \\
+      G3/S3 & Vulnerable --- at moderate risk of extinction or elimination due to a restricted range, relatively few populations, recent and widespread declines, or other factors. \\
+      G4/S4 & Apparently Secure --- uncommon but not rare; some cause for long-term concern due to declines or other factors. \\
+      G5/S5 & Secure --- common; widespread and abundant. \\
+      GH/S5 & Possibly extinct or extirpated --- known only from historical records but there is a chance they may still exist. \\
+      GX/SX & Presumed extinct or extirpated --- no expectation that they still survive. \\
       \hline
      \end{tabular}
   \end{center}
 \end{table}
 
-\noindent  For example, G1 would indicate that a species is critically imperiled across its entire range (i.e., globally). In this example, the species as a whole is regarded as being at very high risk of extinction. A rank of S3 would indicate the species is vulnerable and at moderate risk within a particular state or province, even though it may be more secure elsewhere. Species and ecosystems are designated with either an "X" (presumed extinct or extirpated) if there is no expectation that they still survive, or an "H" (possibly extinct or extirpated)if they are known only from historical records but there is a chance they may still exist. Other variants and qualifiers are used to add information or indicate any range of uncertainty. Additional information regarding PNHP element rank definitions, as well as complete descriptions of ranks and qualifiers can be found at \Sexpr{url_PNHPrank} or \Sexpr{url_NSrank}. PNHP typically tracks all species ranked S1-S3 in Pennsylvania. Some less-rare species are also tracked if they are thought to be of conservation concern. Still other species which are not currently tracked are actually rare, but due to a lack of scientific information, they are not yet ranked and recognized as rare.
+\noindent  For example, G1 would indicate that a species is critically imperiled across its entire range (i.e., globally). In this example, the species as a whole is regarded as being at very high risk of extinction. A rank of S3 would indicate the species is vulnerable and at moderate risk within a particular state or province, even though it may be more secure elsewhere. Other variants and qualifiers are used to add information or indicate any range of uncertainty. Additional information regarding PNHP element rank definitions, as well as complete descriptions of ranks and qualifiers can be found at \Sexpr{url_PNHPrank} or \Sexpr{url_NSrank}. \\
+
+\noindent PNHP typically tracks all species ranked S1-S3 in Pennsylvania. Some less-rare species are also tracked if they are thought to be of conservation concern. Still other species which are not currently tracked are actually rare, but due to a lack of scientific information, they are not yet ranked and recognized as rare.
 
 \subsubsection{Federal and State Status} 
 \noindent Federally listed species are under the jurisdiction of the US Fish and Wildlife Service and have the status definition as described in Table~\ref{tab:statusFed}. Please refer to http://www.naturalheritage.state.pa.us/RankStatusDef.aspx for a precise and expanded list of Federal and State Status definitions. \\

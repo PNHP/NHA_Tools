@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Fayette"
+nameCounty <- "Allegheny"
 YearUpdate <- 2020
 
 editor1 <- "Anna Johnson"
@@ -96,7 +96,6 @@ speciestable <- merge(nha_relatedSpecies, ET, by="ELCODE", all.x=TRUE)
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 
 # replace values where there are multiple taxa groups
-
 speciestable[which(speciestable$ELEMENT_TYPE=="AAAA"),"ELEMENT_TYPE"] <- "AA"
 speciestable[which(speciestable$ELEMENT_TYPE=="AAAB"),"ELEMENT_TYPE"] <- "AA"
 speciestable[which(speciestable$ELEMENT_TYPE=="O"),"ELEMENT_TYPE"] <- "CGH"
@@ -108,15 +107,8 @@ speciestable$OrderVec <- speciestable$ELEMENT_TYPE
 speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
 speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 
-# speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE", all.x=TRUE)  # join the taxa icons
-
-
-
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
-#  taxa[is.na(taxa)] <- "P"
-# # taxa[taxa=="O"] <- "CGH"
-#  taxa <- unique(taxa)
 
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])
@@ -234,7 +226,6 @@ nha_AdvisComm <- dbGetQuery(db_nha, paste("SELECT * FROM AdvisoryCommittees WHER
 dbDisconnect(db_nha)
 
 # SUSN data
-
 SUSNJoinID <- paste(toString(sQuote(SUSN$SNAME)), collapse = ",")
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 SUSN_data <- dbGetQuery(db_nha, paste("SELECT * FROM SUSN WHERE SNAME IN (" , SUSNJoinID,")", sep="") )
