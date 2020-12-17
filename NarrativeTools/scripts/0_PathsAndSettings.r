@@ -93,7 +93,7 @@ NHAdest <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanni
 rnw_template <- "template_Formatted_NHA_PDF.rnw"
 
 # taxaicon lookup
-taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png"), c("AA","AAAA","AAAB","ILARA","AB","IILEP","IITRI","CGH","","","AF","","AM","","IILEY","IMBIV","IIODO","IICOL","P","","IMGAS","IZSPN","IICOL02","AR"), stringsAsFactors = FALSE)
+taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Crustacean.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png"), c("AA","AAAA","AAAB","ILARA","AB","IILEP","IITRI","CGH","","ICMAL","","AF","","AM","","IILEY","IMBIV","IIODO","IICOL","P","","IMGAS","IZSPN","IICOL02","AR"), stringsAsFactors = FALSE)
 names(taxaicon) <- c("icon","ELEMENT_TYPE")
 
 # urls for the template
