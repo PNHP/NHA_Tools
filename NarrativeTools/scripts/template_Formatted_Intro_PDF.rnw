@@ -376,6 +376,17 @@ if(nrow(CountyHUC4)==1){
 
 \noindent \Sexpr{NatHistOverview$NatHistRestore} \\ 
 
+<<label=image_NatCom, echo=FALSE, results='asis'>>=
+if(any(IntroPhotos$photoType=="image_NatCom")){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} \n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{", IntroPhotos[which(IntroPhotos$photoType=="image_NatCom"),"photoFilename"],"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
+  capfun <- as.character(paste(IntroPhotos[which(IntroPhotos$photoType=="image_NatCom"),"photoCaption"], "\\textcolor{gray}{","Photo:", IntroPhotos[which(IntroPhotos$photoType=="image_NatCom"),"photoCredit"],"}\\\\", sep=" "))
+  cat(paste0("\\caption{\\textit{",capfun,"}} \n"))
+  cat("\\end{wrapfigure} \n")
+} else {}
+@
+
 \noindent \Sexpr{NatHistOverview$NatHistCommunities} \\
 
 \noindent The natural communities in \Sexpr{nameCounty} County vary in size, number, and quality. The highest quality forest communities have large trees, a well-developed understory, a diversity of spring wildflowers, and minimal invasive species. Some of these forests may also contain vernal pools or other wetland types making them priority targets for conservation. Likewise, headwater wetlands, vegetated riparian buffers, and scour grasslands are important for a vast number of wildlife species and need protection from disturbances and land use changes. Land trusts, conservation groups, and local and state agencies play crucial and important roles in protecting the natural heritage of Armstrong County for the enjoyment of future generations. 
