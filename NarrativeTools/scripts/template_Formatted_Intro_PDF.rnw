@@ -148,11 +148,11 @@ This project was funded through a grant provided by the \Sexpr{nha_Sources$Fundi
  %\begin{flushleft}
 \includegraphics[width=.85\linewidth]{NS-logo_blue-short-tag_2019-09}
 \newline
-NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology, to document the extent of biodiversity throughout the country with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.\\
-\vspace{10}
-Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe.\\
-\vspace{10}
-All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.  
+\noindent NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology, to document the extent of biodiversity throughout the country with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.\\
+
+\noindent Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe.\\
+
+\noindent All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.  
   %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
@@ -269,7 +269,6 @@ The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty}
     \label{fig:Landcover}
 \end{figure}
 
-
 \newpage
 \subsection{Physiography \& Geology}
 \noindent Landscape topography, climate, and distinctive geological formations define Physiographic Provinces (Figure ~\ref{fig:PhysProv}). Physiography relates in part to a region’s topography and climate. These factors significantly influence soil development, hydrology, and land use patterns of an area. Additionally, both physiography and geology are important to the patterns of plant community distribution, which in turn influence animal distribution. Because of the differences in climate, soils, and moisture regimes, certain plant communities would be expected to occur within some provinces and not in others. 
@@ -362,8 +361,10 @@ if(nrow(CountyHUC4)==1){
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
  %\begin{flushleft}
-   \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans. 
-   \noindent PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects.
+   \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans. \\
+   
+   \noindent PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects.\\
+   
    \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
   %\end{flushleft}
   \end{minipage}}
