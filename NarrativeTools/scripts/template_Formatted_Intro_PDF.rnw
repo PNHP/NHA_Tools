@@ -145,7 +145,7 @@ This project was funded through a grant provided by the \Sexpr{nha_Sources$Fundi
 % call out box about NatureServe!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- \begin{flushleft}
+ %\begin{flushleft}
 \includegraphics[width=.85\linewidth]{NS-logo_blue-short-tag_2019-09}
 \newline
 NatureServe, the natural heritage network, was originally founded by The Nature Conservancy in the early 1970s, with the first program established in South Carolina in 1974. The concept was to create a federation of programs in all 50 U.S. states, using a common database and data management methodology, to document the extent of biodiversity throughout the country with an emphasis on rare and threatened species and natural communities. Many programs were established with state environmental protection or natural resource agencies, while some are housed in universities. Pennsylvania’s partnership with three agencies and a non-profit is unique among the programs.\\
@@ -153,7 +153,7 @@ NatureServe, the natural heritage network, was originally founded by The Nature 
 Over time the heritage network has expanded throughout Canada and 12 Latin American countries. In 1994, the Association for Biodiversity Information (ABI) was founded to more closely coordinate activities of the network, and ABI transformed into NatureServe in 2001 as The Nature Conservancy transferred administration of the network to NatureServe.\\
 \vspace{10}
 All programs in the heritage network use a common data management system outlined on these pages, based on the original concepts of elements, element occurrences, and rarity ranks. Today, the NatureServe network stands as the most comprehensive source of information on the locations and status of biodiversity and natural communities throughout the western hemisphere.  
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 
@@ -190,12 +190,12 @@ if(any(IntroPhotos$photoType=="image_intro")){
 % call out box about PACE!
 \begin{wrapfigure}{R}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- \begin{flushleft}
+ %\begin{flushleft}
     %\centering
-    % \includegraphics[width=0.9\textwidth]{PACE}}
-   \noindent The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
-  \end{flushleft}
-  \end{minipage}}
+    %\includegraphics[width=0.48\textwidth]{PACE}}
+    \noindent The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
+  %\end{flushleft}
+ \end{minipage}}
 \end{wrapfigure}
 \noindent The information and maps presented in this report provide a useful guide for planning residential or commercial developments, recreational parks or trails, for conserving natural areas, and for setting priorities for the preservation of the most vulnerable habitats. All of the sites in this report were evaluated for their importance in protecting biological diversity on a state and local level, but many also have scenic value, provide water quality protection, and are potential sites for low-impact passive recreation, nature observation, and/or environmental education. \\
 
@@ -361,11 +361,11 @@ if(nrow(CountyHUC4)==1){
 % call out box about community class!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- \begin{flushleft}
+ %\begin{flushleft}
    \noindent Plant communities are groups of plants sharing a common environment that interact with each other, animal populations, and the physical environment. The types of plant communities found in an area can tell us a lot about that landscape. Plant community surveys provide information about plant species presence, the structure and composition of the plant community, soil chemistry, geology, presence of wildlife habitat, and quality of the entire landscape. These data can be used to create comprehensive, wide-scale land management and conservation plans. 
    \noindent PNHP’s plant community classification system, Terrestrial and Palustrine Plant Communities of Pennsylvania 2nd Ed. , includes information on over 100 natural plant communities found in Pennsylvania. Community descriptions include plant species and their associated soil types, geology, related plant communities, and range. Information from the PNHP classification system has been incorporated into NatureServe’s National Vegetation Classification and other national projects.
    \noindent Learn more about plant community classification at https://www.naturalheritage.state.pa.us/Communities.aspx
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 \noindent The interaction of geology and climate produces the pattern of vegetation expressed on the landscape. Vegetation provides several critical ecological functions, including the regulation of biogeochemical cycles (water, carbon, and nitrogen), soil formation, and provision of wildlife habitat \parencite{anderson_conserving_2010}. The classification of vegetation communities typically revolves around the dominant species, habitat, and their growth form. Discussion of vegetation communities in this report is divided between terrestrial forested communities and wetland communities. Boundaries between community types in the field are generally less distinct. \\
@@ -436,13 +436,13 @@ Figure ~\ref{fig:ForestPatch} shows the division of these forests by fragmenting
   \begin{center}
    \includegraphics[width=0.5\textwidth]{iMapInvasivesPA}
   \end{center}
- \begin{flushleft}
+ %\begin{flushleft}
    \noindent The mission of the Pennsylvania iMapInvasives program is to support the work of natural resource professionals, citizen scientists, and land owners by providing a free-to-use online platform where invasive species sightings and management efforts can be recorded and shared. All records submitted to the iMapInvasives database are vetted by trusted experts for species identification and mapping location accuracy prior to being confirmed in the database. \\
    
  \noindent The iMapInvasives program works with non-profit groups, state and federal agencies, academia, and many others to compile information on aquatic and terrestrial plants, animals, and insects by documenting where they occur and efforts to manage them. This information is then available for use by countless individuals and organizations to prioritize invasive species control projects. \\
  
  \noindent Sign up for your free iMapInvasives user account today by going to https://www.paimapinvasives.org and clicking on the “Login” button. \\
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 \noindent The introduction of non-native species into Pennsylvania began with the initial introduction of Europeans in the 17th century (Thompson 2002) and continues today. Plants and animals have been deliberately introduced for a variety of purposes including food sources, erosion control, landscaping, and game for hunting and fishing. Other species have been accidentally introduced as ‘stowaways’ through increases in global trade and transportation. These introductions have had drastic effects on Pennsylvania’s biodiversity over time. For example, over 37\% of the plant species now found in the state did not occur here during the first period of European settlement (Thompson 2002). While many introduced species do not spread aggressively or have strong influences on native species, a subset of introduced species—those classified as “invasive”—have a variety of negative impacts on native species and natural communities. As a standard definition, an invasive species is one that is non-native to an area and is known to cause harm to the environment, economy, and/or human health.\\
@@ -810,7 +810,7 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{\Sexpr{paste("Layout_NHA_",toupper(nameCounty),sep="")}}
+\includegraphics[width=0.8\textwidth]{\Sexpr{paste("Layout_NHA_",toupper(nameCounty),sep="")}}
 \caption{\textit{Natural Heritage Areas of \Sexpr{nameCounty} County.}}
 \label{fig:NHAmap}
 \end{figure}
@@ -890,7 +890,7 @@ The following are general recommendations for the protection of the Natural Heri
 \noindent 
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- \begin{flushleft}
+ %\begin{flushleft}
   The following land trusts are active within \Sexpr{nameCounty} County:
   \begin{itemize}
    <<label=landtrust, echo=FALSE, results='asis'>>=
@@ -900,7 +900,7 @@ The following are general recommendations for the protection of the Natural Heri
    @
   \end{itemize}
   The above information comes from https://conservationtools.org/cms/group-finder. Please check there for the latest updates as to which land trusts are working in \Sexpr{nameCounty} County.
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 \noindent Conservation easements protect land while leaving it in private ownership. An easement is a legal agreement between a landowner and a conservation or government agency that permanently limits a property’s use in order to protect its conservation values. It can be tailored to the needs of both the landowner and the conservation organization, and it will not be extinguished with new ownership. Tax incentives may apply to conservation easements donated for conservation purposes.Lease and management agreements also allow the landowner to retain ownership and temporarily ensure protection of land. There are no tax incentives for these conservation methods. A lease to a land trust or government agency can protect land temporarily and ensure that its conservation values will be maintained. This can be a first step to help a landowner decide if they want to pursue more permanent protection methods. Management agreements require landowners and land trusts to work together to develop a plan for managing resources (such as plant or animal habitat, watersheds, forested areas, or agricultural lands) with the land trust offering technical expertise. Land acquisition by a conservation organization can be at fair market value or as a bargain sale where a purchase price is set below fair market value with tax benefits that reduce or eliminate the disparity. One strategy is to identify areas that may be excellent locations for new county or township parks. Sites that can serve more than one purpose such as wildlife habitat, flood and sediment control, water supply, recreation, and environmental education are ideal. Private lands adjacent to public lands should be examined for acquisition when a natural heritage area is present on either property, and there is a need of additional land to complete protection of the associated natural features.Unrestricted donations of land are welcomed by land trusts. The donation of land entitles the donor to a charitable deduction for the full market value, and it releases the donor from the responsibility of managing the land. If the land is donated because of its conservation value, the land will be permanently protected. A donation of land that is not of high biological significance may be sold, with or without restrictions, to a conservation buyer, and the funds used to further the land trust’s conservation mission. \\
@@ -925,7 +925,7 @@ The following are general recommendations for the protection of the Natural Heri
 % call out box about watershed orgs!
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- \begin{flushleft}
+ %\begin{flushleft}
   The following watershed associations are active within \Sexpr{nameCounty} County:
   \begin{itemize}
    <<label=watershed, echo=FALSE, results='asis'>>=
@@ -935,7 +935,7 @@ The following are general recommendations for the protection of the Natural Heri
    @
   \end{itemize}
   The above information comes from https://conservationtools.org/cms/group-finder. Please check there for the latest updates as to which watershed associations are working in \Sexpr{nameCounty} County.
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 \noindent Protection of reservoirs, wetlands, rivers, and creeks is vital for ensuring the health of human communities and natural ecosystems. Waterways that include natural heritage areas, identified in the Results section of this report, are important, sensitive areas that should be protected. Multiple qualities can be preserved by protecting aquatic habitats. For example, conserving natural areas around watersheds that supply municipal water provides an additional protective buffer around the water supply, maintains habitat for wildlife, and may also provide (low impact) recreation opportunities. Many rare species, unique natural communities, and significant habitats occur in wetlands and water bodies, which are directly dependent on natural hydrological patterns and water quality for their continued existence. Ecosystem processes also provide clean water supplies for human communities and do so at significant cost savings in comparison to water treatment facilities. Therefore, protection of high quality watersheds is the primary way to ensure the viability of natural habitats and water quality. Scrutinize development proposals for their impact on entire watersheds, not just the immediate project area. Cooperative efforts in land use planning among municipal, county, state, and federal agencies, developers, and residents can lessen the impact of development on watersheds. 
@@ -960,13 +960,13 @@ The following are general recommendations for the protection of the Natural Heri
   \begin{center}
    \includegraphics[width=0.5\textwidth]{waplogo}
   \end{center}
- \begin{flushleft}
+ %\begin{flushleft}
    \noindent The Pennsylvani awildlife Action Plan...\\
    
  \noindent Stuff stuff. \\
  
  \noindent Sign up for your free iMapInvasives user account today by going to https://wildlifeactionmap.pa.gov and clicking on the “Login” button. \\
-  \end{flushleft}
+  %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 
