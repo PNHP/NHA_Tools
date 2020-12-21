@@ -123,8 +123,8 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 
 \begin{TableNotes}
  \begin{footnotesize}
-    \item [1] See the PNHP website (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
-    \item [2] See NatureServe website (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
+    \item [1] See the PNHP (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. PABS status refers to the status recommended by the Pennsylvania Biological Survey.
+    \item [2] See NatureServe (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
      SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
      @
@@ -132,16 +132,15 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
   \end{footnotesize}
 \end{TableNotes}
 
-\begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
+\begin{longtable}{ l @{\extracolsep{\fill}} *{7}{c} } 
 \toprule
-\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
-%Country & N obs  & Total years & No degree & High school & Some college,+ & smth\tnote{a} & smth\tnote{b} \\
-%& & of education & & & & prestige score & income score \\ 
+\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{\shortstack{PA Legal\\Status}}\tnote{1} & \textbf{\shortstack{PABS\\Status}}\tnote{1} & \textbf{\shortstack{Last\\Observed}}	& \textbf{Quality}\tnote{2} \\
+
 \midrule
 \endhead
 
 \midrule[\heavyrulewidth]
-\multicolumn{7}{r}{\textit{table continued on next page}}\\
+\multicolumn{8}{r}{\textit{table continued on next page}}\\
 \endfoot  
 
 \midrule[\heavyrulewidth]
@@ -164,7 +163,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
      for(i in 1:nrow(speciestable)){ 
        # replace common name if blank
        if(is.na(speciestable$SCOMNAME[i])){
-         speciestable$SCOMNAME[i] <- "No Name Available"
+         speciestable$SCOMNAME[i] <- "no common name"
        } 
        # remove double names for sensitive species of concern
        if(speciestable$SENSITIVE[i]=="Y"){
@@ -198,7 +197,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
          speciestable$icon[i] <- "Sensitive.png"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS_YR[i],"&", speciestable$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", speciestable$SPROT[i], "&", speciestable$PBSSTATUS[i], "&", speciestable$LASTOBS_YR[i], "&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
