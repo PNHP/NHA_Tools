@@ -12,8 +12,8 @@
 import arcpy, os, sys
 
 # set paths to aprx and output folder
-aprx = r"W:\\Heritage\\temp\\NHA_ReportMaps\\NHA_ReportMaps.aprx"
-output_folder = r"W:\\Heritage\\temp\\NHA_ReportMaps\\output_PNG"
+aprx = r"E:\\NHA_ReportMaps\\NHA_ReportMaps.aprx"
+output_folder = r"P:\\Conservation Programs\\Natural Heritage Program\\ConservationPlanning\\NaturalHeritageAreas\\_NHA\\z_BaseImages\\NHA_Maps"  
 
 # set projects, layouts, and establish map series
 p = arcpy.mp.ArcGISProject(aprx)
