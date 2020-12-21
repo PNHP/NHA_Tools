@@ -27,7 +27,6 @@ nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
 nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
 
-
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
@@ -97,7 +96,6 @@ speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","EL
 
 # replace missing values with NA
 speciestable$EORANK[is.na(speciestable$EORANK)] <- "E"
-
 
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
@@ -178,8 +176,7 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
 dbDisconnect(db_nha)
 
-
-
+###############################################################
 ## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
 for(j in 1:length(ETitalics)){
@@ -230,4 +227,9 @@ pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
-
+if(FinalSwitch=="Final"){
+  file.copy(from=paste(NHAdest, "DraftSiteAccounts", nha_foldername, paste0(pdf_filename, ".pdf"), sep="/"), to=paste(NHAdest, "FinalSiteAccounts", paste0(pdf_filename, ".pdf"), sep="/"), overwrite = TRUE, recursive = FALSE, copy.mode = TRUE)
+  cat("The final pdf of", dQuote(nha_name), "is complete and moved the Final NHA directory!")
+} else {
+  cat("The draft of",dQuote(nha_name), "is complete!")
+}

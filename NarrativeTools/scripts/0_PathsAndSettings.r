@@ -33,8 +33,6 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) install.packages("rmarkdown"
 require(rmarkdown)
 if (!requireNamespace("tmap", quietly = TRUE)) install.packages("tmap")
 require(tmap)
-#if (!requireNamespace("OpenStreetMap", quietly = TRUE)) install.packages("OpenStreetMap")
-#require(OpenStreetMap)
 if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
@@ -71,6 +69,7 @@ NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlann
 nha_databasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 nha_databasename <- "NaturalHeritageAreas.sqlite" 
 nha_databasename <- paste(nha_databasepath,nha_databasename,sep="/")
+
 # threat recc database name
 TRdatabasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 TRdatabasename <- "nha_recs.sqlite" 
