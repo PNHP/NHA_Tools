@@ -10,7 +10,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 ################################################################
 # Enter the name of your NHA into the script to run step 2 and 3
-LauncherNHA <- "McIntire Run Slope"
+LauncherNHA <- "Alice"
 FinalSwitch <- "Final" # "Draft"
 
 # Run the Template Databaser
