@@ -190,11 +190,21 @@ if(any(IntroPhotos$photoType=="image_intro")){
 % call out box about PACE!
 \begin{wrapfigure}{R}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
- %\begin{flushleft}
+
     %\centering
     %\includegraphics[width=0.48\textwidth]{PACE}}
-    \noindent The information depicted in this report will be integrated into the \textbf{Pennsylvania Conservation Explorer} a web-based application that includes CNHI information (https://conservationexplorer.dcnr.pa.gov/). The Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment.
-  %\end{flushleft}
+    
+    \noindent The information depicted in this report is also incorporated into the \textbf{Pennsylvania Conservation Explorer} (aka "Explorer"), a web-based interactive application. Explorer allows users to access conservation planning information—users can see locations of natural heritage areas, protected lands and high quality streams. Conservation reports can downloaded for use in local planning or project specific assessment. Through Explorer, users may:
+    \begin{enumerate}
+      \item{visualize available data about Pennsylvania’s natural heritage,}
+      \item{produce conservation planning reports to informally guide projects, or }
+      \item{generate reports to submit as part of a formal Pennsylvania Natural Diversity Inventory (PNDI) environmental project review.}
+    \end{enumerate}
+    \noindent While the first two uses are freely available to anyone interested in exploring the data, the third use is a component of a formal procedure for granting permits to projects, and requires users to log in. Explorer makes available a variety of online video tutorials, supporting 37
+materials, and other resources to aid users in maximizing their use of this tool. \\
+
+    \noindent Learn more about Pennsylvania Conservation Explorer at https://conservationexplorer.dcnr.pa.gov/
+
  \end{minipage}}
 \end{wrapfigure}
 \noindent The information and maps presented in this report provide a useful guide for planning residential or commercial developments, recreational parks or trails, for conserving natural areas, and for setting priorities for the preservation of the most vulnerable habitats. All of the sites in this report were evaluated for their importance in protecting biological diversity on a state and local level, but many also have scenic value, provide water quality protection, and are potential sites for low-impact passive recreation, nature observation, and/or environmental education. \\
