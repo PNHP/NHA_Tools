@@ -242,7 +242,7 @@ for(t in 1:nrow(nha_threats)){
 \textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
 \textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
 \textbf{Previous CNHI reference:} \Sexpr{ifelse(!is.na(selected_nha$OLD_SITE_NAME), paste("This site replaces the following previously published sites: ",selected_nha$OLD_SITE_NAME,"."), "This site does not overlap a previously published site.") } \\
-\textbf{Associated NHAs:} \Sexpr{ifelse(selected_nha$ASSOC_NHA!="None", paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
+\textbf{Associated NHAs:} \Sexpr{ifelse(!is.na(selected_nha$ASSOC_NHA), paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
 \textbf{Approximate Acreage:} \Sexpr{round(selected_nha$ACRES)} acres \\  
   
@@ -257,14 +257,13 @@ for(t in 1:nrow(nha_threats)){
 %%%  Recommended Citation %%% 
 \setlength{\fboxsep}{5pt}
 \fbox{
-\begin{minipage}[c]{0.2\linewidth}
-\includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
-\end{minipage}%
-\begin{minipage}[c]{0.75\linewidth}
-This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.
-\\ \\ Please cite this Natural Heritage Area as: \\
-Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
-\end{minipage}
+ \begin{minipage}[c]{0.2\linewidth}
+  \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
+ \end{minipage}%
+ \begin{minipage}[c]{0.75\linewidth}
+   This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.  \\ \\ Please cite this Natural Heritage Area as: \\
+   Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
+  \end{minipage}
 }
 
 \newpage
