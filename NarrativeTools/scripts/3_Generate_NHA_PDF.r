@@ -230,6 +230,7 @@ setwd(here::here()) # return to the main wd
 if(FinalSwitch=="Final"){
   file.copy(from=paste(NHAdest, "DraftSiteAccounts", nha_foldername, paste0(pdf_filename, ".pdf"), sep="/"), to=paste(NHAdest, "FinalSiteAccounts", paste0(pdf_filename, ".pdf"), sep="/"), overwrite = TRUE, recursive = FALSE, copy.mode = TRUE)
   cat("The final pdf of", dQuote(nha_name), "is complete and moved the Final NHA directory!")
+  beepr::beep(sound=10, expr=NULL)
 } else {
   cat("The draft of",dQuote(nha_name), "is complete!")
 }
