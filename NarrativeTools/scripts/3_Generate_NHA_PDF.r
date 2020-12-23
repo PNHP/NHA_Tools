@@ -97,6 +97,9 @@ speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","EL
 # replace missing values with NA
 speciestable$EORANK[is.na(speciestable$EORANK)] <- "E"
 
+# replace certain species names
+speciestable[which(speciestable$SNAME=="Carex shortiana"),"SCOMNAME"] <- "Short's sedge"
+
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
 # do a check here if it results in a zero length table and will break the script
@@ -151,8 +154,6 @@ spCount_GImperiled <- ifelse(length(a)==0, 0, a)
 spCount_GImperiledSens <- ifelse(any(((granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
-
-  
 rm(granklist, rounded_srank, rounded_grank)
 
 # threats
@@ -203,6 +204,9 @@ if(!is.na(nha_photos$P3C)) {
 } else {
   print("No Photo 3 caption, moving on...")
 }
+
+# replace apostrophes in the description paragraph
+nha_data$Description <- str_replace_all(nha_data$Description, c("â€™"="'"))
 
 # bold tracked species names
 namesbold <- speciestable$SCOMNAME
