@@ -21,9 +21,10 @@
 #source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- LauncherNHA #"" # "Linbrook Woodlands Conservation Area"
+nha_name <- LauncherNHA
 nha_name <- gsub("'", "''", nha_name)
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_name <- gsub("''", "'", nha_name)
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
 nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes

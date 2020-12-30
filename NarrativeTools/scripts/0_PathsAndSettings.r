@@ -123,6 +123,7 @@ foldername <- function(x){
   nha_foldername <- gsub(" ", "", nha_name, fixed=TRUE)
   nha_foldername <- gsub("#", "", nha_foldername, fixed=TRUE)
   nha_foldername <- gsub("''", "", nha_foldername, fixed=TRUE)
+  nha_foldername <- gsub("'", "", nha_foldername, fixed=TRUE)
 }
 
 # function to generate the pdf
