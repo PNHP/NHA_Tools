@@ -90,7 +90,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 } else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
   # Case 2a: regional significance and the species are sensitive
-} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
   cat(paste0("this site is rated as significant because the sensitive species of concern is of G3 rank."))
 # Case 3: regional significance and the species are not sensitive
 } else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
