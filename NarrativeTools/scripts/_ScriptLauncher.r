@@ -3,7 +3,7 @@ rm(list=ls()) # clear the environment
 source(here::here("scripts", "0_PathsAndSettings.r")) # load in the paths and settings file
 ################################################################
 # Enter the name of your NHA into the script to run step 2 and 3
-LauncherNHA <- "Davistown"
+LauncherNHA <- "Bear Run at State Game Land #174"
 FinalSwitch <- "Final" # "Draft"
 # Run the Template Databaser
 source(here::here("scripts","2_NHA_TemplateReader.r"))
