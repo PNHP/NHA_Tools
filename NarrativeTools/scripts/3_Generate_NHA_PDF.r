@@ -138,6 +138,9 @@ spCount_GSecure <- ifelse(length(a)==0, 0, a)
 spCount_GSecureSens <- ifelse(any(((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR"|granklist$GRANK_rounded=="GNA")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
+# G3G4 but has state significance
+
+
 # vulnerable species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G3")&granklist$SENSITIVE!="Y"),])
 if(a>0){

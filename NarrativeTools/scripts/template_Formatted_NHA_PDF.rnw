@@ -76,7 +76,7 @@ if(!is.na(nha_photos$P1N)){
 \noindent
 \Sexpr{as.character(nha_data$Description)}\\\\
 % paragraph about significance ranks
-This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because
+This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because of
 % calculates what text to say
 <<label=sigparagraph, echo=FALSE, results='asis'>>=
 
@@ -86,6 +86,9 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 # case 1a:
 } else if(nha_siterank$site_score=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
   cat(paste0("this site is rated as significant because the sensitive species of concern is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+  # Case 1b: global significance and the species are not sensitive
+} else if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
+  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
   # Case 2: regional significance and the species are not sensitive
 } else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
