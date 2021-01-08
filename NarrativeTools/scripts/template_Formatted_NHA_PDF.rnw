@@ -100,10 +100,10 @@ if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no")
    cat(paste0(" the high concentration of G4, G5, or GNR species at this site."))  
 # Case 4: state significance and the species are not sensitive
 } else if(nha_siterank=="State" & spCount_GSecure>0) {
-  cat("the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
+  cat("the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
 # Case 4a: state significance and the species are all sensitive
 } else if(nha_siterank=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
-  cat("the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level, and also sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
+  cat("the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level, and also sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
 # Case 4b: state significance and species are G3G4 and the species are all sensitive
 } else if(nha_siterank=="State" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
   cat("the tracked species at the site being ranked G3G4, and also sensitive to collection or disturbance. Within Pennsylvania, these species may be severely declining.")
