@@ -172,10 +172,23 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-#site rank
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
+# #site rank
+# db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+# nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
+# dbDisconnect(db_nha)
+
+nha_siterank <- NA
+if(selected_nha$SIG_RANK=="G"){
+  nha_siterank <- "Global"
+} else if(selected_nha$SIG_RANK=="R"){
+  nha_siterank <- "Regional"
+} else if(selected_nha$SIG_RANK=="S"){
+  nha_siterank <- "State"
+} else if(selected_nha$SIG_RANK=="L"){
+  nha_siterank <- "Local"
+} else {
+  nha_siterank <- NA
+}
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
