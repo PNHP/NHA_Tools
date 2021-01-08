@@ -12,8 +12,8 @@
 import arcpy, os, sys
 
 # set paths to aprx and output folder
-aprx = r"E:\\NHA_ReportMaps\\NHA_ReportMaps.aprx"
-output_folder = r"P:\\Conservation Programs\\Natural Heritage Program\\ConservationPlanning\\NaturalHeritageAreas\\_NHA\\z_BaseImages\\NHA_Maps"  
+aprx = r"E:\\NHA_SUSN\\NHA_SUSN.aprx"
+output_folder = r"P:\\Conservation Programs\\Natural Heritage Program\\ConservationPlanning\\NaturalHeritageAreas\\_NHA\\z_BaseImages\\introMaps"
 
 # set projects, layouts, and establish map series
 p = arcpy.mp.ArcGISProject(aprx)
@@ -24,6 +24,6 @@ if not l.mapSeries is None:
 if ms.enabled:
     for pageNum in range(1, ms.pageCount + 1):
         ms.currentPageNumber = pageNum
-        print("Exporting {0}".format(ms.pageRow.SITE_NAME))
-        pageName = ms.pageRow.SITE_NAME
-        l.exportToPNG(os.path.join(output_folder,"Layout_" + ''.join(e for e in (ms.pageRow.SITE_NAME) if e.isalnum()) + ".png"),resolution=200)
+        print("Exporting {0}".format(ms.pageRow.SNAME))
+        pageName = ms.pageRow.SNAME
+        l.exportToPNG(os.path.join(output_folder,"Layout_SUSN_" + ''.join(e for e in (ms.pageRow.SNAME) if e.isalnum()) + ".png"),resolution=200)

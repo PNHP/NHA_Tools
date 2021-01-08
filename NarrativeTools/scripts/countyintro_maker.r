@@ -20,7 +20,7 @@ YearUpdate <- 2020
 editor1 <- "Anna Johnson"
 editor1title <- "Connservation Planner"
 editor1email <- "ajohnson@paconserve.org"
-editor1phone <- ""
+editor1phone <- "412-586-2389"
 editor2 <- "Christopher Tracey"
 editor2title <- "Conservation Planning Manager"
 editor2email <- "ctracey@paconserve.org"
@@ -53,11 +53,30 @@ nha_list <- arc.select(nha, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, "
 # change abbreviations to full words
 nha_list$SIG_RANK <- ifelse(nha_list$SIG_RANK=="G", "Global", ifelse(nha_list$SIG_RANK=="R", "Regional", ifelse(nha_list$SIG_RANK=="S", "State", ifelse(nha_list$SIG_RANK=="L", "Local", NA))))
 
+# get and calculate the map id form the temp layer
+NHA_MapID <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_NHACounty")
+NHA_MapID <- arc.select(NHA_MapID, c("COUNTY_NAM","NHA_Join_ID","SITE_NAME","MAP_ID"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+colnames(NHA_MapID)[4] <- "MAP_ID1"
+nha_list <- merge(nha_list, NHA_MapID[c("NHA_Join_ID","MAP_ID1")], by.x="NHA_JOIN_ID", by.y="NHA_Join_ID")
+nha_list$MAP_ID <- nha_list$MAP_ID1
 
+# make a list of the NHAs in the county extract add data!
 ListJoinID <- nha_list$NHA_JOIN_ID
 ListJoinID <- paste(toString(sQuote(ListJoinID)), collapse = ",")
 
+#################################
 # species lists
+
+# get a list of SUSNs
+SUSN <- arc.open("E:/NHA_SUSN/NHA_SUSN.gdb/SUSN_multipart")
+SUSN <- arc.select(SUSN, c("ELCODE","ELSUBID","SNAME","SCOMNAME"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
+SUSN <- unique(SUSN)
+SUSN <- SUSN[order(SUSN$SNAME),]
+SUSN_type <- data.frame("SNAME"=c("Crotalus horridus","Glyptemys insculpta","Myotis sodalis","Terrapene carolina carolina","Nocomis biguttatus","Alosa chrysochloris"),"ELEMENT_TYPE"=c("AR","AR","AM","AR","AF","AF"))
+SUSN <- merge(SUSN,SUSN_type, by="SNAME")
+SUSN <- SUSN[c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE")]
+
+# NHA species
 nha_relatedSpecies <- arc.open(paste(serverPath,"PNHP.DBO.NHA_SpeciesTable", sep=""))
 nha_relatedSpecies <- arc.select(nha_relatedSpecies, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, ")")) 
 nha_relatedSpecies <- nha_relatedSpecies[c("ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE")]
@@ -65,26 +84,31 @@ nha_relatedSpecies <- unique(nha_relatedSpecies)
 
 nha_relatedSpecies <- nha_relatedSpecies[which(!is.na(nha_relatedSpecies$ELEMENT_TYPE)),]  # temp to remove issues !!!!!!!!!!!!!!!!!!!!!!!!!
 
+# merge in the SUSNs
+nha_relatedSpecies <- rbind(nha_relatedSpecies, SUSN)
+nha_relatedSpecies <- unique(nha_relatedSpecies)
+
+# join to the ET
 ET <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/ET")
 ET <- arc.select(ET, c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")) 
 
 speciestable <- merge(nha_relatedSpecies, ET, by="ELCODE", all.x=TRUE)
 names(speciestable)[names(speciestable)=="SENSITV_SP"] <- c("SENSITIVE")
 
+# replace values where there are multiple taxa groups
+speciestable[which(speciestable$ELEMENT_TYPE=="AAAA"),"ELEMENT_TYPE"] <- "AA"
+speciestable[which(speciestable$ELEMENT_TYPE=="AAAB"),"ELEMENT_TYPE"] <- "AA"
+speciestable[which(speciestable$ELEMENT_TYPE=="O"),"ELEMENT_TYPE"] <- "CGH"
 
-TaxOrder <- c("AM","AB","AAAA","AAAB","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IIORT","IIPLE","ILARA","ICMAL","CGH","S")
+
+TaxOrder <- c("AM","AB","AA","AR","AF","IMBIV","P","N","IZSPN","IMGAS","IIODO","IILEP","IILEY","IICOL02","IICOL","IIORT","IIPLE","IITRI","ILARA","ICMAL","CGH","S")
 speciestable$OrderVec <- speciestable$ELEMENT_TYPE
 #speciestable <- within(speciestable, OrderVec[SENSITIVE =="Y"| SENSITIVE_EO =="Y"] <- "S")    
 speciestable$OrderVec <- factor(speciestable$OrderVec, levels=TaxOrder)
 speciestable <- speciestable[order(speciestable$OrderVec, speciestable$SNAME),]
 
-# speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE", all.x=TRUE)  # join the taxa icons
-
 species <- speciestable$SNAME
 taxa <- unique(speciestable$ELEMENT_TYPE)
-#  taxa[is.na(taxa)] <- "P"
-# # taxa[taxa=="O"] <- "CGH"
-#  taxa <- unique(taxa)
 
 # get a count of PX species for the report
 EThistoricextipated <- nrow(ET[which(ET$SRANK=="SX"|ET$SRANK=="SH"),])
@@ -93,10 +117,17 @@ ETextipated <- nrow(ET[which(ET$SRANK=="SX"),])
 # get a count of the total EOs in Biotics
 eo_ptrep <- arc.open("W:/Heritage/Heritage_Data/Biotics_datasets.gdb/eo_ptreps")
 eo_ptrep <- arc.select(eo_ptrep) # , c("ELCODE","GRANK","SRANK","USESA","SPROT","PBSSTATUS","SENSITV_SP")
-eo_count <- nrow(eo_ptrep)
-eo_ptrep <- NULL
-eo_count <- ceiling(eo_count/1000)*1000
-eo_count <- format(round(as.numeric(eo_count)), big.mark=",")  # 1,000.6
+eo_count <- length(unique(eo_ptrep$EO_ID))
+
+Round <- function(x,y) {
+  if((y - x %% y) <= x %% y) { x + (y - x %% y)}
+  else { x - (x %% y)}
+}
+eo_countrnd <- Round(eo_count, 1000)
+eo_count <- paste(ifelse(eo_count<=eo_countrnd, "almost", "more than"), format(round(as.numeric(eo_countrnd)), big.mark=","), sep=" ")
+
+
+ 
 
 #################################################################################################################
 # Background GIS Data for the County
@@ -135,7 +166,6 @@ CountyNLCD16sumgroup <- CountyNLCD16 %>% group_by(group) %>% summarize(sum=sum(A
 CountyNLCD16sumgroup$percent <- round((CountyNLCD16sumgroup$sum / sum(CountyNLCD16sumgroup$sum))*100,1)
 CountyNLCD16sumgroup <- CountyNLCD16sumgroup[order(-CountyNLCD16sumgroup$sum),]
 
-
 # make graph for land cover
 p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) + 
   geom_bar(position="stack", stat="identity") +
@@ -148,6 +178,21 @@ p <- ggplot(CountyNLCD16, aes(fill=NLCD_Land_Cover_Class, y=Acres, x=group)) +
   print(p)
   dev.off()
 
+# protected amounts
+nha_area <- sum(nha_list$ACRES)
+nha_arearnd <- Round(nha_area, 100)
+nha_area <- paste(ifelse(nha_area<=nha_arearnd, "almost", "more than"), format(round(as.numeric(nha_arearnd)), big.mark=","), sep=" ")
+  
+NHA_ProtectedLands <- arc.open(paste(serverPath,"PNHP.DBO.NHA_ProtectedLands", sep=""))
+NHA_ProtectedLands <- arc.select(NHA_ProtectedLands, where_clause=paste("NHA_JOIN_ID IN (", ListJoinID, ")")) 
+NHA_ProtectedLands  <- NHA_ProtectedLands[c("PROTECTED_LANDS","PERCENT_","NHA_JOIN_ID")]
+
+NHA_ProtectedLands_sum <- NHA_ProtectedLands %>%
+  group_by(NHA_JOIN_ID) %>%
+  summarise(Percent=sum(PERCENT_), n = n())
+NHA_ProtectedLands_sum <- merge(NHA_ProtectedLands_sum, nha_list[c("SITE_NAME","NHA_JOIN_ID","ACRES")])
+NHA_ProtectedLands_sum$ACRESprotected <- NHA_ProtectedLands_sum$ACRES *(NHA_ProtectedLands_sum$Percent/100)
+  
 # land trust service areas for the conclusions
 CountyLandTrust <- arc.open("E:/NHA_CountyIntroMaps/NHA_CountyIntroMaps.gdb/tmp_CountyLandTrustServiceArea ")
 CountyLandTrust <- arc.select(CountyLandTrust , c("COUNTY_NAM","ORG_NAME","ORG_PROFIL","ORG_WEB"), where_clause = paste("COUNTY_NAM=",toupper(sQuote(nameCounty)), sep="")) 
@@ -158,7 +203,7 @@ CountyWatershed <- arc.select(CountyWatershed , c("COUNTY_NAM","Name","Profile",
 
 ###################################################################################################################
 
-# get some county background information
+# get some county inventory background information
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
   infoCNHI <- dbGetQuery(db_nha, paste("SELECT * FROM CNHI_data WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha) 
@@ -179,6 +224,14 @@ editor1a <- paste(word(editor1,-1),", ", gsub("\\s*\\w*$", "", editor1), sep="")
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_AdvisComm <- dbGetQuery(db_nha, paste("SELECT * FROM AdvisoryCommittees WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha)
+
+# SUSN data
+SUSNJoinID <- paste(toString(sQuote(SUSN$SNAME)), collapse = ",")
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+SUSN_data <- dbGetQuery(db_nha, paste("SELECT * FROM SUSN WHERE SNAME IN (" , SUSNJoinID,")", sep="") )
+dbDisconnect(db_nha)
+SUSN <- merge(SUSN, SUSN_data, by="SNAME")
+rm(SUSN_data)
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database

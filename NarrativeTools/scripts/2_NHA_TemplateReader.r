@@ -8,7 +8,9 @@
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
 nha_name <- LauncherNHA
+nha_name <- gsub("'", "''", nha_name)
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_name <- gsub("''", "'", nha_name)
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
 # access geodatabase to pull site info 
@@ -22,6 +24,7 @@ NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, 
 if(length(NHA_file)==1) {
   n <- 1
 } else {
+  beepr::beep(sound=1, expr=NULL)
   print(NHA_file)
   cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
   n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))

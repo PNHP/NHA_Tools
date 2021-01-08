@@ -15,7 +15,7 @@
 \usepackage{url}
 \urlstyle{same}
 \usepackage{graphicx}
-\graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/}{../../DraftSiteAccounts/z_photos} }
+\graphicspath{ {../../z_BaseImages/}{../../z_BaseImages/EO_images/}{photos/}{../../DraftSiteAccounts/z_photos}{../../z_BaseImages/NHA_Maps/} }
 \usepackage[style=authoryear,hyperref=false]{biblatex}
 \addbibresource{../../citations/PNHP_refs.bib}
 % \usepackage{cite}
@@ -76,37 +76,43 @@ if(!is.na(nha_photos$P1N)){
 \noindent
 \Sexpr{as.character(nha_data$Description)}\\\\
 % paragraph about significance ranks
-This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because
+This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because of
 % calculates what text to say
 <<label=sigparagraph, echo=FALSE, results='asis'>>=
 
 # Case 1: global significance and the species are not sensitive
-if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
+if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
   cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
 # case 1a:
-} else if(nha_siterank$site_score=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
+} else if(nha_siterank=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
   cat(paste0("this site is rated as significant because the sensitive species of concern is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+  # Case 1b: global significance and the species are not sensitive
+} else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
+  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", present within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
   # Case 2: regional significance and the species are not sensitive
-} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", present within the NHA."))
   # Case 2a: regional significance and the species are sensitive
-} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
   cat(paste0("this site is rated as significant because the sensitive species of concern is of G3 rank."))
 # Case 3: regional significance and the species are not sensitive
-} else if(nha_siterank$site_score=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
-   cat(paste0("of the high concentration of G4, G5, or GNR species at this site."))  
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
+   cat(paste0(" the high concentration of G4, G5, or GNR species at this site."))  
 # Case 4: state significance and the species are not sensitive
-} else if(nha_siterank$site_score=="State" & spCount_GSecure>0) {
+} else if(nha_siterank=="State" & spCount_GSecure>0) {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
 # Case 4a: state significance and the species are all sensitive
-} else if(nha_siterank$site_score=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+} else if(nha_siterank=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
   cat("to the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level but they are sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of the their range or loss of habitat.")
-# Case 5: local significance and the species are not sensitive
-} else if(nha_siterank$site_score=="Local" & spCount_GSecure>0) {
-  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
+# Case 4b: state significance and species are G3G4 and the species are all sensitive
+} else if(nha_siterank=="State" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
+  cat("to the tracked species at the site being ranked G3G4 but they are sensitive to collection or disturbance. Within Pennsylvania, these species may be severely declining.")
+  # Case 5: local significance and the species are not sensitive
+} else if(nha_siterank=="Local" & spCount_GSecure>0) {
+  cat("the tracked species are secure globally, but occur at the edge of their range in Pennsylvania and are on local conservation concern.")
 # Case 5: local significance and the species are  sensitive
-} else if(nha_siterank$site_score=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
-  cat("for some reason that they are <<<<neat>>>> but they don't rise to the state level......")
+} else if(nha_siterank=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("the tracked species are secure globally, but occur at the edge of their range in Pennsylvania and are on local conservation concern.")
 }
 @
 \noindent
@@ -123,8 +129,8 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
 
 \begin{TableNotes}
  \begin{footnotesize}
-    \item [1] See the PNHP website (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. A legal status in parentheses is a status change recommended by the Pennsylvania Biological Survey.
-    \item [2] See NatureServe website (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
+    \item [1] See the PNHP (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. PABS status refers to the status recommended by the Pennsylvania Biological Survey.
+    \item [2] See NatureServe (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
     <<SensitiveFNote3, echo=FALSE, results='asis'>>=
      SensitiveFNote <- ifelse(any(speciestable$SENSITIVE=="Y"), "\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
      @
@@ -132,16 +138,15 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
   \end{footnotesize}
 \end{TableNotes}
 
-\begin{longtable}{ l @{\extracolsep{\fill}} *{6}{c} }
+\begin{longtable}{ l @{\extracolsep{\fill}} *{7}{c} } 
 \toprule
-\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{PA Legal Status} & \textbf{Last Observed}	& \textbf{Quality}\tnote{2} \\
-%Country & N obs  & Total years & No degree & High school & Some college,+ & smth\tnote{a} & smth\tnote{b} \\
-%& & of education & & & & prestige score & income score \\ 
+\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{\shortstack{PA Legal\\Status}}\tnote{1} & \textbf{\shortstack{PABS\\Status}}\tnote{1} & \textbf{\shortstack{Last\\Observed}}	& \textbf{Quality}\tnote{2} \\
+
 \midrule
 \endhead
 
 \midrule[\heavyrulewidth]
-\multicolumn{7}{r}{\textit{table continued on next page}}\\
+\multicolumn{8}{r}{\textit{table continued on next page}}\\
 \endfoot  
 
 \midrule[\heavyrulewidth]
@@ -164,7 +169,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
      for(i in 1:nrow(speciestable)){ 
        # replace common name if blank
        if(is.na(speciestable$SCOMNAME[i])){
-         speciestable$SCOMNAME[i] <- "No Name Available"
+         speciestable$SCOMNAME[i] <- "no common name"
        } 
        # remove double names for sensitive species of concern
        if(speciestable$SENSITIVE[i]=="Y"){
@@ -198,7 +203,7 @@ if(nha_siterank$site_score=="Global" & spCount_GImperiled>0 & spCount_GImperiled
          speciestable$icon[i] <- "Sensitive.png"
        }
        # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", paste0(speciestable$SPROT[i]," (",speciestable$PBSSTATUS[i],")"), "&", speciestable$LASTOBS_YR[i],"&", speciestable$EORANK[i],"\\\\") )
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",speciestable$icon[i],"}","&",speciestable$GRANK[i], "&", speciestable$SRANK[i],"&", speciestable$SPROT[i], "&", speciestable$PBSSTATUS[i], "&", speciestable$LASTOBS_YR[i], "&", speciestable$EORANK[i],"\\\\") )
      }
 @       
 
@@ -243,7 +248,7 @@ for(t in 1:nrow(nha_threats)){
 \textbf{Municipalities:} \Sexpr{nha_data$CountyMuni} \\
 \textbf{USGS quads:} \Sexpr{selected_nha$USGS_QUAD} \\
 \textbf{Previous CNHI reference:} \Sexpr{ifelse(!is.na(selected_nha$OLD_SITE_NAME), paste("This site replaces the following previously published sites: ",selected_nha$OLD_SITE_NAME,"."), "This site does not overlap a previously published site.") } \\
-\textbf{Associated NHAs:} \Sexpr{ifelse(selected_nha$ASSOC_NHA!="None", paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
+\textbf{Associated NHAs:} \Sexpr{ifelse(!is.na(selected_nha$ASSOC_NHA), paste("This site is associated with the following other NHAs: ",selected_nha$ASSOC_NHA, ". We recommend consulting the accounts for those sites for additional conservation information."), "This site is not directly associated with another NHA.")  } \\               
 \textbf{Overlapping Protected Lands:} \Sexpr{nha_data$PROTECTED_LANDS} \\
 \textbf{Approximate Acreage:} \Sexpr{round(selected_nha$ACRES)} acres \\  
   
@@ -258,33 +263,21 @@ for(t in 1:nrow(nha_threats)){
 %%%  Recommended Citation %%% 
 \setlength{\fboxsep}{5pt}
 \fbox{
-\begin{minipage}[c]{0.2\linewidth}
-\includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
-\end{minipage}%
-\begin{minipage}[c]{0.75\linewidth}
-This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.
-\\ \\ Please cite this Natural Heritage Area as: \\
-Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. . Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
-\end{minipage}
+ \begin{minipage}[c]{0.2\linewidth}
+  \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
+ \end{minipage}%
+ \begin{minipage}[c]{0.75\linewidth}
+   This Natural Heritage Area was developed as part of an update to the \Sexpr{nha_Sources$FullName} with funding from the \Sexpr{nha_Sources$Funding}.  \\ \\ Please cite this Natural Heritage Area as: \\
+   Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
+  \end{minipage}
 }
 
 \newpage
-
-
-% insert the NHA map
+% insert the NHA map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 <<label=mapimage, echo=FALSE, results='asis'>>=
-if(!is.na(nha_photos$P1N)){
   mapfile <- paste("Layout_", nha_foldername, sep="")
-  #cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
-  cat(paste0("\\includegraphics[width=0.95\\textwidth]{",mapfile,"} %  \n"))
-  #cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
-  #capfun <- as.character(paste(nha_photos$P1C, "\\textcolor{gray}{","Photo: ", nha_photos$P1N,"}\\\\", sep=" "))
-  #cat(paste0("\\caption{",capfun,"} \n"))
-  #cat("\\end{wrapfigure} \n")
-} else if(is.na(nha_photos$P1N)){
- cat("insert map here") # do nothing
-}
+  cat(paste0("\\includegraphics[width=1\\textwidth]{",mapfile,"} %  \n"))
 @
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
