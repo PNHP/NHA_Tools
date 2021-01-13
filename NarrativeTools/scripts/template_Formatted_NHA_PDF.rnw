@@ -89,7 +89,10 @@ if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no")
   # Case 1b: global significance and the species are not sensitive
 } else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
   cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-  # Case 2: regional significance and the species are not sensitive
+  # case 1c: global sig because of a winter bat colony
+} else if(nha_siterank=="Global" & nrow(speciestable==1) & speciestable$SNAME=="Bat Hibernaculum") {
+  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))  
+    # Case 2: regional significance and the species are not sensitive
 } else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
   # Case 2a: regional significance and the species are sensitive
