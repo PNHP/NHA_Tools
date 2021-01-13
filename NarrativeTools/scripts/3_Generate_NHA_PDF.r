@@ -121,6 +121,9 @@ speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
 speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
 speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
 
+# manually change the sensitivity if the the EO is sensitive
+speciestable[which(speciestable$SENSITIVE=="N" & speciestable$SENSITIVE_EO=="Y"),"SENSITIVE"] <- "Y"
+
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
 

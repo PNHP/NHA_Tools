@@ -20,6 +20,7 @@ selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "A
 
 # find the NHA word file template that we want to use
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
+NHA_file <- setdiff(NHA_file, NHA_file[substring(NHA_file,1,1)=="~"]) # remove temp files
 # select the file number from the list below
 if(length(NHA_file)==1) {
   n <- 1
@@ -28,7 +29,8 @@ if(length(NHA_file)==1) {
   print(NHA_file)
   cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
   n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))
-}
+}  
+
 print(paste0("using the ",NHA_file[n], " for input into the script!"))
 NHA_file <- NHA_file[n]
 # create the path to the whole file!

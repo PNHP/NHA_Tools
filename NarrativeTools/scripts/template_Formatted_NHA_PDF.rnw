@@ -89,15 +89,21 @@ if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no")
   # Case 1b: global significance and the species are not sensitive
 } else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
   cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-  # Case 2: regional significance and the species are not sensitive
+  # case 1c: global sig because of a winter bat colony
+} else if(nha_siterank=="Global" & nrow(speciestable==1) & speciestable$SNAME[1]=="Bat Hibernaculum") {
+  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+    # Case 2: regional significance and the species are not sensitive
 } else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
   cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
   # Case 2a: regional significance and the species are sensitive
 } else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
   cat(paste0("the occurrence of a sensitive species of concern that is of G3 rank."))
-# Case 3: regional significance and the species are not sensitive
+# Case 2b: regional significance and the species are not sensitive
 } else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
    cat(paste0(" the high concentration of G4, G5, or GNR species at this site."))  
+# Case 2c: regional significance and their are sensitive and non sensitive G3 species present
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+   cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
 # Case 4: state significance and the species are not sensitive
 } else if(nha_siterank=="State" & spCount_GSecure>0) {
   cat("the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
