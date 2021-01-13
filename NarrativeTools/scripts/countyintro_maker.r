@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Washington"
+nameCounty <- "Westmoreland"
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
@@ -211,6 +211,11 @@ dbDisconnect(db_nha)
 # get some Natural History background information
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
  NatHistOverview <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_NatHistOverview WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha) 
+
+# get watershed examples
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+  WatershedsExamples <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_Watersheds WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha) 
 
 # get a count of the different ranks of the NHAs
