@@ -15,7 +15,7 @@ source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
 nameCounty <- "Washington"
-YearUpdate <- 2020
+YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
 editor1title <- "Connservation Planner"
