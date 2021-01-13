@@ -255,3 +255,8 @@ pdf_filename <- paste(nameCounty,"_Intro_",gsub("[^0-9]", "", Sys.time() ),sep="
 makePDF("template_Formatted_Intro_PDF.rnw", pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
+beepr::beep(sound=10, expr=NULL)
+
+##
+# String all the PDFs together
+

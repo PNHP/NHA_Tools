@@ -989,19 +989,25 @@ The following are general recommendations for the protection of the Natural Heri
 \begin{wrapfigure}{r}{.5\textwidth}
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
   \begin{center}
-   \includegraphics[width=0.5\textwidth]{waplogo}
+   \includegraphics[width=0.9\textwidth]{PASWAP_Logo_RGB}
   \end{center}
  %\begin{flushleft}
-   \noindent The Pennsylvani awildlife Action Plan...\\
+   \noindent Conservation Opportunity Area Tool\\
    
- \noindent Stuff stuff. \\
+ \noindent Do you want to help Pennsylvania’s imperiled wildlife but are not sure where to start? The Wildlife Action Plan Conservation Opportunity Area (COA) Tool is just the place! Powered by more than 400,000 Species of Greatest Conservation Need locations, the COA Tool provides species information for your areas of interest. Learn about what species are (or might be) in the area, their habitat preferences, the habitats found in the area, and conservation actions that will benefit the at-risk species. There is also an option to query by county or large watershed. 
+Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore an area of your interest today! \\
+
+  \begin{center}
+   https://wildlifeactionmap.pa.gov
+  \end{center}
  
- \noindent Sign up for your free iMapInvasives user account today by going to https://wildlifeactionmap.pa.gov and clicking on the “Login” button. \\
+ \noindent The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish & Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe. \\
+ \\
   %\end{flushleft}
   \end{minipage}}
 \end{wrapfigure}
 
-
+\afterpage{\clearpage}
 
 \newpage
 \section{REFERENCES AND LITERATURE CITED}
