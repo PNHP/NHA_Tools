@@ -256,9 +256,7 @@ if(any(IntroPhotos$photoType=="image_NatHist")){
   cat("\\end{wrapfigure} \n")
 } else {cat("")}
 @
-\noindent \Sexpr{nameCounty} County is rich in history, and scenic and natural resources. However, its rural character, natural resources, and farmland are all seriously threatened by the conversion of farmland and natural habitats to suburban and commercial uses, a trend common throughout southwestern Pennsylvania. Major interstate highways linking \Sexpr{nameCounty} County to metropolitan centers have made commuting to Pittsburgh feasible.\\
-
-\noindent The scenic and natural environments that have attracted many people to the county are quickly being lost because of increased sprawling development. Wise planning, however, can maintain these natural environments and the plants and animals associated with them. A balance between growth and preservation of scenic and natural resources can be achieved by guiding development away from the most environmentally sensitive areas.
+\noindent \Sexpr{NatHistOverview$NatHistOpeningPara} \\
 
 \subsection{Land Cover}
 The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])} (Figure ~\ref{fig:Landcover}). \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category, making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are important for habitat and water quality.
@@ -403,7 +401,7 @@ if(any(IntroPhotos$photoType=="image_NatCom")){
 
 \noindent \Sexpr{NatHistOverview$NatHistCommunities} \\
 
-\noindent The natural communities in \Sexpr{nameCounty} County vary in size, number, and quality. The highest quality forest communities have large trees, a well-developed understory, a diversity of spring wildflowers, and minimal invasive species. Some of these forests may also contain vernal pools or other wetland types making them priority targets for conservation. Likewise, headwater wetlands, vegetated riparian buffers, and scour grasslands are important for a vast number of wildlife species and need protection from disturbances and land use changes. Land trusts, conservation groups, and local and state agencies play crucial and important roles in protecting the natural heritage of Armstrong County for the enjoyment of future generations. 
+\noindent The natural communities in \Sexpr{nameCounty} County vary in size, number, and quality. The highest quality forest communities have large trees, a well-developed understory, a diversity of spring wildflowers, and minimal invasive species. Some of these forests may also contain vernal pools or other wetland types making them priority targets for conservation. Likewise, headwater wetlands, vegetated riparian buffers, and scour grasslands are important for a vast number of wildlife species and need protection from disturbances and land use changes. Land trusts, conservation groups, and local and state agencies play crucial and important roles in protecting the natural heritage of \Sexpr{nameCounty} County for the enjoyment of future generations. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Regional Disturbances}
