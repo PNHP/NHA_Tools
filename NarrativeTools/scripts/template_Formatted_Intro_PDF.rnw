@@ -884,7 +884,9 @@ Due to a combination of sensitivity issues, some species have created challenges
 \item The species being too sensitive for its location to be pinpointed to an area of core habitat that it makes use of, even if its name is obscured in NHA site accounts and it is listed as sensitive. These are often species which are poached or collected, or species which are extremely sensitive to disturbances.
 \item The species is wide-ranging and too mobile on the landscape for a core habitat patch to meaningfully define the area of habitat that it relies on. 
 \end{itemize}
-Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.
+Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.\\
+\\
+
 
 
 <<label=SUSN, echo=FALSE, results='asis'>>=
