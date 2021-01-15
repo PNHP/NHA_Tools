@@ -239,7 +239,30 @@ if(any(IntroPhotos$photoType=="image_intro")){
 
 \noindent Fifty-six percent of Pennsylvania’s wetlands have been lost or substantially degraded by filling, draining, or conversion to ponds. According to the Pennsylvania Department of Environmental Protection (DEP), 60 percent of Pennsylvania lakes that have been assessed for biological health  to date are listed as impaired. Of 83,000 miles of streams in Pennsylvania, almost 70,000 miles have been assessed for water quality. From this, nearly 11,000 miles have been designated as impaired due to abandoned mine discharges, acid precipitation, and agricultural or urban runoff. The species that depend on these habitats are correspondingly under threat: 58 percent of threatened or endangered plant species are wetland or aquatic species; 13 percent of Pennsylvania’s 200 native fish species have been lost, while an additional 23 percent are imperiled. Among freshwater mussels, one of the most globally imperiled groups of organisms, 18 of Pennsylvania’s 67 native species are extirpated (meaning locally extinct) and another 22 are imperiled.\\
 
-\noindent Prior to European colonization, over 90 percent of Pennsylvania’s land area was forested. Native Americans encouraged disturbance regimes, often fire-driven, that created a shifting patchwork of early and later successional areas \parencite{stambaugh_wave_2018}, and likely played a large role in facilitating dominance by fire and drought tolerant species like oak (Quercus) and chestnut (Castanea). European colonization of Pennsylvania, followed by clear-cutting of forests and then fire suppression, dramatically altered the disturabnce regimes on the landscape, as well as the overall landcover. Today, much of our forest has begun to regenerate, with ~60 percent forest cover overall, but much of this forest is fragmented by roads, utility rights-of-way, agriculture, and other intensive human developments. There has also been a general shift in Pennsylvania forests towards dominance of tree species that are more shade tolerant and intolerant of fire, like maple (\textit{Acer spp.}) and birch (\textit{Betula spp.}) \parencite{abrams_global_2019}. Only 42 percent of remaining forest is classified as interior forest habitat; meaning that some of the species which are very sensitive to human disturbances and that depend upon these relatively undisturbed forest habitats are in decline. In addition to habitat fragmentation, forest pests, acid precipitation (which causes nutrient leaching and stunted growth), over browsing by deer and the aggressive spread of invasive species also threaten forest ecosystem health. \\
+
+\noindent
+% call out box about WAP/COA!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.9\textwidth]{PASWAP_Logo_RGB}
+  \end{center}
+ %\begin{flushleft}
+   \noindent Conservation Opportunity Area Tool\\
+   
+ \noindent Do you want to help Pennsylvania’s imperiled wildlife but are not sure where to start? The Wildlife Action Plan Conservation Opportunity Area (COA) Tool is just the place! Powered by more than 400,000 Species of Greatest Conservation Need locations, the COA Tool provides species information for your areas of interest. Learn about what species are (or might be) in the area, their habitat preferences, the habitats found in the area, and conservation actions that will benefit the at-risk species. There is also an option to query by county or large watershed. 
+Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore an area of your interest today! \\
+
+  \begin{center}
+   https://wildlifeactionmap.pa.gov
+  \end{center}
+ 
+ \noindent \small The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish and Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe.
+  %\end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
+Prior to European colonization, over 90 percent of Pennsylvania’s land area was forested. Native Americans encouraged disturbance regimes, often fire-driven, that created a shifting patchwork of early and later successional areas \parencite{stambaugh_wave_2018}, and likely played a large role in facilitating dominance by fire and drought tolerant species like oak (Quercus) and chestnut (Castanea). European colonization of Pennsylvania, followed by clear-cutting of forests and then fire suppression, dramatically altered the disturabnce regimes on the landscape, as well as the overall landcover. Today, much of our forest has begun to regenerate, with ~60 percent forest cover overall, but much of this forest is fragmented by roads, utility rights-of-way, agriculture, and other intensive human developments. There has also been a general shift in Pennsylvania forests towards dominance of tree species that are more shade tolerant and intolerant of fire, like maple (\textit{Acer spp.}) and birch (\textit{Betula spp.}) \parencite{abrams_global_2019}. Only 42 percent of remaining forest is classified as interior forest habitat; meaning that some of the species which are very sensitive to human disturbances and that depend upon these relatively undisturbed forest habitats are in decline. In addition to habitat fragmentation, forest pests, acid precipitation (which causes nutrient leaching and stunted growth), over browsing by deer and the aggressive spread of invasive species also threaten forest ecosystem health. \\
 
 \noindent The Pennsylvania Natural Heritage Program (PNHP) in cooperation with the Pennsylvania Biological Survey (PABS) assesses the conservation status of species of vascular plants, vertebrates, and selected invertebrate groups native to Pennsylvania. While Pennsylvania hosts a diversity of other life forms, far too little information is known about the distribution of mosses, liverworts, lichens, fungi, and most invertebrates to fully assess their conservation status at this time. Despite lacking information about all of these groups of species, it is still possible to protect at least some rare species for which we know little about by conserving rare natural communities. Species tend to occur in specific habitats or natural communities, and by conserving a broad range of examples of all natural community types we will likely also conserve many of the associated species, whether or not we even know what those species are. Thus, the natural community approach is a coarse filter for broad scale biodiversity protection, while the fine filter, species-specific approach is used for those individual species for which it is feasible.\\
 
@@ -375,7 +398,7 @@ if(nrow(CountyHUC4)==1){
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
  %\begin{flushleft}
  \begin{center}
-   \includegraphics[width=0.95\textwidth]{RedOakMixedHardwoodForestANF○}
+   \includegraphics[width=0.95\textwidth]{RedOakMixedHardwoodForestANF}
   \end{center}
  
  
@@ -416,10 +439,6 @@ if(any(IntroPhotos$photoType=="image_NatCom")){
 \subsection{Regional Disturbances}
 Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today. In general, natural communities will be more resilient to disturbances when landscape connectivity is high and communities are still relatively intact and unfragmented. This allows for disturbed communities to be recolonized by individuals from nearby undisturbed patches in the landscape. \\
 
-\noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of a consistent history of human intervention. Another example of an ecosystem shaped by consistent disturbances are floodplain forests. The structure of these forest communities are the result of periodic scouring and deposition of sediments as streams overtop their banks, which facilitates species which are tolerant of these types of disturbance cycles, such as silver maple (Acer saccharinum), sycamore (Platanus occidentalis), or willows (Salix spp.). In the absence of regular flooding, these floodplain communities would not be able to persist. \\
-
-\noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species  \parencite{latham_managing_2005}. Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct loss of rare plants \parencite{beguin_management_2016}. \\
-
 % % disturbance photo
 \begin{wrapfigure}{r}{0.5\textwidth}
 % \begin{figure}[h]
@@ -429,6 +448,10 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
  \label{fig:Disturbance}
 % \end{figure}
 \end{wrapfigure}
+\noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of a consistent history of human intervention. Another example of an ecosystem shaped by consistent disturbances are floodplain forests. The structure of these forest communities are the result of periodic scouring and deposition of sediments as streams overtop their banks, which facilitates species which are tolerant of these types of disturbance cycles, such as silver maple (Acer saccharinum), sycamore (Platanus occidentalis), or willows (Salix spp.). In the absence of regular flooding, these floodplain communities would not be able to persist. \\
+
+\noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species  \parencite{latham_managing_2005}. Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct loss of rare plants \parencite{beguin_management_2016}. \\
+
 \noindent \underline{Human Disturbances} --- Humans function as ecosystem engineers, altering the landscape around us to suit our needs. Some species benefit from human-induced changes, such as birds that inhabit the early successional and edge habitats created by utility corridors, or disturbance-adapted plants that colonize roadsides; however, as is more often the case, species with specific habitat requirements suffer declines when faced with human encroachment. Given the pervasiveness of human influence throughout the northeastern United States, the ecological importance of large areas of relatively unfragmented and undisturbed habitat cannot be overestimated. Not only are these areas potential habitat for a number of sensitive species, but they are also important for the maintenance of vital ecosystem processes and services such as nutrient cycling, pollination, and predator-prey interactions. Additionally, large forested areas also serve to filter and regulate the flows of streams within watersheds and store large quantities of carbon as biomass. While human disturbances are semi-permanent parts of the landscape, decisions about the type, timing, location, and extent of future disturbances can have a strong influence on the natural ecological diversity that remains for future generations. Careful land use planning can protect the most sensitive ecological areas from disturbance and also allow working landscapes to continue to support biodiversity while also fulfilling societal needs. \\
 
 \subsection{Forest Fragmentation}
@@ -506,15 +529,6 @@ The spread of invasive species within the region presents a significant hurdle t
 \noindent The following are an overview of the general methods used to create this Natural Heritage Inventory.  For more detail about any of these methods, please contact the Pennsylvania Natural Heritage Program. 
 
 \subsection{Field Work and Data Management}
-
-% \begin{wrapfigure}{r}{0.5\textwidth}
-% % \begin{figure}[h]
-% %\centering
-% \includegraphics[width=0.50\textwidth]{fieldwork}
-%  \caption{\textit{Fieldwork like this is what we do...}}
-%  \label{fig:NHAfieldwork}
-% % \end{figure}
-% \end{wrapfigure}
 
 \noindent Inventory data comes from a variety of sources. PNHP biologists and data managers work with records of species occurrences, collected from museums, citizen science databases, and various partners and contractors. These occurrences are verified by expert biologists on staff, and in some cases followed up with for additional fieldwork. PNHP biologists also plan de-novo surveys to locations that have the potential to host rare species. PNHP works directly with landowners and other knowledgable stakeholders to define the boundaries of habitat, ascertain land use history, and develop an understanding of conservation threats and concerns for each occurrence. All of this information is stored in a GIS-based database known as "Biotics", which allows PNHP to track how populations fare over time, and note changes in status and quality of habitat. To learn more about PNHP methodology for data collection and management, visit our website: https://www.naturalheritage.state.pa.us/methodology.aspx. \\  
 
@@ -667,7 +681,8 @@ The spread of invasive species within the region presents a significant hurdle t
 \end{table}
 
 \subsection{Mapping and Conservation Planning for Sensitive Species}
-As some data that PNHP collects is considered sensitive, due to threats to the focal species from human collection or other harm, the program has adopted the following general guidelines regarding the release of natural heritage information:
+
+\noindent As some data that PNHP collects is considered sensitive, due to threats to the focal species from human collection or other harm, the program has adopted the following general guidelines regarding the release of natural heritage information:
 \begin{itemize}
  \item The discretionary release of PNHP information should help conserve the species, habitat, or site in question.
  \item Non-sensitive information will be made broadly available, while the distribution of sensitive information will be restricted.
@@ -831,7 +846,7 @@ else if(t=="CGH"|t=="O"){
 @
 \end{longtable}
 
-All of the above species are mapped within an NHA, except for the following species:  \Sexpr{SUSN$SNAME}. Due to a combination of sensitivity issues, these species have created challenges for being incorporatedinto meaningful conservation planning products, namely Natural Heritage Areas
+\noindent All of the above species are mapped within an NHA, except for the following species:  \textit{\Sexpr{SUSN$SNAME}}. Due to a combination of sensitivity issues, these species have created challenges for being incorporated into meaningful conservation planning products, namely Natural Heritage Areas
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -868,7 +883,6 @@ This inventory of rare species has resulted in the designation of \Sexpr{nrow(nh
 \endlastfoot
 
 <<label=nhatable, echo=FALSE, results='asis'>>=
-
 nha_list <- nha_list[order(nha_list$SITE_NAME),]
 for(i in 1:nrow(nha_list)){
        cat(paste0(nha_list$MAP_ID[i], " & ", nha_list$SITE_NAME[i], " NHA & ", nha_list$SIG_RANK[i], " & ", nha_list$BRIEF_DESC[i]," \\\\") )
@@ -880,12 +894,12 @@ for(i in 1:nrow(nha_list)){
 
 \subsection{Planning for Sensitive Species}
 
-Due to a combination of sensitivity issues, some species have created challenges for being incorporatedinto meaningful conservation planning products, namely Natural Heritage Areas. These issues are primarily a combination of: \begin{itemize}
+Due to a combination of sensitivity issues, some species have created challenges for being incorporated into meaningful conservation planning products, namely Natural Heritage Areas. These issues are primarily a combination of: \begin{itemize}
 \item The species being too sensitive for its location to be pinpointed to an area of core habitat that it makes use of, even if its name is obscured in NHA site accounts and it is listed as sensitive. These are often species which are poached or collected, or species which are extremely sensitive to disturbances.
 \item The species is wide-ranging and too mobile on the landscape for a core habitat patch to meaningfully define the area of habitat that it relies on. 
 \end{itemize}
-Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.
-
+Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.\\
+\\
 
 <<label=SUSN, echo=FALSE, results='asis'>>=
 SUSN <- SUSN[order(SUSN$ELEMENT_TYPE, SUSN$SNAME),]
@@ -987,30 +1001,6 @@ The following are general recommendations for the protection of the Natural Heri
 \subsubsection{Encourage conservation work by grassroots organizations}
 \noindent County and municipal governments can do much of the work necessary to plan for the protection and management of natural areas identified in this report; however, grassroots organizations are needed to assist with obtaining funding, identifying landowners who wish to protect their land, and providing information about easements, land acquisition, management, and stewardship of protected sites. Increasingly, local watershed organizations and land trusts are taking proactive steps to accomplish conservation at the local level. When activities threaten to impact ecological features, the responsible agency should be contacted. If no agency exists, private groups such as conservancies, land trusts, and watershed associations should be sought for ecological consultation and specific protection recommendations.
 
-
-\noindent
-% call out box about WAP/COA!
-\begin{wrapfigure}{r}{.5\textwidth}
- \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-  \begin{center}
-   \includegraphics[width=0.9\textwidth]{PASWAP_Logo_RGB}
-  \end{center}
- %\begin{flushleft}
-   \noindent Conservation Opportunity Area Tool\\
-   
- \noindent Do you want to help Pennsylvania’s imperiled wildlife but are not sure where to start? The Wildlife Action Plan Conservation Opportunity Area (COA) Tool is just the place! Powered by more than 400,000 Species of Greatest Conservation Need locations, the COA Tool provides species information for your areas of interest. Learn about what species are (or might be) in the area, their habitat preferences, the habitats found in the area, and conservation actions that will benefit the at-risk species. There is also an option to query by county or large watershed. 
-Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore an area of your interest today! \\
-
-  \begin{center}
-   https://wildlifeactionmap.pa.gov
-  \end{center}
- 
- \noindent The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish and Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe. \\
- \\
-  %\end{flushleft}
-  \end{minipage}}
-\end{wrapfigure}
-
 \afterpage{\clearpage}
 
 \newpage
@@ -1020,6 +1010,9 @@ Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore a
 
 \newpage
 \section{NATURAL HERITAGE AREA SITE ACCOUNTS}
+
+\noindent The following section presents the \Sexpr{nrow(nha_list)} Natural Heritage Areas (NHAs) in \Sexpr(nameCounty) included in this report. Updated NHA site accounts may be available, please contact PNHP for more details. 
+
 \begin{enumerate}
    <<label=nhalistappend, echo=FALSE, results='asis'>>=
    for(i in 1:nrow(nha_list)){
