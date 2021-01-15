@@ -507,9 +507,7 @@ The spread of invasive species within the region presents a significant hurdle t
 % % \end{figure}
 % \end{wrapfigure}
 
-\noindent We do some fieldwork.  Fieldwork begins with planning a survey. This survey can be based on previously known reports (museum records, various databases, etc).
-
-\noindent Data is entered into a GIS-based database known as "Biotics".
+\noindent Inventory data comes from a variety of sources. PNHP biologists and data managers work with records of species occurrences, collected from museums, citizen science databases, and various partners and contractors. These occurrences are verified by expert biologists on staff, and in some cases followed up with for additional fieldwork. PNHP biologists also plan de-novo surveys to locations that have the potential to host rare species. PNHP works directly with landowners and other knowledgable stakeholders to define the boundaries of habitat, ascertain land use history, and develop an understanding of conservation threats and concerns for each occurrence. All of this information is stored in a GIS-based database known as "Biotics", which allows PNHP to track how populations fare over time, and note changes in status and quality of habitat. To learn more about PNHP methodology for data collection and management, visit our website: https://www.naturalheritage.state.pa.us/methodology.aspx. \\  
 
 \subsection{Natural Heritage Area Mapping}
 \noindent A Natural Heritage Area (NHA) is an area containing one or more plant or animal species of concern at state or federal levels, exemplary natural communities, or exceptional native biological diversity. NHAs include both the immediate habitat and surrounding lands important in the support of these elements. They are mapped according to their sensitivity to human activities, with designations of Core Habitat and Supporting Landscape areas. The sensitivity of each designation varies significantly according to the particular plant, animal, or natural community habitat that the area represents and is discussed in detail in each NHA Site Description. \\
@@ -547,7 +545,7 @@ The spread of invasive species within the region presents a significant hurdle t
 \noindent Site accounts are designed to be shared with interested individuals and potential users, and are available to the public via Pennsylvania Conservation Explorer available through http://www.naturalheritage.state.pa.us/. 
 
 \subsubsection{PNHP Element Ranks}
-\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number (rangin from 1 to 5) or letter (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment.  \\
+\noindent Determining which species and ecosystems are thriving and which are rare or declining is crucial for targeting conservation efforts toward elements of biodiversity in greatest need. NatureServe and its member programs use a suite of factors to assess the conservation status of plant and animal species, as well as ecological communities and systems. These assessments lead to the designation of a PNHP element rank. For species, these ranks provide an estimate of extinction risk, and for ecological communities and systems they provide an estimate of the risk of elimination. The decisions regarding PNHP rank and status are made by a state-recognized panel of experts of the Pennsylvania Biological Survey, following NatureServe guidelines. The PNHP element rank of each species or ecosystem is identified by a number (ranging from 1 to 5) or letter (Table ~\ref{tab:rankEO}) proceeded by a letter reflecting the appropriate geographic scale of the assessment.  \\
 
 \begin{table}[h!]
   \begin{center}
@@ -822,7 +820,7 @@ else if(t=="CGH"|t=="O"){
 @
 \end{longtable}
 
-All of the above species are mapped within an NHA, except for the \Sexpr{SUSN$SNAME}.
+All of the above species are mapped within an NHA, except for the following species:  \Sexpr{SUSN$SNAME}. Due to a combination of sensitivity issues, these species have created challenges for being incorporatedinto meaningful conservation planning products, namely Natural Heritage Areas
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -871,7 +869,12 @@ for(i in 1:nrow(nha_list)){
 
 \subsection{Planning for Sensitive Species}
 
-A bunch of text \\
+Due to a combination of sensitivity issues, some species have created challenges for being incorporatedinto meaningful conservation planning products, namely Natural Heritage Areas. These issues are primarily a combination of: \begin{itemize}
+\item The species being too sensitive for its location to be pinpointed to an area of core habitat that it makes use of, even if its name is obscured in NHA site accounts and it is listed as sensitive. These are often species which are poached or collected, or species which are extremely sensitive to disturbances.
+\item The species is wide-ranging and too mobile on the landscape for a core habitat patch to meaningfully define the area of habitat that it relies on. 
+\end{itemize}
+Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.
+
 
 <<label=SUSN, echo=FALSE, results='asis'>>=
 SUSN <- SUSN[order(SUSN$ELEMENT_TYPE, SUSN$SNAME),]
