@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Washington"
+nameCounty <- "Westmoreland"
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
@@ -26,7 +26,7 @@ editor2title <- "Conservation Planning Manager"
 editor2email <- "ctracey@paconserve.org"
 editor2phone <- "412-586-2326"
 
-staffPNHP <- "JoAnn Albert, Charlie Eichelberger, Kierstin Carlson, Rocky Gleason, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman."
+staffPNHP <- "JoAnn Albert, Jaci Braund, Charlie Eichelberger, Kierstin Carlson, Mary Ann Furedi, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Natalie Virbitsky, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman"
 
 projectLead <- "Ryan Gordon"
 projectLeadOrg <- "Southwest Pennsylvania Commission"
@@ -213,6 +213,11 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
  NatHistOverview <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_NatHistOverview WHERE nameCounty = " , sQuote(nameCounty), sep="") )
 dbDisconnect(db_nha) 
 
+# get watershed examples
+db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+  WatershedsExamples <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_Watersheds WHERE nameCounty = " , sQuote(nameCounty), sep="") )
+dbDisconnect(db_nha) 
+
 # get a count of the different ranks of the NHAs
 sigcount <- as.data.frame(table(nha_list$SIG_RANK))
 names(sigcount) <- c("sig","count")
@@ -246,7 +251,46 @@ dbDisconnect(db_nha)
 ##############################################################################################################
 ## Write the output document for the site ###############
 setwd(paste(NHAdest,"CountyIntros", nameCounty, sep="/")) #, "countyIntros", nameCounty, sep="/")
-pdf_filename <- paste(nameCounty,"_Intro_",gsub("[^0-9]", "", Sys.time() ),sep="")
+pdf_filename <- paste(nameCounty,"_",YearUpdate,"_Intro",sep="") # ,gsub("[^0-9]", "", Sys.time() )
 makePDF("template_Formatted_Intro_PDF.rnw", pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
+beepr::beep(sound=10, expr=NULL)
+
+#############################################################################
+# String all the NHAs PDFs together
+library(pdftools)
+
+includedNHAs <- as.data.frame(nha_list$SITE_NAME)
+names(includedNHAs) <- "SITE_NAME"
+includedNHAs$filename <- gsub(" ", "", includedNHAs$SITE_NAME, fixed=TRUE)
+includedNHAs$filename <- gsub("#", "", includedNHAs$filename, fixed=TRUE)
+includedNHAs$filename <- gsub("''", "", includedNHAs$filename, fixed=TRUE)
+includedNHAs$filename <- gsub("'", "", includedNHAs$filename, fixed=TRUE) 
+
+filelist <- list.files("P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/FinalSiteAccounts")
+filelist_stripped <- gsub("(.+?)(\\_.*)", "\\1", filelist)
+filelist_new <- data.frame(filelist, filelist_stripped)
+filelist_new$filelist <- as.character(filelist_new$filelist)
+filelist_new$filelist_stripped <- as.character(filelist_new$filelist_stripped)
+filelist_new <- filelist_new[which(filelist_new$filelist_stripped %in% includedNHAs$filename),]
+
+setdiff(includedNHAs$filename, filelist_new$filelist_stripped) # make sure this is ZERO!!!!
+
+setwd("P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/FinalSiteAccounts")  
+pdf_combine(filelist_new$filelist, output=paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"NHAs","joined.pdf",sep="_"), sep="/"))
+setwd(here::here())
+
+#pdf_compress(input=paste(NHAdest,"CountyIntros", nameCounty, paste("NHA",nameCounty,"joined.pdf",sep="_"), sep="/"), output=paste(NHAdest,"CountyIntros", nameCounty, paste("NHA",nameCounty,"joined_compress.pdf",sep="_"), sep="/"))
+
+
+###############
+# string all the NHI parts together
+f_Cover <- paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"Cover.pdf",sep="_"), sep="/")  
+f_Intro <- paste(NHAdest,"CountyIntros", nameCounty,paste(nameCounty,"_",YearUpdate,"_Intro.pdf",sep=""), sep="/")
+f_NHA <- paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"NHAs","joined.pdf",sep="_"), sep="/")
+
+pdf_combine(c(f_Cover, f_Intro, f_NHA), output=paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"NHI.pdf",sep="_"), sep="/"))
+
+
+

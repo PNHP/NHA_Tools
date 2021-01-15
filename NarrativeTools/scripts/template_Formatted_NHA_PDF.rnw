@@ -263,6 +263,8 @@ for(t in 1:nrow(nha_threats)){
 %\bibliographystyle{plain}
 \printbibliography[heading=none]
 
+\p
+
 \bigskip
 % the next line moves the recommended citation to the bottom of the page
 \vspace*{\fill}
@@ -279,6 +281,8 @@ for(t in 1:nrow(nha_threats)){
 }
 
 \newpage
+
+
 % insert the NHA map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 <<label=mapimage, echo=FALSE, results='asis'>>=
   mapfile <- paste("Layout_", nha_foldername, sep="")
