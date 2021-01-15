@@ -239,7 +239,30 @@ if(any(IntroPhotos$photoType=="image_intro")){
 
 \noindent Fifty-six percent of Pennsylvania’s wetlands have been lost or substantially degraded by filling, draining, or conversion to ponds. According to the Pennsylvania Department of Environmental Protection (DEP), 60 percent of Pennsylvania lakes that have been assessed for biological health  to date are listed as impaired. Of 83,000 miles of streams in Pennsylvania, almost 70,000 miles have been assessed for water quality. From this, nearly 11,000 miles have been designated as impaired due to abandoned mine discharges, acid precipitation, and agricultural or urban runoff. The species that depend on these habitats are correspondingly under threat: 58 percent of threatened or endangered plant species are wetland or aquatic species; 13 percent of Pennsylvania’s 200 native fish species have been lost, while an additional 23 percent are imperiled. Among freshwater mussels, one of the most globally imperiled groups of organisms, 18 of Pennsylvania’s 67 native species are extirpated (meaning locally extinct) and another 22 are imperiled.\\
 
-\noindent Prior to European colonization, over 90 percent of Pennsylvania’s land area was forested. Native Americans encouraged disturbance regimes, often fire-driven, that created a shifting patchwork of early and later successional areas \parencite{stambaugh_wave_2018}, and likely played a large role in facilitating dominance by fire and drought tolerant species like oak (Quercus) and chestnut (Castanea). European colonization of Pennsylvania, followed by clear-cutting of forests and then fire suppression, dramatically altered the disturabnce regimes on the landscape, as well as the overall landcover. Today, much of our forest has begun to regenerate, with ~60 percent forest cover overall, but much of this forest is fragmented by roads, utility rights-of-way, agriculture, and other intensive human developments. There has also been a general shift in Pennsylvania forests towards dominance of tree species that are more shade tolerant and intolerant of fire, like maple (\textit{Acer spp.}) and birch (\textit{Betula spp.}) \parencite{abrams_global_2019}. Only 42 percent of remaining forest is classified as interior forest habitat; meaning that some of the species which are very sensitive to human disturbances and that depend upon these relatively undisturbed forest habitats are in decline. In addition to habitat fragmentation, forest pests, acid precipitation (which causes nutrient leaching and stunted growth), over browsing by deer and the aggressive spread of invasive species also threaten forest ecosystem health. \\
+
+\noindent
+% call out box about WAP/COA!
+\begin{wrapfigure}{r}{.5\textwidth}
+ \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
+  \begin{center}
+   \includegraphics[width=0.9\textwidth]{PASWAP_Logo_RGB}
+  \end{center}
+ %\begin{flushleft}
+   \noindent Conservation Opportunity Area Tool\\
+   
+ \noindent Do you want to help Pennsylvania’s imperiled wildlife but are not sure where to start? The Wildlife Action Plan Conservation Opportunity Area (COA) Tool is just the place! Powered by more than 400,000 Species of Greatest Conservation Need locations, the COA Tool provides species information for your areas of interest. Learn about what species are (or might be) in the area, their habitat preferences, the habitats found in the area, and conservation actions that will benefit the at-risk species. There is also an option to query by county or large watershed. 
+Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore an area of your interest today! \\
+
+  \begin{center}
+   https://wildlifeactionmap.pa.gov
+  \end{center}
+ 
+ \noindent \small The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish and Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe.
+  %\end{flushleft}
+  \end{minipage}}
+\end{wrapfigure}
+
+Prior to European colonization, over 90 percent of Pennsylvania’s land area was forested. Native Americans encouraged disturbance regimes, often fire-driven, that created a shifting patchwork of early and later successional areas \parencite{stambaugh_wave_2018}, and likely played a large role in facilitating dominance by fire and drought tolerant species like oak (Quercus) and chestnut (Castanea). European colonization of Pennsylvania, followed by clear-cutting of forests and then fire suppression, dramatically altered the disturabnce regimes on the landscape, as well as the overall landcover. Today, much of our forest has begun to regenerate, with ~60 percent forest cover overall, but much of this forest is fragmented by roads, utility rights-of-way, agriculture, and other intensive human developments. There has also been a general shift in Pennsylvania forests towards dominance of tree species that are more shade tolerant and intolerant of fire, like maple (\textit{Acer spp.}) and birch (\textit{Betula spp.}) \parencite{abrams_global_2019}. Only 42 percent of remaining forest is classified as interior forest habitat; meaning that some of the species which are very sensitive to human disturbances and that depend upon these relatively undisturbed forest habitats are in decline. In addition to habitat fragmentation, forest pests, acid precipitation (which causes nutrient leaching and stunted growth), over browsing by deer and the aggressive spread of invasive species also threaten forest ecosystem health. \\
 
 \noindent The Pennsylvania Natural Heritage Program (PNHP) in cooperation with the Pennsylvania Biological Survey (PABS) assesses the conservation status of species of vascular plants, vertebrates, and selected invertebrate groups native to Pennsylvania. While Pennsylvania hosts a diversity of other life forms, far too little information is known about the distribution of mosses, liverworts, lichens, fungi, and most invertebrates to fully assess their conservation status at this time. Despite lacking information about all of these groups of species, it is still possible to protect at least some rare species for which we know little about by conserving rare natural communities. Species tend to occur in specific habitats or natural communities, and by conserving a broad range of examples of all natural community types we will likely also conserve many of the associated species, whether or not we even know what those species are. Thus, the natural community approach is a coarse filter for broad scale biodiversity protection, while the fine filter, species-specific approach is used for those individual species for which it is feasible.\\
 
@@ -375,7 +398,7 @@ if(nrow(CountyHUC4)==1){
  \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
  %\begin{flushleft}
  \begin{center}
-   \includegraphics[width=0.95\textwidth]{RedOakMixedHardwoodForestANF○}
+   \includegraphics[width=0.95\textwidth]{RedOakMixedHardwoodForestANF}
   \end{center}
  
  
@@ -988,30 +1011,6 @@ The following are general recommendations for the protection of the Natural Heri
 
 \subsubsection{Encourage conservation work by grassroots organizations}
 \noindent County and municipal governments can do much of the work necessary to plan for the protection and management of natural areas identified in this report; however, grassroots organizations are needed to assist with obtaining funding, identifying landowners who wish to protect their land, and providing information about easements, land acquisition, management, and stewardship of protected sites. Increasingly, local watershed organizations and land trusts are taking proactive steps to accomplish conservation at the local level. When activities threaten to impact ecological features, the responsible agency should be contacted. If no agency exists, private groups such as conservancies, land trusts, and watershed associations should be sought for ecological consultation and specific protection recommendations.
-
-
-\noindent
-% call out box about WAP/COA!
-\begin{wrapfigure}{r}{.5\textwidth}
- \fbox{\begin{minipage}{\dimexpr\linewidth-2\fboxrule-2\fboxsep}
-  \begin{center}
-   \includegraphics[width=0.9\textwidth]{PASWAP_Logo_RGB}
-  \end{center}
- %\begin{flushleft}
-   \noindent Conservation Opportunity Area Tool\\
-   
- \noindent Do you want to help Pennsylvania’s imperiled wildlife but are not sure where to start? The Wildlife Action Plan Conservation Opportunity Area (COA) Tool is just the place! Powered by more than 400,000 Species of Greatest Conservation Need locations, the COA Tool provides species information for your areas of interest. Learn about what species are (or might be) in the area, their habitat preferences, the habitats found in the area, and conservation actions that will benefit the at-risk species. There is also an option to query by county or large watershed. 
-Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore an area of your interest today! \\
-
-  \begin{center}
-   https://wildlifeactionmap.pa.gov
-  \end{center}
- 
- \noindent The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish and Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe. \\
- \\
-  %\end{flushleft}
-  \end{minipage}}
-\end{wrapfigure}
 
 \afterpage{\clearpage}
 
