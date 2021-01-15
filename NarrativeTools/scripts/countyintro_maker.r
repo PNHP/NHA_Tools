@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Allegheny"
+nameCounty <- "Westmoreland"
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
@@ -26,7 +26,7 @@ editor2title <- "Conservation Planning Manager"
 editor2email <- "ctracey@paconserve.org"
 editor2phone <- "412-586-2326"
 
-staffPNHP <- "JoAnn Albert, Charlie Eichelberger, Kierstin Carlson, Rocky Gleason, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman."
+staffPNHP <- "JoAnn Albert, Jaci Braund, Charlie Eichelberger, Kierstin Carlson, Mary Ann Furedi, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Natalie Virbitsky, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman"
 
 projectLead <- "Ryan Gordon"
 projectLeadOrg <- "Southwest Pennsylvania Commission"
