@@ -26,7 +26,7 @@ editor2title <- "Conservation Planning Manager"
 editor2email <- "ctracey@paconserve.org"
 editor2phone <- "412-586-2326"
 
-staffPNHP <- "JoAnn Albert, Jaci Braund, Charlie Eichelberger, Kierstin Carlson, Mary Ann Furedi, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Christopher Tracey, Natalie Virbitsky, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman"
+staffPNHP <- "JoAnn Albert, Jaci Braund, Charlie Eichelberger, Kierstin Carlson, Mary Ann Furedi, Steve Grund, Amy Jewitt, Anna Johnson, Susan Klugman, John Kunsman, Betsy Leppo, Jessica McPherson, Molly Moore, Ryan Miller, Greg Podniesinski, Megan Pulver, Erika Schoen, Scott Schuette, Emily Szoszorek, Kent Taylor, Christopher Tracey, Natalie Virbitsky, Jeff Wagner, Denise Watts, Joe Wisgo, Pete Woods, David Yeany, and Ephraim Zimmerman"
 
 projectLead <- "Ryan Gordon"
 projectLeadOrg <- "Southwest Pennsylvania Commission"
@@ -249,7 +249,7 @@ IntroPhotos <- dbGetQuery(db_nha, paste("SELECT * FROM IntroData_Photos WHERE na
 dbDisconnect(db_nha) 
 
 ##############################################################################################################
-## Write the output document for the site ###############
+## Write the output document for the intro ###############
 setwd(paste(NHAdest,"CountyIntros", nameCounty, sep="/")) #, "countyIntros", nameCounty, sep="/")
 pdf_filename <- paste(nameCounty,"_",YearUpdate,"_Intro",sep="") # ,gsub("[^0-9]", "", Sys.time() )
 makePDF("template_Formatted_Intro_PDF.rnw", pdf_filename) # user created function
