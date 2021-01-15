@@ -831,7 +831,7 @@ else if(t=="CGH"|t=="O"){
 @
 \end{longtable}
 
-All of the above species are mapped within an NHA, except for the following species:  \Sexpr{SUSN$SNAME}. Due to a combination of sensitivity issues, these species have created challenges for being incorporatedinto meaningful conservation planning products, namely Natural Heritage Areas
+\noindent All of the above species are mapped within an NHA, except for the following species:  \textit{\Sexpr{SUSN$SNAME}}. Due to a combination of sensitivity issues, these species have created challenges for being incorporated into meaningful conservation planning products, namely Natural Heritage Areas
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -1022,6 +1022,9 @@ Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore a
 
 \newpage
 \section{NATURAL HERITAGE AREA SITE ACCOUNTS}
+
+\noindent The following section presents the \Sexpr{nrow(nha_list)} Natural Heritage Areas (NHAs) in \Sexpr(nameCounty) included in this report. Updated NHA site accounts may be available, please contact PNHP for more details. 
+
 \begin{enumerate}
    <<label=nhalistappend, echo=FALSE, results='asis'>>=
    for(i in 1:nrow(nha_list)){
