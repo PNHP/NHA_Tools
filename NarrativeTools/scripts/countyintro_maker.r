@@ -251,7 +251,7 @@ dbDisconnect(db_nha)
 ##############################################################################################################
 ## Write the output document for the site ###############
 setwd(paste(NHAdest,"CountyIntros", nameCounty, sep="/")) #, "countyIntros", nameCounty, sep="/")
-pdf_filename <- paste(nameCounty,"_Intro",sep="") # ,gsub("[^0-9]", "", Sys.time() )
+pdf_filename <- paste(nameCounty,"_",YearUpdate,"_Intro",sep="") # ,gsub("[^0-9]", "", Sys.time() )
 makePDF("template_Formatted_Intro_PDF.rnw", pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
@@ -286,9 +286,8 @@ setwd(here::here())
 
 ###############
 # string all the NHI parts together
-
 f_Cover <- paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"Cover.pdf",sep="_"), sep="/")  
-f_Intro <- paste(NHAdest,"CountyIntros", nameCounty,paste(nameCounty,"_Intro.pdf",sep=""), sep="/")
+f_Intro <- paste(NHAdest,"CountyIntros", nameCounty,paste(nameCounty,"_",YearUpdate,"_Intro.pdf",sep=""), sep="/")
 f_NHA <- paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"NHAs","joined.pdf",sep="_"), sep="/")
 
 pdf_combine(c(f_Cover, f_Intro, f_NHA), output=paste(NHAdest,"CountyIntros", nameCounty, paste(nameCounty,"NHI.pdf",sep="_"), sep="/"))

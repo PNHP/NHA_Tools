@@ -1014,6 +1014,15 @@ Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore a
 
 \printbibliography[heading=none]
 
-
+\newpage
+\section{NATURAL HERITAGE AREA SITE ACCOUNTS}
+\begin{enumerate}
+   <<label=nhalistappend, echo=FALSE, results='asis'>>=
+   for(i in 1:nrow(nha_list)){
+     cat(paste("\\item{",nha_list$SITE_NAME,"} \\   ", sep=""))
+   }
+   @
+\end{enumerate}
+\afterpage{\clearpage}
 
 \end{document}
