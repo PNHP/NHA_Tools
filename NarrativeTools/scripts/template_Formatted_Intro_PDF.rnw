@@ -548,7 +548,7 @@ The spread of invasive species within the region presents a significant hurdle t
 %\centering
 \includegraphics[width=0.50\textwidth]{NHA_siteacct_Page_1.jpg}
  \caption{\textit{Example of an Natural Heritage Area site account.}}
- \label{fig:NHAact}
+ \label{fig:NHAacct}
 % \end{figure}
 \end{wrapfigure}
 \noindent For each NHA, we have developed a written account (Figure ~\ref{fig:NHAacct}) that describes the site, outlines conservation priorities, and recommends conservation actions for each NHA. Each site account includes lists the species tracked by PNHP documented at that site. This table includes the species common and scientific names. A species listed as a “Sensitive Species of Concern” is unnamed by request of the jurisdictional agency responsible for its protection, due to factors such as illegal collection, intentional destruction, or potential to be disturbed by people. Additional information noted in the table includes PNHP element ranks, State Status, quality rank and the last year this species was officially observed (see below). Conservation Rank information is also presented in tables for each NHA and a basic of overview of field values is presented below.\\
