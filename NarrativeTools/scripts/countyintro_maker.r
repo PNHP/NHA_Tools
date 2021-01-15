@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Fayette"
+nameCounty <- "Allegheny"
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"

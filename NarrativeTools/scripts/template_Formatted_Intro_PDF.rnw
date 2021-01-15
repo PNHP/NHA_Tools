@@ -259,7 +259,8 @@ if(any(IntroPhotos$photoType=="image_NatHist")){
   cat("\\end{wrapfigure} \n")
 } else {cat("")}
 @
-\noindent \Sexpr{NatHistOverview$NatHistOpeningPara} \\
+\noindent 
+\Sexpr{NatHistOverview$NatHistOpeningPara} \\
 
 \subsection{Land Cover}
 The 2016 NLCD land cover \parencite{dewitz_national_2019} for \Sexpr{nameCounty} County shows that the majority (\Sexpr{CountyNLCD16sumgroup$percent[1]})\%) is \Sexpr{tolower(CountyNLCD16sumgroup$group[1])} (Figure ~\ref{fig:Landcover}). \Sexpr{CountyNLCD16sumgroup$group[2]} is the next highest landcover category, making up approximately \Sexpr{CountyNLCD16sumgroup$percent[2]}\% of \Sexpr{nameCounty} County's land area. Although wetlands only make up a small percentage of the county's land area (\Sexpr{CountyNLCD16sumgroup[which(CountyNLCD16sumgroup$group=="Wetland"), "percent"]}\%), they are important for habitat and water quality.
@@ -999,7 +1000,7 @@ Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore a
    https://wildlifeactionmap.pa.gov
   \end{center}
  
- \noindent The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish & Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe. \\
+ \noindent The Wildlife Action Plan and COA Tool were developed and are administered by the Pennsylvania Fish and Boat Commission and Pennsylvania Game Commission, with technical support provided by the Pennsylvania Natural Heritage Program and NatureServe. \\
  \\
   %\end{flushleft}
   \end{minipage}}
@@ -1017,7 +1018,7 @@ Everyone can play a role in supporting Pennsylvania’s wild heritage. Explore a
 \begin{enumerate}
    <<label=nhalistappend, echo=FALSE, results='asis'>>=
    for(i in 1:nrow(nha_list)){
-     cat(paste("\\item{",nha_list$SITE_NAME,"} \\   ", sep=""))
+     cat(paste("\\item{",nha_list$SITE_NAME[i],"} \\   ", sep=""))
    }
    @
 \end{enumerate}
