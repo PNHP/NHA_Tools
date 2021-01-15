@@ -804,17 +804,19 @@ else if(t=="CGH"|t=="O"){
   }
   for(i in 1:nrow(speciestable)){
     if(speciestable$ELEMENT_TYPE[i] == t){
+      
+      symsens <- ifelse(speciestable$SENSITIVE[i]=="Y","*","")
       # check to see if the SNAME is the same as the SCOMNAME and if so, please drop the SNAME
       if(is.na(speciestable$SCOMNAME[i])){
-        speciesstring <- paste("no common name (\\textit{", speciestable$SNAME[i], "}) ", sep="")
+        speciesstring <- paste("no common name (\\textit{", speciestable$SNAME[i], "}) ",symsens, sep="")
       } else if(speciestable$SCOMNAME[i]==speciestable$SNAME[i]){
         speciesstring <- paste0(speciestable$SCOMNAME[i])
       } 
       else {
-        speciesstring <- paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ", sep="")
+        speciesstring <- paste(speciestable$SCOMNAME[i], " (\\textit{", speciestable$SNAME[i], "}) ",symsens, sep="")
         # split to two lines if its too long    
         if(nchar(speciesstring)>58) {
-           speciesstring <- paste0(speciestable$SCOMNAME[i],"\\\\ \\enspace (\\textit{",speciestable$SNAME[i],"}) ")
+           speciesstring <- paste0(speciestable$SCOMNAME[i],"\\\\ \\enspace (\\textit{",speciestable$SNAME[i],"}) ",symsens)
         } else {
            speciesstring <- speciesstring
         }
