@@ -17,6 +17,7 @@ nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "AND STATUS = 'NP'"))
+#selected_nha <- selected_nha %>% slice(2)
 
 # find the NHA word file template that we want to use
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.

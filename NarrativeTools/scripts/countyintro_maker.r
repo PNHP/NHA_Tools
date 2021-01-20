@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Westmoreland"
+nameCounty <- "Westmoreland" #Allegheny, Armstrong, Beaver, Butler, Fayette, Greene, Indiana, Lawrence, Washington,  
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
@@ -59,6 +59,9 @@ NHA_MapID <- arc.select(NHA_MapID, c("COUNTY_NAM","NHA_Join_ID","SITE_NAME","MAP
 colnames(NHA_MapID)[4] <- "MAP_ID1"
 nha_list <- merge(nha_list, NHA_MapID[c("NHA_Join_ID","MAP_ID1")], by.x="NHA_JOIN_ID", by.y="NHA_Join_ID")
 nha_list$MAP_ID <- nha_list$MAP_ID1
+
+# replace ampersand
+nha_list$SITE_NAME <- gsub("&", "\\\\&", nha_list$SITE_NAME)
 
 # make a list of the NHAs in the county extract add data!
 ListJoinID <- nha_list$NHA_JOIN_ID
