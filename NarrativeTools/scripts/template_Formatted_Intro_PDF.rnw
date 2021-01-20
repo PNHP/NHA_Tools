@@ -437,10 +437,8 @@ if(any(IntroPhotos$photoType=="image_NatCom")){
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Regional Disturbances}
-Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today. In general, natural communities will be more resilient to disturbances when landscape connectivity is high and communities are still relatively intact and unfragmented. This allows for disturbed communities to be recolonized by individuals from nearby undisturbed patches in the landscape. \\
-
 % % disturbance photo
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}{R}{0.5\textwidth}
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{AMDdischarge.jpg}
@@ -448,6 +446,8 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
  \label{fig:Disturbance}
 % \end{figure}
 \end{wrapfigure}
+\noindent Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today. In general, natural communities will be more resilient to disturbances when landscape connectivity is high and communities are still relatively intact and unfragmented. This allows for disturbed communities to be recolonized by individuals from nearby undisturbed patches in the landscape. \\
+
 \noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of a consistent history of human intervention. Another example of an ecosystem shaped by consistent disturbances are floodplain forests. The structure of these forest communities are the result of periodic scouring and deposition of sediments as streams overtop their banks, which facilitates species which are tolerant of these types of disturbance cycles, such as silver maple (\textit{Acer saccharinum}), sycamore (\textit{Platanus occidentalis}), or willows (\textit{Salix spp.}). In the absence of regular flooding, these floodplain communities would not be able to persist. \\
 
 \noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species  \parencite{latham_managing_2005}. Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct loss of rare plants \parencite{beguin_management_2016}. \\
