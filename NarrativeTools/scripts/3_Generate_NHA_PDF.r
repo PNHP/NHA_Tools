@@ -33,7 +33,7 @@ nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "AND STATUS = 'NP'"))
-
+#selected_nha <- selected_nha %>% slice(2)
 # Access SQL database to access nha site account data
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename)
 nha_data <- dbGetQuery(db_nha, paste("SELECT * from nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
@@ -259,3 +259,4 @@ if(FinalSwitch=="Final"){
 } else {
   cat("The draft of",dQuote(nha_name), "is complete!")
 }
+
