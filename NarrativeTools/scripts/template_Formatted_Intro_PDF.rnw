@@ -439,6 +439,7 @@ if(any(IntroPhotos$photoType=="image_NatCom")){
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Regional Disturbances}
+\noindent
 % % disturbance photo
 \begin{wrapfigure}{R}{0.5\textwidth}
 % \begin{figure}[h]

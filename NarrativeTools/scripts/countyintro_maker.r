@@ -14,7 +14,7 @@ rm(list = ls())
 source(here::here("scripts", "0_PathsAndSettings.r"))
 
 # Variables for the Intro!
-nameCounty <- "Lawrence" #Allegheny, Armstrong, Beaver, Butler, Fayette, Greene, Indiana, Lawrence, Washington,  
+nameCounty <- "Washington" #Allegheny, Armstrong, Beaver, Butler, Fayette, Greene, Indiana, Lawrence, Washington, Westmoreland 
 YearUpdate <- 2021
 
 editor1 <- "Anna Johnson"
