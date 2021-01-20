@@ -15,7 +15,8 @@
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
-%\usepackage[section]{placeins}
+\usepackage[section]{placeins}
+\usepackage{needspace}
 \usepackage{url}
 \urlstyle{same}
 %\usepackage{siunitx}
@@ -904,6 +905,7 @@ Rather than create NHA core habitats which are too large to meaningfully allow c
 <<label=SUSN, echo=FALSE, results='asis'>>=
 SUSN <- SUSN[order(SUSN$ELEMENT_TYPE, SUSN$SNAME),]
 for(i in 1:nrow(SUSN)){
+  cat(paste("\\Needspace{20\\baselineskip}"))
   cat(paste("\\subsubsection{ \\textbf{",SUSN$SCOMNAME[i], " (\\textit{", SUSN$SNAME[i],"})} } \\\\ ", sep=""))
   cat("\\noindent")
   cat("\\begin{wrapfigure}{rR}{0.5\\textwidth}")
@@ -913,6 +915,7 @@ for(i in 1:nrow(SUSN)){
   cat("\\end{wrapfigure}")
   cat(paste("\\noindent ", SUSN$Description[i], " \\\\ ", sep=""))
   cat(paste("\\noindent ", SUSN$ThreatRec[i], " \\\\ ", sep=""))
+  #cat("\\smallskip ")
   cat("\\smallskip ")
 }
 @
