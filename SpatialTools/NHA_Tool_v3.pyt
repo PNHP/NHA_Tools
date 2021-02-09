@@ -689,8 +689,7 @@ class NHAExport(object):
                 nha_ids = sorted({row[0] for row in cursor if row[0] is not None and (row[1] == 'NP' or row[1] == 'C')})
 
         #construct where query for feature set load statements
-        nha_expression = "NHA_JOIN_ID IN ('{0}')".format("','".format(nha_ids))
-        #nha_expression = "NHA_JOIN_ID IN ({0})".format(','.join("'{0}'".format(id) for id in nha_ids))
+        nha_expression = "NHA_JOIN_ID IN ({0})".format(','.join("'{0}'".format(id) for id in nha_ids))
 
         #load qualifying core NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying Selected NHA Cores")
