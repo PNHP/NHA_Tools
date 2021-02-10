@@ -659,13 +659,21 @@ class NHAExport(object):
         nha_query = params[2].valueAsText
         sensitive_species = params[3].valueAsText
 
-        #establish rest endpoint urls
-        eo_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/Biotics/FeatureServer/0'
-        nha_core_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/0'
-        nha_supporting_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/1'
-        political_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/2'
-        protected_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
-        species_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/4'
+##        #establish rest endpoint urls
+##        eo_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/Biotics/FeatureServer/0'
+##        nha_core_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/0'
+##        nha_supporting_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/1'
+##        political_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/2'
+##        protected_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
+##        species_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/4'
+
+        username = getuser().lower()
+        eo_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.Biotics\\PNHP.DBO.eo_ptreps'
+        nha_core_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Core'
+        nha_supporting_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Supporting'
+        political_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_PoliticalBoundaries'
+        protected_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_ProtectedLands'
+        species_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_SpeciesTable'
 
         #check for selection. error out if no selection is made.
         desc = arcpy.Describe(nha_core)
@@ -693,31 +701,35 @@ class NHAExport(object):
 
         #load qualifying core NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying Selected NHA Cores")
-        nha_core_fs = arcpy.FeatureSet()
-        nha_core_fs.load(nha_core_url,nha_expression)
-        nha_core_fs.save(os.path.join(output_gdb+".gdb","NHA_Core"))
+        arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression)
 
         #load qualifying supporting NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying NHA Supporting")
-        nha_supporting_fs = arcpy.FeatureSet()
-        nha_supporting_fs.load(nha_supporting_url,nha_expression)
-        nha_supporting_fs.save(os.path.join(output_gdb+".gdb","NHA_Supporting"))
+        arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression)
+
+##        nha_supporting_fs = arcpy.FeatureSet()
+##        nha_supporting_fs.load(nha_supporting_url,nha_expression)
+##        nha_supporting_fs.save(os.path.join(output_gdb+".gdb","NHA_Supporting"))
         #create relationship class between nha core and nha supporting feature classes
         arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","NHA_Supporting"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Supporting"),"SIMPLE","Core_TO_Supporting","Supporting_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
 
         #load qualifying political boundary records and save to output gdb
         arcpy.AddMessage("Copying Political Boundaries Table")
-        political_fs = arcpy.RecordSet()
-        political_fs.load(political_url,nha_expression)
-        political_fs.save(os.path.join(output_gdb+".gdb","PoliticalBoundaries"))
+        arcpy.TableToTable_conversion(political_url,output_gdb+".gdb","PoliticalBoundaries",nha_expression)
+
+##        political_fs = arcpy.RecordSet()
+##        political_fs.load(political_url,nha_expression)
+##        political_fs.save(os.path.join(output_gdb+".gdb","PoliticalBoundaries"))
         #create relationship class between nha core and political boundaries table
         arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","PoliticalBoundaries"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Political"),"SIMPLE","Core_TO_Political","Political_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
 
         #load qualifying protected lands records and save to output gdb
         arcpy.AddMessage("Copying Protected Lands Table")
-        protected_fs = arcpy.RecordSet()
-        protected_fs.load(protected_url,nha_expression)
-        protected_fs.save(os.path.join(output_gdb+".gdb","ProtectedLands"))
+        arcpy.TableToTable_conversion(protected_url,output_gdb+".gdb","ProtectedLands",nha_expression)
+
+##        protected_fs = arcpy.RecordSet()
+##        protected_fs.load(protected_url,nha_expression)
+##        protected_fs.save(os.path.join(output_gdb+".gdb","ProtectedLands"))
         #create relationship class between nha core and protected lands table
         arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","ProtectedLands"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Protected"),"SIMPLE","Core_TO_Protected","Protected_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
 
@@ -728,9 +740,11 @@ class NHAExport(object):
         else:
             #load qualifying species table records and save to output gdb
             arcpy.AddMessage("Copying Species Table")
-            species_fs = arcpy.RecordSet()
-            species_fs.load(species_url,nha_expression)
-            species_fs.save(os.path.join(output_gdb+".gdb","SpeciesTable"))
+            arcpy.TableToTable_conversion(species_url,output_gdb+".gdb","SpeciesTable",nha_expression)
+
+##            species_fs = arcpy.RecordSet()
+##            species_fs.load(species_url,nha_expression)
+##            species_fs.save(os.path.join(output_gdb+".gdb","SpeciesTable"))
             #create relationship class between nha core and species table
             arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","SpeciesTable"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Species"),"SIMPLE","Core_TO_Species","Species_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
 
@@ -758,24 +772,24 @@ class NHAExport(object):
             else:
                 arcpy.AddMessage("You have chosen not to mask sensitive species")
 
-        arcpy.AddMessage("Creating and assigning domains")
-        #create significance rank domain and assign to sig rank field
-        arcpy.CreateDomain_management(output_gdb+".gdb","SIG_RANK_1","Significance rank","TEXT","CODED")
-        sig_rank_dict = {"G":"Global", "R":"Regional", "S":"State", "L":"Local"}
-        for code in sig_rank_dict:
-            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","SIG_RANK_1",code,sig_rank_dict[code])
-        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"SIG_RANK","SIG_RANK_1")
-
-        #create status domain and assign to status field
-        arcpy.CreateDomain_management(output_gdb+".gdb","NHA_STATUS","NHA completion status","TEXT","CODED")
-        status_dict = {"D":"Draft", "NR":"Completed - Needs Review", "NP":"Completed - Not Published", "C":"Current", "RN":"Revision Needed", "H":"Historic"}
-        for code in status_dict:
-            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","NHA_STATUS",code,status_dict[code])
-        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"STATUS","NHA_STATUS")
-
-        #create element type domain and assign to element type field
-        arcpy.CreateDomain_management(output_gdb+".gdb","ELEM_TYPE","Element type","TEXT","CODED")
-        elem_dict = {"AAAA":"Salamander", "AAAB":"Frog", "AB":"Bird", "AF":"Fish", "AM":"Mammal", "AR":"Reptile", "CGH":"Community", "I":"Invertebrate - Other", "ICMAL":"Invertebrate - Crayfishes", "IICOL":"Invertebrate - Other Beetles", "IICOL02":"Invertebrate - Tiger Beetles", "IIEPH":"Invertebrate - Mayflies", "IIHYM":"Invertebrate - Bees", "IILEP":"Invertebrate - Butterflies and Skippers", "IILEY":"Invertebrate - Moths", "IIODO":"Invertebrate - Dragonflies and Damselflies", "IIORT":"Invertebrate - Grasshoppers", "IIPLE": "Invertebrate - Stoneflies", "IITRI":"Invertebrate - Caddisflies", "ILARA":"Invertebrate - Spiders", "IMBIV":"Invertebrate - Mussels", "IMGAS":"Invertebrate - Gastropods", "IZSPN":"Invertebrate - Sponges", "N":"Nonvascular Plants", "O":"Other", "P":"Vascular Plants"}
-        for code in elem_dict:
-            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","ELEM_TYPE",code,elem_dict[code])
-        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","SpeciesTable"),"ELEMENT_TYPE","ELEM_TYPE")
+##        arcpy.AddMessage("Creating and assigning domains")
+##        #create significance rank domain and assign to sig rank field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","SIG_RANK_1","Significance rank","TEXT","CODED")
+##        sig_rank_dict = {"G":"Global", "R":"Regional", "S":"State", "L":"Local"}
+##        for code in sig_rank_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","SIG_RANK_1",code,sig_rank_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"SIG_RANK","SIG_RANK_1")
+##
+##        #create status domain and assign to status field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","NHA_STATUS","NHA completion status","TEXT","CODED")
+##        status_dict = {"D":"Draft", "NR":"Completed - Needs Review", "NP":"Completed - Not Published", "C":"Current", "RN":"Revision Needed", "H":"Historic"}
+##        for code in status_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","NHA_STATUS",code,status_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"STATUS","NHA_STATUS")
+##
+##        #create element type domain and assign to element type field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","ELEM_TYPE","Element type","TEXT","CODED")
+##        elem_dict = {"AAAA":"Salamander", "AAAB":"Frog", "AB":"Bird", "AF":"Fish", "AM":"Mammal", "AR":"Reptile", "CGH":"Community", "I":"Invertebrate - Other", "ICMAL":"Invertebrate - Crayfishes", "IICOL":"Invertebrate - Other Beetles", "IICOL02":"Invertebrate - Tiger Beetles", "IIEPH":"Invertebrate - Mayflies", "IIHYM":"Invertebrate - Bees", "IILEP":"Invertebrate - Butterflies and Skippers", "IILEY":"Invertebrate - Moths", "IIODO":"Invertebrate - Dragonflies and Damselflies", "IIORT":"Invertebrate - Grasshoppers", "IIPLE": "Invertebrate - Stoneflies", "IITRI":"Invertebrate - Caddisflies", "ILARA":"Invertebrate - Spiders", "IMBIV":"Invertebrate - Mussels", "IMGAS":"Invertebrate - Gastropods", "IZSPN":"Invertebrate - Sponges", "N":"Nonvascular Plants", "O":"Other", "P":"Vascular Plants"}
+##        for code in elem_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","ELEM_TYPE",code,elem_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","SpeciesTable"),"ELEMENT_TYPE","ELEM_TYPE")
