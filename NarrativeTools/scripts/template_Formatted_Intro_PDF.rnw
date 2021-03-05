@@ -345,7 +345,7 @@ cat("\\end{itemize}")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \subsection{Watersheds}
-\noindent A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. As you move downstream in a watershed, tThese pathways converge into streams and rivers, which become progressively larger, eventually reaching the oceans.  % an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay.
+\noindent A watershed is defined by the local topography, which dictates which path water will take as it flows towards the lowest point in an area. The water moves through a network of drainage pathways, both underground and on the surface. As you move downstream in a watershed, these pathways converge into streams and rivers, which become progressively larger, eventually reaching the oceans.  % an estuary where the Susquehanna and Potomac rivers reach the Chesapeake Bay.
 Every stream, tributary, and river has an associated watershed, with small watersheds merging to become larger watersheds. Watersheds can be classified at large scales, like that of the \Sexpr{WatershedsExamples$WatershedLarge}, or smaller scales, like that of \Sexpr{WatershedsExamples$WatershedSmall}, but all land is part of a watershed. % Susquehanna Raystown Branch of the Juniata River
 <<label=watershedoverview, echo=FALSE, results='asis'>>=
 
