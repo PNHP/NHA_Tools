@@ -701,11 +701,30 @@ class NHAExport(object):
 
         #load qualifying core NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying Selected NHA Cores")
-        arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression)
+
+        #use fieldmap to remove unwanted fields
+        fieldmappings = arcpy.FieldMappings()
+        #Add all fields from inputs.
+        fieldmappings.addTable(nha_core_url)
+        # Name fields you want to delete.
+        losers = ["ARCHIVE_DATE", "ARCHIVE_REASON", "created_date","created_user","last_edited_date","last_edited_user","MAP_ID","NOTES","OLD_SITE_NAME","STATUS","SOURCE_REPORT","PROJECT","BLUEPRINT"] # etc.
+        #Remove all output fields you don't want.
+        for field in fieldmappings.fields:
+            if field.name in losers:
+                fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
+
+        arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
 
         #load qualifying supporting NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying NHA Supporting")
-        arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression)
+        #use fieldmap to remove unwanted fields
+        fieldmappings = arcpy.FieldMappings()
+        fieldmappings.addTable(nha_supporting_url)
+        for field in fieldmappings.fields:
+            if field.name in losers:
+                fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
+
+        arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression,fieldmappings)
 
 ##        nha_supporting_fs = arcpy.FeatureSet()
 ##        nha_supporting_fs.load(nha_supporting_url,nha_expression)
