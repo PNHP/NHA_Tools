@@ -21,18 +21,19 @@
 #source(here::here("scripts","0_PathsAndSettings.r"))
 
 # Pull in the selected NHA data ################################################
-nha_name <- LauncherNHA #"" # "Linbrook Woodlands Conservation Area"
+nha_name <- LauncherNHA
+nha_name <- gsub("'", "''", nha_name)
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_name <- gsub("''", "'", nha_name)
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
 nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
-
 
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "AND STATUS = 'NP'"))
-
+#selected_nha <- selected_nha %>% slice(2)
 # Access SQL database to access nha site account data
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename)
 nha_data <- dbGetQuery(db_nha, paste("SELECT * from nha_siteaccount WHERE NHA_JOIN_ID = ", sQuote(selected_nha$NHA_JOIN_ID), sep=""))
@@ -98,6 +99,8 @@ speciestable <- speciestable[c("EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","EL
 # replace missing values with NA
 speciestable$EORANK[is.na(speciestable$EORANK)] <- "E"
 
+# replace certain species names
+speciestable[which(speciestable$SNAME=="Carex shortiana"),"SCOMNAME"] <- "Short's sedge"
 
 # merge the species table with the taxonomic icons
 speciestable <- merge(speciestable, taxaicon, by="ELEMENT_TYPE")
@@ -118,6 +121,9 @@ speciestable <- speciestable %>% distinct(SNAME, LASTOBS_YR, .keep_all= TRUE)
 speciestable <- speciestable %>% group_by(SNAME) %>% slice_min(EORANK)
 speciestable <- speciestable %>%  group_by(SNAME) %>%  slice_max(LASTOBS_YR)
 
+# manually change the sensitivity if the the EO is sensitive
+speciestable[which(speciestable$SENSITIVE=="N" & speciestable$SENSITIVE_EO=="Y"),"SENSITIVE"] <- "Y"
+
 # create paragraph about species ranks
 db_nha <- dbConnect(SQLite(), dbname=TRdatabasename)
 
@@ -134,6 +140,9 @@ if(a>0){
 spCount_GSecure <- ifelse(length(a)==0, 0, a)
 spCount_GSecureSens <- ifelse(any(((granklist$GRANK_rounded=="G4"|granklist$GRANK_rounded=="G5"|granklist$GRANK_rounded=="GNR"|granklist$GRANK_rounded=="GNA")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
+
+# G3G4 but has state significance
+
 
 # vulnerable species
 a <- nrow(granklist[which((granklist$GRANK_rounded=="G3")&granklist$SENSITIVE!="Y"),])
@@ -153,8 +162,6 @@ spCount_GImperiled <- ifelse(length(a)==0, 0, a)
 spCount_GImperiledSens <- ifelse(any(((granklist$GRANK_rounded=="G2"|granklist$GRANK_rounded=="G1")&granklist$SENSITIVE=="Y")), "yes", "no")
 rm(a)
 
-
-  
 rm(granklist, rounded_srank, rounded_grank)
 
 # threats
@@ -168,18 +175,30 @@ db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_photos <- dbGetQuery(db_nha, paste("SELECT * FROM nha_photos WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
 dbDisconnect(db_nha)
 
-#site rank
-db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
-nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
-dbDisconnect(db_nha)
+# #site rank
+# db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
+# nha_siterank <- dbGetQuery(db_nha, paste("SELECT site_score FROM nha_runrecord WHERE NHA_JOIN_ID = " , sQuote(nha_data$NHA_JOIN_ID), sep="") )
+# dbDisconnect(db_nha)
+
+nha_siterank <- NA
+if(selected_nha$SIG_RANK=="G"){
+  nha_siterank <- "Global"
+} else if(selected_nha$SIG_RANK=="R"){
+  nha_siterank <- "Regional"
+} else if(selected_nha$SIG_RANK=="S"){
+  nha_siterank <- "State"
+} else if(selected_nha$SIG_RANK=="L"){
+  nha_siterank <- "Local"
+} else {
+  nha_siterank <- NA
+}
 
 # sources and funding
 db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
 nha_Sources <- dbGetQuery(db_nha, paste("SELECT * FROM nha_SourcesFunding WHERE SOURCE_REPORT = " , sQuote(selected_nha$SOURCE_REPORT), sep="") )
 dbDisconnect(db_nha)
 
-
-
+###############################################################
 ## format various blocks of text to be formatted in terms of italics and bold font : Note that  Etitalics vector is now loaded in paths and settings
 # italicize all SNAMEs in the descriptive text. 
 for(j in 1:length(ETitalics)){
@@ -207,6 +226,9 @@ if(!is.na(nha_photos$P3C)) {
   print("No Photo 3 caption, moving on...")
 }
 
+# replace apostrophes in the description paragraph
+nha_data$Description <- str_replace_all(nha_data$Description, c("â€™"="'"))
+
 # bold tracked species names
 namesbold <- speciestable$SCOMNAME
 namesbold <- namesbold[!is.na(namesbold)]
@@ -230,4 +252,11 @@ pdf_filename <- paste(nha_foldername,"_",gsub("[^0-9]", "", Sys.time() ),sep="")
 makePDF(rnw_template, pdf_filename) # user created function
 deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
 setwd(here::here()) # return to the main wd
+if(FinalSwitch=="Final"){
+  file.copy(from=paste(NHAdest, "DraftSiteAccounts", nha_foldername, paste0(pdf_filename, ".pdf"), sep="/"), to=paste(NHAdest, "FinalSiteAccounts", paste0(pdf_filename, ".pdf"), sep="/"), overwrite = TRUE, recursive = FALSE, copy.mode = TRUE)
+  cat("The final pdf of", dQuote(nha_name), "is complete and moved the Final NHA directory!")
+  beepr::beep(sound=10, expr=NULL)
+} else {
+  cat("The draft of",dQuote(nha_name), "is complete!")
+}
 

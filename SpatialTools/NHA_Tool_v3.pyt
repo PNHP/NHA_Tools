@@ -15,6 +15,7 @@ import sqlite3 as lite
 import pandas as pd
 
 arcpy.env.overwriteOutput = True
+arcpy.env.transferDomains = True
 
 ######################################################################################################################################################
 ## Define universal variables and functions
@@ -103,7 +104,7 @@ class Toolbox(object):
         self.label = "NHA Tools v3"
         self.alias = "NHA Tools v3"
         self.canRunInBackground = False
-        self.tools = [CreateNHAv3,FillAttributes,SiteRankFill]
+        self.tools = [CreateNHAv3,FillAttributes,SiteRankFill,NHAExport]
 
 ######################################################################################################################################################
 ## Begin create NHA tool - this tool creates the core and supporting NHAs and fills their initial attributes
@@ -205,7 +206,6 @@ class CreateNHAv3(object):
         nha_core = r'NHAEdit\NHA Core Habitat'
         nha_supporting = r'NHAEdit\NHA Supporting Landscape'
         spec_tbl = r'PNHP.DBO.NHA_SpeciesTable'
-
 
         eo_reps = r'W:\\Heritage\\Heritage_Data\\Biotics_datasets.gdb\\eo_reps'
 
@@ -414,10 +414,6 @@ class FillAttributes(object):
         prot_lands_tbl = r'PNHP.DBO.NHA_ProtectedLands'
         boundaries_tbl = r'PNHP.DBO.NHA_PoliticalBoundaries'
 
-##        boundaries_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_PoliticalBoundaries"
-##        prot_lands_tbl = r"H:\\Projects\\NHA\\_NHA_Updates_2019_12_05\\NHA.gdb\\NHA_ProtectedLands"
-
-
         # check for selection on nha core layer and exit if there is no selection
         desc = arcpy.Describe(nha_core)
         if not desc.FIDSet == '':
@@ -558,21 +554,23 @@ class SiteRankFill(object):
 
     def execute(self, params, messages):
         nha_core = params[0].valueAsText
+
+        #sqlite database path
         db = r'P:\Conservation Programs\Natural Heritage Program\ConservationPlanning\NaturalHeritageAreas\_NHA\z_Databases\NaturalHeritageAreas.sqlite'
-
+        #connect to sqlite db
         con = lite.connect(db)
-
+        #open cursor in sqlite db
         with con:
             cur = con.cursor()
-
-        dictionary = {}
+        #create dataframe from sqlite data
         query = 'SELECT NHA_JOIN_ID,site_score,date_run FROM nha_runrecord ORDER BY NHA_JOIN_ID ASC;'
         df = pd.read_sql(query,con)
-
+        #drop duplicate site runs based on the most recent
         df = df.sort_values('date_run').drop_duplicates(subset='NHA_JOIN_ID',keep='last')
-
+        #create and fill dictionary with nha_join_id and site_score
+        dictionary = {}
         dictionary = df.set_index('NHA_JOIN_ID')['site_score'].to_dict()
-
+        #use dictionary to fill sig_rank in NHA core layer
         with arcpy.da.UpdateCursor(nha_core,["NHA_JOIN_ID","SIG_RANK"]) as cursor:
             for row in cursor:
                 for k,v in dictionary.items():
@@ -593,3 +591,224 @@ class SiteRankFill(object):
                             pass
                     else:
                         pass
+
+######################################################################################################################################################
+######################################################################################################################################################
+
+######################################################################################################################################################
+## NHA Export Tool
+######################################################################################################################################################
+
+class NHAExport(object):
+    def __init__(self):
+        """Define the tool (tool name is the name of the class)."""
+        self.label = "Export NHAs to File Geodatabase"
+        self.description = ""
+        self.canRunInBackground = False
+        self.category = "NHA Export Tools"
+
+    def getParameterInfo(self):
+        nha_core = arcpy.Parameter(
+            displayName = "Selected NHA Core Layer",
+            name = "nha_core",
+            datatype = "GPFeatureLayer",
+            parameterType = "Required",
+            direction = "Input")
+        nha_core.value = r'NHAEdit\NHA Core Habitat'
+
+        output_gdb = arcpy.Parameter(
+            displayName = "Export File Geodatabase Location and Name",
+            name = "output_gdb",
+            datatype = "DEWorkspace",
+            parameterType = "Required",
+            direction = "Output")
+
+        nha_query = arcpy.Parameter(
+            displayName = "What NHA statuses would you like to include in export?",
+            name = "nha_query",
+            datatype = "GPString",
+            parameterType = "Required",
+            direction = "Input")
+        nha_query.filter.list = ["Only Current NHAs","Only Completed - Not Published NHAs","All Current or Completed - Not Published NHAs"]
+        nha_query.value = "All Current or Completed - Not Published NHAs"
+
+        sensitive_species = arcpy.Parameter(
+            displayName = "What do you want to do with sensitive species?",
+            name = "sensitive_species",
+            datatype = "GPString",
+            parameterType = "Required",
+            direction = "Input")
+        sensitive_species.filter.list = ["Include sensitive species in species table","Mask sensitive species in species table","Exclude species table from export"]
+        sensitive_species.value = "Include sensitive species in species table"
+
+        params = [nha_core,output_gdb,nha_query,sensitive_species]
+        return params
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, params):
+        return
+
+    def updateMessages(self, params):
+        return
+
+    def execute(self, params, messages):
+        nha_core = params[0].valueAsText
+        output_gdb = params[1].valueAsText
+        nha_query = params[2].valueAsText
+        sensitive_species = params[3].valueAsText
+
+##        #establish rest endpoint urls
+##        eo_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/Biotics/FeatureServer/0'
+##        nha_core_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/0'
+##        nha_supporting_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/1'
+##        political_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/2'
+##        protected_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
+##        species_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/4'
+
+        username = getuser().lower()
+        eo_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.Biotics\\PNHP.DBO.eo_ptreps'
+        nha_core_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Core'
+        nha_supporting_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Supporting'
+        political_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_PoliticalBoundaries'
+        protected_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_ProtectedLands'
+        species_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_SpeciesTable'
+
+        #check for selection. error out if no selection is made.
+        desc = arcpy.Describe(nha_core)
+        if not desc.FIDSet == '':
+            pass
+        else:
+            arcpy.AddWarning("No NHA Cores are selected. Please make a selection and try again.")
+            sys.exit()
+
+        #create empty database
+        arcpy.AddMessage("Creating Database")
+        gdb = arcpy.CreateFileGDB_management(os.path.dirname(output_gdb),os.path.basename(output_gdb)+".gdb")
+
+        #create list of qualifying NHA_JOIN_IDs to be exported in selection based on selection of current or completed not published
+        with arcpy.da.SearchCursor(nha_core,["NHA_JOIN_ID","STATUS"]) as cursor:
+            if nha_query == "Only Current NHAs":
+                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and row[1] == 'C'})
+            elif nha_query == "Only Completed - Not Published NHAs":
+                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and row[1] == 'NP'})
+            else:
+                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and (row[1] == 'NP' or row[1] == 'C')})
+
+        #construct where query for feature set load statements
+        nha_expression = "NHA_JOIN_ID IN ({0})".format(','.join("'{0}'".format(id) for id in nha_ids))
+
+        #load qualifying core NHAs to feature set and save in output file gdb
+        arcpy.AddMessage("Copying Selected NHA Cores")
+
+        #use fieldmap to remove unwanted fields
+        fieldmappings = arcpy.FieldMappings()
+        #Add all fields from inputs.
+        fieldmappings.addTable(nha_core_url)
+        # Name fields you want to delete.
+        losers = ["ARCHIVE_DATE", "ARCHIVE_REASON", "created_date","created_user","last_edited_date","last_edited_user","MAP_ID","NOTES","OLD_SITE_NAME","STATUS","SOURCE_REPORT","PROJECT","BLUEPRINT"] # etc.
+        #Remove all output fields you don't want.
+        for field in fieldmappings.fields:
+            if field.name in losers:
+                fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
+
+        arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
+
+        #load qualifying supporting NHAs to feature set and save in output file gdb
+        arcpy.AddMessage("Copying NHA Supporting")
+        #use fieldmap to remove unwanted fields
+        fieldmappings = arcpy.FieldMappings()
+        fieldmappings.addTable(nha_supporting_url)
+        for field in fieldmappings.fields:
+            if field.name in losers:
+                fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
+
+        arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression,fieldmappings)
+
+##        nha_supporting_fs = arcpy.FeatureSet()
+##        nha_supporting_fs.load(nha_supporting_url,nha_expression)
+##        nha_supporting_fs.save(os.path.join(output_gdb+".gdb","NHA_Supporting"))
+        #create relationship class between nha core and nha supporting feature classes
+        arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","NHA_Supporting"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Supporting"),"SIMPLE","Core_TO_Supporting","Supporting_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
+
+        #load qualifying political boundary records and save to output gdb
+        arcpy.AddMessage("Copying Political Boundaries Table")
+        arcpy.TableToTable_conversion(political_url,output_gdb+".gdb","PoliticalBoundaries",nha_expression)
+
+##        political_fs = arcpy.RecordSet()
+##        political_fs.load(political_url,nha_expression)
+##        political_fs.save(os.path.join(output_gdb+".gdb","PoliticalBoundaries"))
+        #create relationship class between nha core and political boundaries table
+        arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","PoliticalBoundaries"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Political"),"SIMPLE","Core_TO_Political","Political_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
+
+        #load qualifying protected lands records and save to output gdb
+        arcpy.AddMessage("Copying Protected Lands Table")
+        arcpy.TableToTable_conversion(protected_url,output_gdb+".gdb","ProtectedLands",nha_expression)
+
+##        protected_fs = arcpy.RecordSet()
+##        protected_fs.load(protected_url,nha_expression)
+##        protected_fs.save(os.path.join(output_gdb+".gdb","ProtectedLands"))
+        #create relationship class between nha core and protected lands table
+        arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","ProtectedLands"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Protected"),"SIMPLE","Core_TO_Protected","Protected_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
+
+        #check if species table should be copied
+        if sensitive_species == "Exclude species table from export":
+            arcpy.AddMessage("You have chosen not to include the species table in your export")
+            pass
+        else:
+            #load qualifying species table records and save to output gdb
+            arcpy.AddMessage("Copying Species Table")
+            arcpy.TableToTable_conversion(species_url,output_gdb+".gdb","SpeciesTable",nha_expression)
+
+##            species_fs = arcpy.RecordSet()
+##            species_fs.load(species_url,nha_expression)
+##            species_fs.save(os.path.join(output_gdb+".gdb","SpeciesTable"))
+            #create relationship class between nha core and species table
+            arcpy.CreateRelationshipClass_management(os.path.join(output_gdb+".gdb","NHA_Core"),os.path.join(output_gdb+".gdb","SpeciesTable"),os.path.join(output_gdb+".gdb","NHA_Core_TO_Species"),"SIMPLE","Core_TO_Species","Species_TO_Core","NONE","ONE_TO_MANY","NONE","NHA_JOIN_ID","NHA_JOIN_ID")
+
+            #check if sensitive species should be masked
+            if sensitive_species == "Mask sensitive species in species table":
+                #load eo_ptreps into feature set
+                eo_ptreps = arcpy.FeatureSet()
+                eo_ptreps.load(eo_url)
+                #create list of sensitive species and sensitive eos
+                with arcpy.da.SearchCursor(eo_ptreps,["EO_ID","SENSITV_SP","SENSITV_EO"]) as cursor:
+                    sensitive_eos = sorted({row[0] for row in cursor if row[1]=="Y" or row[2]=="Y"})
+                #edit sensitive species records to scrub identifying info
+                with arcpy.da.UpdateCursor(os.path.join(output_gdb+".gdb","SpeciesTable"),["EO_ID","ELCODE","ELSUBID","SNAME","SCOMNAME","ELEMENT_TYPE"]) as cursor:
+                    for row in cursor:
+                        if row[0] in sensitive_eos:
+                            row[0] = None
+                            row[1] = None
+                            row[2] = None
+                            row[3] = "SENSITIVE SPECIES"
+                            row[4] = "SENSITIVE SPECIES"
+                            row[5] = None
+                            cursor.updateRow(row)
+                        else:
+                            pass
+            else:
+                arcpy.AddMessage("You have chosen not to mask sensitive species")
+
+##        arcpy.AddMessage("Creating and assigning domains")
+##        #create significance rank domain and assign to sig rank field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","SIG_RANK_1","Significance rank","TEXT","CODED")
+##        sig_rank_dict = {"G":"Global", "R":"Regional", "S":"State", "L":"Local"}
+##        for code in sig_rank_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","SIG_RANK_1",code,sig_rank_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"SIG_RANK","SIG_RANK_1")
+##
+##        #create status domain and assign to status field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","NHA_STATUS","NHA completion status","TEXT","CODED")
+##        status_dict = {"D":"Draft", "NR":"Completed - Needs Review", "NP":"Completed - Not Published", "C":"Current", "RN":"Revision Needed", "H":"Historic"}
+##        for code in status_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","NHA_STATUS",code,status_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","NHA_Core"),"STATUS","NHA_STATUS")
+##
+##        #create element type domain and assign to element type field
+##        arcpy.CreateDomain_management(output_gdb+".gdb","ELEM_TYPE","Element type","TEXT","CODED")
+##        elem_dict = {"AAAA":"Salamander", "AAAB":"Frog", "AB":"Bird", "AF":"Fish", "AM":"Mammal", "AR":"Reptile", "CGH":"Community", "I":"Invertebrate - Other", "ICMAL":"Invertebrate - Crayfishes", "IICOL":"Invertebrate - Other Beetles", "IICOL02":"Invertebrate - Tiger Beetles", "IIEPH":"Invertebrate - Mayflies", "IIHYM":"Invertebrate - Bees", "IILEP":"Invertebrate - Butterflies and Skippers", "IILEY":"Invertebrate - Moths", "IIODO":"Invertebrate - Dragonflies and Damselflies", "IIORT":"Invertebrate - Grasshoppers", "IIPLE": "Invertebrate - Stoneflies", "IITRI":"Invertebrate - Caddisflies", "ILARA":"Invertebrate - Spiders", "IMBIV":"Invertebrate - Mussels", "IMGAS":"Invertebrate - Gastropods", "IZSPN":"Invertebrate - Sponges", "N":"Nonvascular Plants", "O":"Other", "P":"Vascular Plants"}
+##        for code in elem_dict:
+##            arcpy.AddCodedValueToDomain_management(output_gdb+".gdb","ELEM_TYPE",code,elem_dict[code])
+##        arcpy.AssignDomainToField_management(os.path.join(output_gdb+".gdb","SpeciesTable"),"ELEMENT_TYPE","ELEM_TYPE")

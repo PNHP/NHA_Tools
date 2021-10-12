@@ -33,8 +33,6 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) install.packages("rmarkdown"
 require(rmarkdown)
 if (!requireNamespace("tmap", quietly = TRUE)) install.packages("tmap")
 require(tmap)
-#if (!requireNamespace("OpenStreetMap", quietly = TRUE)) install.packages("OpenStreetMap")
-#require(OpenStreetMap)
 if (!requireNamespace("openxlsx", quietly = TRUE)) install.packages("openxlsx")
 require(openxlsx)
 if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
@@ -71,6 +69,7 @@ NHA_path <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlann
 nha_databasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 nha_databasename <- "NaturalHeritageAreas.sqlite" 
 nha_databasename <- paste(nha_databasepath,nha_databasename,sep="/")
+
 # threat recc database name
 TRdatabasepath <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanning/NaturalHeritageAreas/_NHA/z_Databases"
 TRdatabasename <- "nha_recs.sqlite" 
@@ -93,7 +92,7 @@ NHAdest <- "P:/Conservation Programs/Natural Heritage Program/ConservationPlanni
 rnw_template <- "template_Formatted_NHA_PDF.rnw"
 
 # taxaicon lookup
-taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png"), c("AAAA","AAAB","ILARA","AB","IILEP","IITRI","CGH","","","AF","","AM","","IILEY","IMBIV","IIODO","","P","","IMGAS","IZSPN","IICOL02","AR"), stringsAsFactors = FALSE)
+taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Crustacean.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png","OtherInverts.png","Communities.png"), c("AA","AAAA","AAAB","ILARA","AB","IILEP","IITRI","CGH","","ICMAL","","AF","","AM","","IILEY","IMBIV","IIODO","IICOL","P","","IMGAS","IZSPN","IICOL02","AR","IIPLE","O"), stringsAsFactors = FALSE)
 names(taxaicon) <- c("icon","ELEMENT_TYPE")
 
 # urls for the template
@@ -124,6 +123,7 @@ foldername <- function(x){
   nha_foldername <- gsub(" ", "", nha_name, fixed=TRUE)
   nha_foldername <- gsub("#", "", nha_foldername, fixed=TRUE)
   nha_foldername <- gsub("''", "", nha_foldername, fixed=TRUE)
+  nha_foldername <- gsub("'", "", nha_foldername, fixed=TRUE)
 }
 
 # function to generate the pdf
@@ -138,7 +138,7 @@ makePDF <- function(rnw_template, pdf_filename) {
 
 # function to delete .txt, .log etc if pdf is created successfully.
 deletepdfjunk <- function(pdf_filename){
-  fn_ext <- c(".aux",".out",".run.xml",".bcf",".blg",".tex",".log",".bbl") #
+  fn_ext <- c(".aux",".out",".run.xml",".bcf",".blg",".tex",".log",".bbl",".toc") #
   if (file.exists(paste(pdf_filename, ".pdf",sep=""))){
     for(i in 1:NROW(fn_ext)){
       fn <- paste(pdf_filename, fn_ext[i],sep="")

@@ -8,24 +8,30 @@
 # Pull in the selected NHA data ################################################
 # File path for completed Word documents
 nha_name <- LauncherNHA
+nha_name <- gsub("'", "''", nha_name)
 nha_nameSQL <- paste("'", nha_name, "'", sep='')
+nha_name <- gsub("''", "'", nha_name)
 nha_foldername <- foldername(nha_name) # this now uses a user-defined function
 
 # access geodatabase to pull site info 
 serverPath <- paste("C:/Users/",Sys.getenv("USERNAME"),"/AppData/Roaming/ESRI/ArcGISPro/Favorites/PNHP.PGH-gis0.sde/",sep="")
 nha <- arc.open(paste(serverPath,"PNHP.DBO.NHA_Core", sep=""))
 selected_nha <- arc.select(nha, where_clause=paste("SITE_NAME=", nha_nameSQL, "AND STATUS = 'NP'"))
+#selected_nha <- selected_nha %>% slice(2)
 
 # find the NHA word file template that we want to use
 NHA_file <- list.files(path=paste(NHAdest, "DraftSiteAccounts", nha_foldername, sep="/"), pattern=".docx$")  # --- make sure your excel file is not open.
+NHA_file <- setdiff(NHA_file, NHA_file[substring(NHA_file,1,1)=="~"]) # remove temp files
 # select the file number from the list below
 if(length(NHA_file)==1) {
   n <- 1
 } else {
+  beepr::beep(sound=1, expr=NULL)
   print(NHA_file)
   cat("Select the file number of the word document you wish to use:")#n <- as.numeric(readLines())
   n <- as.numeric(scan(what=character(),nmax=1,quiet=TRUE))
-}
+}  
+
 print(paste0("using the ",NHA_file[n], " for input into the script!"))
 NHA_file <- NHA_file[n]
 # create the path to the whole file!
