@@ -15,6 +15,8 @@
 \usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage[section]{placeins}
+\usepackage{needspace}
 \usepackage{url}
 \urlstyle{same}
 %\usepackage{siunitx}
@@ -437,10 +439,9 @@ if(any(IntroPhotos$photoType=="image_NatCom")){
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Regional Disturbances}
-Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today. In general, natural communities will be more resilient to disturbances when landscape connectivity is high and communities are still relatively intact and unfragmented. This allows for disturbed communities to be recolonized by individuals from nearby undisturbed patches in the landscape. \\
-
+\noindent
 % % disturbance photo
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}{R}{0.5\textwidth}
 % \begin{figure}[h]
 %\centering
 \includegraphics[width=0.50\textwidth]{AMDdischarge.jpg}
@@ -448,6 +449,8 @@ Disturbances, whether natural or man-made, have played a key role in shaping man
  \label{fig:Disturbance}
 % \end{figure}
 \end{wrapfigure}
+\noindent Disturbances, whether natural or man-made, have played a key role in shaping many of the region’s natural communities and their associated species. The frequency and scale of these disturbances is formative in the appearance of natural communities today. In general, natural communities will be more resilient to disturbances when landscape connectivity is high and communities are still relatively intact and unfragmented. This allows for disturbed communities to be recolonized by individuals from nearby undisturbed patches in the landscape. \\
+
 \noindent \underline{Natural Disturbances} --- Natural disturbances, such as fire and flooding, can actually benefit certain natural communities and species. Periodic fires are needed to maintain grassland openings, allow new growth of the characteristic species, and keep out other later-successional species. The forests encountered in Pennsylvania by the first European colonists experienced frequent cycles of fire, encouraged in part by Native American land management practices. Thus many of the "pristine" or historic ecosystem conditions that we recognize in this region are in part the product of a consistent history of human intervention. Another example of an ecosystem shaped by consistent disturbances are floodplain forests. The structure of these forest communities are the result of periodic scouring and deposition of sediments as streams overtop their banks, which facilitates species which are tolerant of these types of disturbance cycles, such as silver maple (\textit{Acer saccharinum}), sycamore (\textit{Platanus occidentalis}), or willows (\textit{Salix spp.}). In the absence of regular flooding, these floodplain communities would not be able to persist. \\
 
 \noindent Over-browsing by deer is another natural disturbance which can have detrimental effects on natural communities and species  \parencite{latham_managing_2005}. Excessive deer browse can remove the understory of some forests and halt regeneration of the canopy and understory by preferential feeding. Deer feeding preferences can have a direct effect on rare plants and severely decrease essential habitat for other animal species. Over-browsing can result in a lack of forest regeneration, a reduction in the diversity and density of forest understory, a decrease in songbird diversity and direct loss of rare plants \parencite{beguin_management_2016}. \\
@@ -891,28 +894,30 @@ for(i in 1:nrow(nha_list)){
 }
 @
 \end{longtable}
-
+\newpage
 \subsection{Planning for Sensitive Species}
 
 Due to a combination of sensitivity issues, some species have created challenges for being incorporated into meaningful conservation planning products, namely Natural Heritage Areas. These issues are primarily a combination of: \begin{itemize}
 \item The species being too sensitive for its location to be pinpointed to an area of core habitat that it makes use of, even if its name is obscured in NHA site accounts and it is listed as sensitive. These are often species which are poached or collected, or species which are extremely sensitive to disturbances.
 \item The species is wide-ranging and too mobile on the landscape for a core habitat patch to meaningfully define the area of habitat that it relies on. 
 \end{itemize}
-Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.\\
-\\
+Rather than create NHA core habitats which are too large to meaningfully allow concrete conservation actions to be planned, PNHP has elected to share  range maps of the species which fall into the above categories and are present in \Sexpr{nameCounty} County, and describe their general conservation needs below.
 
 <<label=SUSN, echo=FALSE, results='asis'>>=
 SUSN <- SUSN[order(SUSN$ELEMENT_TYPE, SUSN$SNAME),]
 for(i in 1:nrow(SUSN)){
-  cat(paste("\\noindent \\textbf{",SUSN$SCOMNAME[i], " (\\textit{", SUSN$SNAME[i],"})} \\\\ ", sep=""))
-  cat("\\begin{wrapfigure}{r}{0.5\\textwidth}")
+  cat(paste("\\Needspace{20\\baselineskip}"))
+  cat(paste("\\subsubsection{ \\textbf{",SUSN$SCOMNAME[i], " (\\textit{", SUSN$SNAME[i],"})} } \\\\ ", sep=""))
+  cat("\\noindent")
+  cat("\\begin{wrapfigure}{rR}{0.5\\textwidth}")
   cat(paste("\\includegraphics[width=0.50\\textwidth]{", paste("Layout_SUSN_", gsub(" ", "",  SUSN$SNAME[i], fixed=TRUE), sep="")   ,"} ", sep=""))
   cat(paste("\\caption{\\textit{Range map for ",paste(SUSN$SCOMNAME[i], " (", SUSN$SNAME[i],") ", sep=""), "indicating where environmental review conflicts may be encountered.}} \\ ", sep=""))
   cat(paste("\\label{fig:SUSN",i,"}", sep=""))
   cat("\\end{wrapfigure}")
   cat(paste("\\noindent ", SUSN$Description[i], " \\\\ ", sep=""))
   cat(paste("\\noindent ", SUSN$ThreatRec[i], " \\\\ ", sep=""))
-  cat("\\medskip ")
+  #cat("\\smallskip ")
+  cat("\\smallskip ")
 }
 @
 
