@@ -205,7 +205,8 @@ class CreateNHAv3(object):
 
         nha_core = r'NHAEdit\NHA Core Habitat'
         nha_supporting = r'NHAEdit\NHA Supporting Landscape'
-        spec_tbl = r'PNHP.DBO.NHA_SpeciesTable'
+        spec_tbl = r'NHAEdit\\PNHP.DBO.NHA_SpeciesTable'
+        boundaries_tbl = r'NHAEdit\\PNHP.DBO.NHA_PoliticalBoundaries'
 
         eo_reps = r'W:\\Heritage\\Heritage_Data\\Biotics_datasets.gdb\\eo_reps'
 
@@ -227,7 +228,28 @@ class CreateNHAv3(object):
         else:
             pass
 
-        arcpy.AddMessage("......")
+        # add reporting about whether NHA name is already being used
+        arcpy.AddMessage("............")
+        nha_site_names = sorted({row[0] for row in arcpy.da.SearchCursor(nha_core,"SITE_NAME") if row[0] is not None})
+        if not site_name in nha_site_names:
+            arcpy.AddMessage("There are no existing NHAs with the same site name: "+site_name)
+        else:
+            arcpy.AddMessage("The following NHAs have the same site name: "+site_name)
+            with arcpy.da.SearchCursor(nha_core,["SITE_NAME","STATUS","NHA_JOIN_ID"]) as cursor:
+                for row in cursor:
+                    if row[0] == site_name:
+                        nha_join_id = row[2]
+                        with arcpy.da.SearchCursor(boundaries_tbl,["NHA_JOIN_ID","COUNTY"]) as cursor1:
+                            for row1 in cursor1:
+                                if row1[0] == nha_join_id:
+                                    county = row1[1]
+                        value_list = [row[0],row[1]]
+                        if "county" in locals():
+                            value_list.append(county)
+                        site_name_values = tuple(value_list)
+                        arcpy.AddWarning(site_name_values)
+
+        arcpy.AddMessage("............")
         # create list of eo ids for all selected CPPs that are current or approved
         with arcpy.da.SearchCursor(cpp_core,["EO_ID","Status"]) as cursor:
             eoids = sorted({row[0] for row in cursor if row[1] != "n"})
@@ -237,14 +259,14 @@ class CreateNHAv3(object):
 
         # add reporting messages about which CPPs are being excluded
         if excluded_eoids:
-            arcpy.AddWarning("Selected CPPs with the following EO IDs are being excluded because they were marked as not approved: "+ ','.join([str(x) for x in excluded_eoids]))
+            arcpy.AddMessage("Selected CPPs with the following EO IDs are being excluded because they were marked as not approved: "+ ','.join([str(x) for x in excluded_eoids]))
         else:
             pass
 
         # add reporting messages about which CPPs are being included and exit with message if no selected CPPs are current or approved.
         if len(eoids) != 0:
             arcpy.AddMessage("Selected CPPs with the following EO IDs are being used to create this NHA: "+','.join([str(x) for x in eoids]))
-            arcpy.AddMessage("......")
+            arcpy.AddMessage("............")
         else:
             arcpy.AddWarning("Your CPP selection does not include any current or approved CPPs and we cannot proceed. Goodbye.")
             sys.exit()
@@ -256,7 +278,7 @@ class CreateNHAv3(object):
             sql_query = '"EO_ID" = {}'.format(eoids[0])
 
         arcpy.AddMessage("Creating and attributing NHA core for site: "+ site_name)
-        arcpy.AddMessage("......")
+        arcpy.AddMessage("............")
         # create cpp_core layer from selected CPPs marked as current or approved and dissolve to create temporary nha geometry
         cpp_core_lyr = arcpy.MakeFeatureLayer_management(cpp_core, "cpp_core_lyr", sql_query)
         temp_nha = os.path.join(mem_workspace,"temp_nha")
@@ -295,13 +317,14 @@ class CreateNHAv3(object):
 ######################################################################################################################################################
 
         arcpy.AddMessage("Creating and attributing NHA supporting for site: "+ site_name)
-        arcpy.AddMessage("......")
+        arcpy.AddMessage("............")
         # create supporting cpp layer from selected CPPs marked as current or approved and dissolve to create temporary nha supporting geometry
         cpp_supporting_lyr = arcpy.MakeFeatureLayer_management(cpp_supporting, "cpp_supporting_lyr", sql_query)
         with arcpy.da.SearchCursor(cpp_supporting_lyr,"EO_ID") as cursor:
             cpp_supp = sorted({row[0] for row in cursor})
         if len(cpp_supp) == 0:
-            arcpy.AddWarning("No supporting CPPs exist for the selected CPP cores in this area. No NHA Supporting landscape has been drawn. Please review the CPP supporting polygons in this area.")
+            arcpy.AddMessage("No supporting CPPs exist for the selected CPP cores in this area. No NHA Supporting landscape has been drawn. Please review the CPP supporting polygons in this area.")
+            arcpy.AddMessage("............")
         else:
             temp_nha_supp = arcpy.Dissolve_management(cpp_supporting_lyr, os.path.join(mem_workspace,"temp_nha_supp"))
 
@@ -324,8 +347,6 @@ class CreateNHAv3(object):
 ## Insert species records into NHA species table
 ######################################################################################################################################################
 
-        # make EO layer with selected EOs that were used to create the NHA layer
-        eo_reps_lyr = arcpy.MakeFeatureLayer_management(eo_reps,"eo_reps_lyr",sql_query)
         SpeciesInsert = []
         # report which EOs were included in NHA and add EO records to list to be inserted into NHA species table
         arcpy.AddMessage("The following species records have been added to the NHA Species Table for NHA with site name, "+site_name+":")
@@ -333,9 +354,9 @@ class CreateNHAv3(object):
             with arcpy.da.SearchCursor(eo_reps, ["ELCODE","ELSUBID","SNAME","SCOMNAME","EO_ID"], '"EO_ID" = {}'.format(eoid)) as cursor:
                 for row in cursor:
                     values = tuple([row[0],row[1],row[2],row[3],element_type(row[0]),row[4],nha_join_id])
-                    arcpy.AddMessage(values)
+                    arcpy.AddWarning(values)
                     SpeciesInsert.append(values)
-        arcpy.AddMessage("......")
+        arcpy.AddMessage("............")
 
         # insert EO records into NHA species table
         for insert in SpeciesInsert:
@@ -345,7 +366,7 @@ class CreateNHAv3(object):
         # report about EOs that overlap the NHA core, but were not included in the NHA species table
         eo_reps_full = arcpy.MakeFeatureLayer_management(eo_reps,"eo_reps_full")
         arcpy.SelectLayerByLocation_management(eo_reps_full,"INTERSECT",temp_nha,selection_type="NEW_SELECTION")
-        arcpy.AddWarning("The following EO rep records intersected your NHA, but do not have a CPP drawn:")
+        arcpy.AddMessage("The following EO rep records intersected your NHA, but do not have a CPP drawn:")
         with arcpy.da.SearchCursor(eo_reps_full,["EO_ID","SNAME","SCOMNAME","LASTOBS_YR","EORANK","EO_TRACK","EST_RA","PREC_BCD"]) as cursor:
             for row in cursor:
                 if row[0] not in eoids:
@@ -353,9 +374,9 @@ class CreateNHAv3(object):
                 else:
                     pass
 
-        arcpy.AddMessage("......")
+        arcpy.AddMessage("............")
         arcpy.AddMessage("The initial NHA core and supporting landscapes were created for site name, "+site_name+". Please make any necessary manual edits. Once spatial edits are complete, don't forget to run step 2. Fill NHA Spatial Attributes")
-
+        arcpy.AddMessage("............")
 ######################################################################################################################################################
 ## Begin fill nha spatial attributes tool which finishes attributes that depend on manual edits
 ######################################################################################################################################################
@@ -411,8 +432,8 @@ class FillAttributes(object):
         muni = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\StateLayers.Default.pgh-gis0.sde\\StateLayers.DBO.Boundaries_Political\\StateLayers.DBO.PaMunicipalities'
         prot_lands = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\StateLayers.Default.pgh-gis0.sde\\StateLayers.DBO.Protected_Lands\\StateLayers.DBO.TNC_Secured_Areas'
         usgs_quad = r'W:\LYRS\Indexes\QUAD 24K.lyr'
-        prot_lands_tbl = r'PNHP.DBO.NHA_ProtectedLands'
-        boundaries_tbl = r'PNHP.DBO.NHA_PoliticalBoundaries'
+        prot_lands_tbl = r'NHAEdit\\PNHP.DBO.NHA_ProtectedLands'
+        boundaries_tbl = r'NHAEdit\\PNHP.DBO.NHA_PoliticalBoundaries'
 
         # check for selection on nha core layer and exit if there is no selection
         desc = arcpy.Describe(nha_core)
