@@ -650,8 +650,8 @@ class NHAExport(object):
             datatype = "GPString",
             parameterType = "Required",
             direction = "Input")
-        nha_query.filter.list = ["Only Current NHAs","Only Completed - Not Published NHAs","All Current or Completed - Not Published NHAs"]
-        nha_query.value = "All Current or Completed - Not Published NHAs"
+        nha_query.filter.list = ["Only Current NHAs","All Current or Move to Historic NHAs","All Current or Completed - Needs Published NHAs"]
+        nha_query.value = "All Current or Move to Historic NHAs"
 
         sensitive_species = arcpy.Parameter(
             displayName = "What do you want to do with sensitive species?",
@@ -688,13 +688,20 @@ class NHAExport(object):
 ##        protected_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/3'
 ##        species_url = r'https://maps.waterlandlife.org/arcgis/rest/services/PNHP/NHAEdit/FeatureServer/4'
 
-        username = getuser().lower()
-        eo_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.Biotics\\PNHP.DBO.eo_ptreps'
-        nha_core_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Core'
-        nha_supporting_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_Supporting'
-        political_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_PoliticalBoundaries'
-        protected_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_ProtectedLands'
-        species_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP.Default.pgh-gis0.sde\\PNHP.DBO.NHA_SpeciesTable'
+        # username = getuser().lower()
+        # eo_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.Biotics\\PNHP.DBO.eo_ptreps'
+        # nha_core_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.NHA_Core'
+        # nha_supporting_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.NHA_Supporting'
+        # political_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.NHA_PoliticalBoundaries'
+        # protected_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.NHA_ProtectedLands'
+        # species_url = r'C:\\Users\\'+username+r'\\AppData\\Roaming\\Esri\\ArcGISPro\\Favorites\\PNHP_Default_pgh-gis0.sde\\PNHP.DBO.NHA_SpeciesTable'
+
+        eo_url = r'Biotics\\eo_ptreps'
+        nha_core_url = r'NHAEdit\\NHA Core Habitat'
+        nha_supporting_url = r'NHAEdit\\NHA Supporting Landscape'
+        political_url = r'NHAEdit\\PNHP.DBO.NHA_PoliticalBoundaries'
+        protected_url = r'NHAEdit\\PNHP.DBO.NHA_ProtectedLands'
+        species_url = r'NHAEdit\\PNHP.DBO.NHA_SpeciesTable'
 
         #check for selection. error out if no selection is made.
         desc = arcpy.Describe(nha_core)
@@ -706,16 +713,16 @@ class NHAExport(object):
 
         #create empty database
         arcpy.AddMessage("Creating Database")
-        gdb = arcpy.CreateFileGDB_management(os.path.dirname(output_gdb),os.path.basename(output_gdb)+".gdb")
+        arcpy.CreateFileGDB_management(os.path.dirname(output_gdb),os.path.basename(output_gdb)+".gdb")
 
         #create list of qualifying NHA_JOIN_IDs to be exported in selection based on selection of current or completed not published
         with arcpy.da.SearchCursor(nha_core,["NHA_JOIN_ID","STATUS"]) as cursor:
             if nha_query == "Only Current NHAs":
                 nha_ids = sorted({row[0] for row in cursor if row[0] is not None and row[1] == 'C'})
-            elif nha_query == "Only Completed - Not Published NHAs":
-                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and row[1] == 'NP'})
+            elif nha_query == "All Current or Completed - Needs Published NHAs":
+                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and (row[1] == 'C' or row[1] == 'NP')})
             else:
-                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and (row[1] == 'NP' or row[1] == 'C')})
+                nha_ids = sorted({row[0] for row in cursor if row[0] is not None and (row[1] == 'C' or row[1] == 'MH')})
 
         #construct where query for feature set load statements
         nha_expression = "NHA_JOIN_ID IN ({0})".format(','.join("'{0}'".format(id) for id in nha_ids))
@@ -728,13 +735,13 @@ class NHAExport(object):
         #Add all fields from inputs.
         fieldmappings.addTable(nha_core_url)
         # Name fields you want to delete.
-        losers = ["ARCHIVE_DATE", "ARCHIVE_REASON", "created_date","created_user","last_edited_date","last_edited_user","MAP_ID","NOTES","OLD_SITE_NAME","STATUS","SOURCE_REPORT","PROJECT","BLUEPRINT"] # etc.
+        losers = ["ARCHIVE_DATE", "ARCHIVE_REASON", "created_date","created_user","last_edited_date","last_edited_user","MAP_ID","NOTES","OLD_SITE_NAME","STATUS","PROJECT","BLUEPRINT","SITE_TYPE","ASSOC_NHA","USGS_QUAD"] # etc.
         #Remove all output fields you don't want.
         for field in fieldmappings.fields:
             if field.name in losers:
                 fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
 
-        arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
+        core = arcpy.FeatureClassToFeatureClass_conversion(nha_core_url,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
 
         #load qualifying supporting NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying NHA Supporting")
@@ -745,7 +752,8 @@ class NHAExport(object):
             if field.name in losers:
                 fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
 
-        arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression,fieldmappings)
+        supporting = arcpy.FeatureClassToFeatureClass_conversion(nha_supporting_url,output_gdb+".gdb","NHA_Supporting",nha_expression,fieldmappings)
+        arcpy.JoinField_management(supporting,"NHA_JOIN_ID",core,"NHA_JOIN_ID",["SITE_NAME","SIG_RANK","BRIEF_DESC","SOURCE_REPORT","SITEACCOUNT_PDF"])
 
 ##        nha_supporting_fs = arcpy.FeatureSet()
 ##        nha_supporting_fs.load(nha_supporting_url,nha_expression)
