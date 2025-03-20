@@ -1,0 +1,294 @@
+%This knitr document is called by the knit2pdf ....
+\documentclass{article}
+\usepackage[utf8]{inputenc} %\UseRawInputEncoding
+\usepackage{fontspec}
+\setmainfont{Gill Sans MT}
+\pdfmapfile{=pdftex35.map} %I think this fixes some MikTex font reading issues
+\usepackage[margin=10pt,font=small]{caption}
+\usepackage{afterpage}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,threeparttablex, array}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{xurl}
+\urlstyle{same}
+\usepackage{graphicx}
+\graphicspath{{H:/Scripts/NHA_Tools/SiteReports/_data/photos/}{H:/Scripts/NHA_Tools/SiteReports/_data/ref_images/}}
+% \usepackage{cite}
+\usepackage{enumitem}
+\usepackage{enumitem,kantlipsum}
+\setlist{nolistsep}
+\usepackage{fancyhdr} %for headers,footers
+% \usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+\usepackage{lastpage}
+\usepackage{hanging}
+
+\geometry{letterpaper, top=0.45in, bottom=0.75in, left=0.75in, right=0.75in}
+\pagestyle{fancy} \fancyhf{} \renewcommand\headrulewidth{0pt} %strip default header/footer stuff
+
+\setlength\intextsep{0pt}
+
+%add footers
+\lfoot{
+ \small   %small font. The double slashes is newline in fancyhdr
+ \textcolor{gray}{\Sexpr{paste(as.character(nha_nameLatex), "Natural Heritage Area", sep=" ")}\\Pennsylvania Natural Heritage Program }
+}
+\rfoot{
+ \small  
+ \textcolor{gray}{page \thepage \ of \ \pageref*{LastPage}}
+}
+
+\begin{document}
+%\RaggedRight
+\catcode`\_=11
+
+% Header
+\noindent
+\textbf{\LARGE{\Sexpr{paste(as.character(nha_nameLatex),"NHA",sep=" ")}}}\\
+\large A site of \underline{\Sexpr{nha_siterank} Significance} \
+\medskip \\
+
+% image
+<<label=topimage, echo=FALSE, results='asis'>>=
+if(!is.na(selected_nha$photo_caption)){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{",photo_file,"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
+  capfun <- as.character(paste(selected_nha$photo_caption, "\\textcolor{gray}{","Photo: ", selected_nha$photo_name,"}\\\\", sep=" "))
+  cat(paste0("\\caption{",capfun,"} \n"))
+  cat("\\end{wrapfigure} \n")
+} else if(is.na(selected_nha$photo_caption)){
+ cat("% no image present so nothing is added")#do nothing
+}
+@
+
+% Site Description
+\normalsize
+\noindent
+\Sexpr{as.character(site_account$site_desc)}\\\\
+% paragraph about significance ranks
+This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because of
+% calculates what text to say
+<<label=sigparagraph, echo=FALSE, results='asis'>>=
+
+# Case 1: global significance and the species are not sensitive
+if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
+  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+# case 1a:
+} else if(nha_siterank=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
+  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+  # Case 1b: global significance and the species are not sensitive
+} else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
+  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+  # case 1c: global sig because of a winter bat colony
+} else if(nha_siterank=="Global" & nrow(species_table==1) & species_table$SNAME[1]=="Bat Hibernaculum") {
+  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+    # Case 2: regional significance and the species are not sensitive
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
+  cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
+  # Case 2a: regional significance and the species are sensitive
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
+  cat(paste0("the occurrence of a sensitive species of concern that is of G3 rank."))
+# Case 2b: regional significance and the species are not sensitive
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
+   cat(paste0(" the high concentration of G4, G5, or GNR species at this site."))  
+# Case 2c: regional significance and their are sensitive and non sensitive G3 species present
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+   cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
+# Case 4: state significance and the species are not sensitive
+} else if(nha_siterank=="State" & spCount_GSecure>0) {
+  cat("the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
+# Case 4a: state significance and the species are all sensitive
+} else if(nha_siterank=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level, and also sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
+# Case 4b: state significance and species are G3G4 and the species are all sensitive
+} else if(nha_siterank=="State" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
+  cat("the tracked species at the site being ranked G3G4, and also sensitive to collection or disturbance. Within Pennsylvania, these species may be severely declining.")
+  # Case 5: local significance and the species are not sensitive
+} else if(nha_siterank=="Local" & spCount_GSecure>0) {
+  cat("tracked species which are secure globally, but occur at the edge of their range in Pennsylvania and thus are of local conservation concern.")
+# Case 5: local significance and the species are  sensitive
+} else if(nha_siterank=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat("tracked species which are secure globally, but occur at the edge of their range in Pennsylvania and are thus of local conservation concern.")
+}
+@
+\noindent
+\\\\All species tracked by PNHP documented at this NHA include:
+\smallskip
+\afterpage{\clearpage}
+% Species Table
+\begin{ThreePartTable}
+\renewcommand\TPTminimum{\textwidth}
+%% Arrange for "longtable" to take up full width of text block
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\setlength\tabcolsep{0pt}
+
+\begin{TableNotes}
+ \begin{footnotesize}
+    \item [1] See the PNHP (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. PABS status refers to the status recommended by the Pennsylvania Biological Survey.
+    \item [2] See NatureServe (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
+    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
+     SensitiveFNote <- ifelse(any(species_table$SENSITV_SP=="Y"), "\\item [3] This species is not named by request of the   jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
+     @
+    \Sexpr{paste(SensitiveFNote)}
+  \end{footnotesize}
+\end{TableNotes}
+
+\begin{longtable}{ l @{\extracolsep{\fill}} *{7}{c} } 
+\toprule
+\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{\shortstack{PA Legal\\Status}}\tnote{1} & \textbf{\shortstack{PABS\\Status}}\tnote{1} & \textbf{\shortstack{Last\\Observed}}	& \textbf{Quality}\tnote{2} \\
+
+\midrule
+\endhead
+
+\midrule[\heavyrulewidth]
+\multicolumn{8}{r}{\textit{table continued on next page}}\\
+\endfoot  
+
+\midrule[\heavyrulewidth]
+\insertTableNotes  % tell LaTeX where to insert the table-related notes
+\endlastfoot
+
+     <<label=speciestable, echo=FALSE, results='asis'>>=
+     #Sort species table first taxonomically, and then alphabetically by SName
+     TaxOrder <- c("Mammal","Bird","Salamander","Frog","Reptile","Fish","Invertebrate - Mussels","Vascular Plant","Nonvascular   Plant","Invertebrate - Sponges","Invertebrate - Gastropods","Invertebrate - Dragonflies and Damselflies","Invertebrate - Butterflies and Skippers","Invertebrate - Moths","Invertebrate - Tiger Beetles","Invertebrate - Grasshoppers","Invertebrate - Stoneflies","Invertebrate - Spiders","Invertebrate - Crayfishes","Community","Sensitive")
+     species_table$OrderVec <- species_table$taxa
+     species_table <- within(species_table, OrderVec[SENSITV_SP =="Y"| SENSITV_EO =="Y"] <- "Sensitive")    
+     species_table$OrderVec <- factor(species_table$OrderVec, levels=TaxOrder)
+     species_table <- species_table[order(species_table$OrderVec, species_table$SNAME),]
+     
+     #Recode Sensitive Species names
+     species_table$SNAME_or <- species_table$SNAME
+     SSct <- length(species_table$SENSITV_SP[species_table$SENSITV_SP == "Y"])
+     SSOCid <- toupper(letters[1:SSct])
+     j=0 #set the indexing for the sensitive species 
+     for(i in 1:nrow(species_table)){ 
+       # replace common name if blank
+       if(is.na(species_table$SCOMNAME[i])){
+         species_table$SCOMNAME[i] <- "no common name"
+       } 
+       # remove double names for sensitive species of concern
+       if(species_table$SENSITV_SP[i]=="Y"){
+         j <- j + 1 # add one the sensitive species id
+         speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
+       } else {
+         speciesstring <- paste0(species_table$SCOMNAME[i]," (\\textit{",species_table$SNAME[i],"}) ")
+         if(nchar(speciesstring)>58) {
+           speciesstring <- paste0(species_table$SCOMNAME[i],"\\\\ \\enspace (\\textit{",species_table$SNAME[i],"}) ")
+         } else {
+           speciesstring <- speciesstring
+         }
+       }
+       # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
+       if(species_table$SCOMNAME[i]==species_table$SNAME[i] & species_table$SENSITV_SP[i]!="Y"){
+         speciesstring <- paste0(species_table$SCOMNAME[i])
+       } 
+       # replace the state status 'NA'
+       if(is.na(species_table$SPROT[i])){
+         species_table$SPROT[i] <- "--"
+       } 
+       if(is.na(species_table$PBSSTATUS[i])){
+         species_table$PBSSTATUS[i] <- "--"
+       }      
+       # mask information for sensitive species
+       if(species_table$SENSITV_SP[i]=="Y") {
+         species_table$SPROT[i] <- "--"
+         species_table$PBSSTATUS[i] <- "--"
+         species_table$GRANK[i] <- "--"
+         species_table$SRANK[i] <- "--"
+         species_table$icon[i] <- "Sensitive.png"
+       }
+       # concatenate and make the table row
+       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",species_table$icon[i],"}","&",species_table$GRANK[i], "&", species_table$SRANK[i],"&", species_table$SPROT[i], "&", species_table$PBSSTATUS[i], "&", species_table$LASTOBS_YR[i], "&", species_table$EORANK[i],"\\\\") )
+     }
+@       
+
+\end{longtable}   
+\end{ThreePartTable}
+
+%%% Threats and Species Recommendations %%%
+\medskip
+\noindent
+\textbf{\underline{Threats and Species Recommendations}}\\\\
+\normalsize 
+\noindent \Sexpr{as.character(site_account$tr_summary)} Specific threats and stresses to the elements present at this site, as well as conservation actions, include:  
+\begin{itemize}
+<<echo=FALSE, results='asis'>>=
+for(t in 1:nrow(tr_bullets)){
+  cat(paste0("\\item ",tr_bullets$threat_text[t]))#as.character()
+}
+@
+\end{itemize}
+\medskip
+\noindent This NHA site account is one of the first steps for promoting conservation management actions to support the species of concern at the site. NHA sites may have multiple habitat types present and require a variety of conservation strategies that may occasionally conflict. PNHP staff are available for additional consultation to help address specific site challenges. For additional information, please contact naturalheritage@paconserve.org.
+
+\bigskip
+
+%%% Location and Additional Infomation %%% 
+\pagebreak[1]
+\noindent\textbf{\underline{Location}}\\\\
+\smallskip
+\textbf{Municipalities:} \Sexpr{site_account$CountyMuni} \\
+\textbf{Overlapping Protected Lands:} \Sexpr{site_account$protected_lands} \\
+\textbf{Approximate Acreage:} \Sexpr{round(area_acres)} acres \\  
+  
+%%% References %%% 
+\noindent\textbf{\underline{References}} \\
+\smallskip
+<<results="asis", echo=FALSE>>=
+  refs = references$latex_citation
+  cat("", refs, sep="\n\\item\\hangpara{2em}{1} ")
+@
+
+\p
+
+\bigskip
+% the next line moves the recommended citation to the bottom of the page
+\vspace*{\fill}
+%%%  Recommended Citation %%% 
+\setlength{\fboxsep}{5pt}
+\noindent\fbox{
+ \begin{minipage}[c]{0.2\linewidth}
+  \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
+ \end{minipage}%
+ \begin{minipage}[c]{0.75\linewidth}
+    Please cite this Natural Heritage Area as: \\
+    Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
+  \end{minipage}
+}
+
+\newpage
+
+
+% insert the NHA map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<<label=mapimage, echo=FALSE, results='asis'>>=
+  map_path <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map__", nha_join_id, ".png", sep="")
+  if(file.exists(map_path)){
+    mapfile <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map__", nha_join_id, ".png", sep="")
+    cat(paste0("\\noindent\\includegraphics[width=1\\textwidth]{",mapfile,"} %  \n"))
+  }
+@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+if(!is.na(selected_nha$photo_caption)){
+  cat("\\begin{wrapfigure}{R}{0.5\\textwidth} % [13]\n")
+  cat(paste0("\\includegraphics[width=0.5\\textwidth]{",photo_file,"} %  \n"))
+  cat("\\captionsetup{labelformat=empty, justification=raggedright} \n")
+  capfun <- as.character(paste(selected_nha$photo_caption, "\\textcolor{gray}{","Photo: ", selected_nha$photo_name,"}\\\\", sep=" "))
+  cat(paste0("\\caption{",capfun,"} \n"))
+  cat("\\end{wrapfigure} \n")
+} else if(is.na(selected_nha$photo_caption)){
+ cat("% no image present so nothing is added")#do nothing
+}

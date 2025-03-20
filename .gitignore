@@ -46,3 +46,18 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .Rproj.user
+
+# xml files and other stuff from arcgis tools
+*.xml
+/Index/
+*.atbx
+*Rhistory
+*.gdb
+
+
+# data and archive folders
+/SiteReports/_data/
+/archive/
+/.idea/
+/Index/
+
