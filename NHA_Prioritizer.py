@@ -34,7 +34,7 @@ output_feature = "Biotics_SourceFeature_centroids"  # filename of output centroi
 
 # define function to convert arcgis table to Pandas dataframe
 def arcgis_table_to_pandas_df(table_path, field_names, where_clause=None):
-    arr = arcpy.da.TableToNumPyArray(in_table=table_path, field_names=field_names, where_clause=where_clause)
+    arr = arcpy.da.TableToNumPyArray(in_table=table_path, field_names=field_names, where_clause=where_clause, skip_nulls=True)
     df = pd.DataFrame(arr)
     return df
 
@@ -81,7 +81,7 @@ sf_nha_df = arcgis_table_to_pandas_df(sf_nha_intersect, sf_nha_intersect_fields)
 
 # convert visits to pandas dataframe to do calculations
 visits_fields = [f.name for f in arcpy.ListFields(visits)]
-visits_df = arcgis_table_to_pandas_df(visits, visits_fields)
+visits_df = pd.DataFrame((row for row in arcpy.da.SearchCursor(visits, visits_fields)), columns=visits_fields)
 
 # convert sf_centroids to pandas dataframe for join
 sf_fields = [f.name for f in arcpy.ListFields(sf_centroids_lyr) if f.name != arcpy.Describe(sf_centroids_lyr).shapeFieldName] # exclude the shape fields
@@ -89,7 +89,7 @@ sf_df = arcgis_table_to_pandas_df(sf_centroids_lyr, sf_fields)
 
 # convert eo_ptreps to pandas dataframe for join
 eo_fields = [f.name for f in arcpy.ListFields(eo_ptreps) if f.name != arcpy.Describe(eo_ptreps).shapeFieldName] # exclude the shape fields
-eo_df = arcgis_table_to_pandas_df(eo_ptreps, eo_fields)
+eo_df = pd.DataFrame((row for row in arcpy.da.SearchCursor(eo_ptreps, eo_fields)), columns=eo_fields)
 
 # outer join of sf_nha_intersect and visits to get visits that intersect NHAs
 visits_nha_merge = pd.merge(visits_df, sf_nha_df, on='SF_ID', how='outer')
@@ -207,7 +207,7 @@ protected_lands_df.rename(columns={'PERCENTAGE': 'percent_protected'}, inplace=T
 
 
 ## CALCULATING BOTANY STATS
-plant_species = species_df.loc[species_df["ELCODE"].str.startswith('P', na=False)]
+plant_species = species_df.loc[species_df["ELCODE"].str.startswith('P', na=False) | species_df["ELCODE"].str.startswith('N', na=False)]
 
 # get nha PLANT site score by summing the weighted scores of EOs within the NHA
 plant_score = plant_species.groupby('nha_join_id')['weighted_score'].sum().to_frame().reset_index()
@@ -217,7 +217,7 @@ plant_score.rename(columns={'weighted_score': 'BOTANY_weighted_score'}, inplace=
 num_plant_species = plant_species.groupby('nha_join_id')['ELSUBID'].nunique().to_frame().reset_index()
 num_plant_species.rename(columns={'ELSUBID': 'BOTANY_count_species'}, inplace=True)
 
-# get number of species per NHA
+# get number of plant EOs per NHA
 num_plant_eos = plant_species.groupby('nha_join_id')['EO_ID'].nunique().to_frame().reset_index()
 num_plant_eos.rename(columns={'EO_ID': 'BOTANY_count_EOs'}, inplace=True)
 
@@ -251,6 +251,32 @@ high_grank = plant_species.groupby(['nha_join_id'])['BOTANY_high_grank'].sum().t
 #nha_fields = ["nha_join_id", "sig_rank"] # exclude the shape fields
 #nha_list = arcgis_table_to_pandas_df(nha_core, nha_fields)
 
+# get numbers of species/EOs in other taxa groups in each NHA
+mussel_species = species_df.loc[species_df["ELCODE"].str.startswith('IMBIV', na=False)]
+invert_species = species_df.loc[species_df["ELCODE"].str.startswith('I', na=False) & ~species_df["ELCODE"].str.startswith('IMBIV', na=False)]
+animal_species = species_df.loc[species_df["ELCODE"].str.startswith('A', na=False)]
+
+# get number of species per NHA for taxa groups
+num_mussel_species = mussel_species.groupby('nha_join_id')['ELSUBID'].nunique().to_frame().reset_index()
+num_mussel_species.rename(columns={'ELSUBID': 'MUSSEL_count_species'}, inplace=True)
+
+num_invert_species = invert_species.groupby('nha_join_id')['ELSUBID'].nunique().to_frame().reset_index()
+num_invert_species.rename(columns={'ELSUBID': 'INVERT_count_species'}, inplace=True)
+
+num_animal_species = animal_species.groupby('nha_join_id')['ELSUBID'].nunique().to_frame().reset_index()
+num_animal_species.rename(columns={'ELSUBID': 'VERTEBRATE_count_species'}, inplace=True)
+
+# get number of EOs per NHA for taxa groups
+num_mussel_eos = mussel_species.groupby('nha_join_id')['EO_ID'].nunique().to_frame().reset_index()
+num_mussel_eos.rename(columns={'EO_ID': 'MUSSEL_count_eos'}, inplace=True)
+
+num_invert_eos = invert_species.groupby('nha_join_id')['EO_ID'].nunique().to_frame().reset_index()
+num_invert_eos.rename(columns={'EO_ID': 'INVERT_count_eos'}, inplace=True)
+
+num_animal_eos = animal_species.groupby('nha_join_id')['EO_ID'].nunique().to_frame().reset_index()
+num_animal_eos.rename(columns={'EO_ID': 'VERTEBRATE_count_eos'}, inplace=True)
+
+
 # DO A BUNCH OF STUFF TO JOIN ALL THE METRICS INTO ONE DATAFRAME
 #final_metrics = pd.merge(nha_list, nha_site_score, how='left', on='nha_join_id')
 final_metrics = nha_site_score
@@ -263,10 +289,16 @@ final_metrics = pd.merge(final_metrics, min_visit_yr, how='left', on='nha_join_i
 final_metrics = pd.merge(final_metrics, mean_visit_yr, how='left', on='nha_join_id')
 final_metrics = pd.merge(final_metrics, max_visit_yr, how='left', on='nha_join_id')
 final_metrics = pd.merge(final_metrics, protected_lands_df[["nha_join_id","percent_protected"]], how='left', on='nha_join_id')
-final_metrics = pd.merge(final_metrics, plant_score, how='left', on='nha_join_id')
-final_metrics["BOTANY_score_percentile"] = final_metrics["BOTANY_weighted_score"].rank(pct=True, method='min')
 final_metrics = pd.merge(final_metrics, num_plant_species, how='left', on='nha_join_id')
 final_metrics = pd.merge(final_metrics, num_plant_eos, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_animal_species, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_animal_eos, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_mussel_species, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_mussel_eos, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_invert_species, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, num_invert_eos, how='left', on='nha_join_id')
+final_metrics = pd.merge(final_metrics, plant_score, how='left', on='nha_join_id')
+final_metrics["BOTANY_score_percentile"] = final_metrics["BOTANY_weighted_score"].rank(pct=True, method='min')
 final_metrics = pd.merge(final_metrics, count_s1s2s3_species, how='left', on='nha_join_id')
 final_metrics = pd.merge(final_metrics, count_s1s2s3_eos, how='left', on='nha_join_id')
 final_metrics = pd.merge(final_metrics, min_lastobs_plants, how='left', on='nha_join_id')
@@ -287,13 +319,15 @@ def fill_botany_tiers(row):
     else:
         return 'Tier 3'
 
+
 # Apply the function to create a new column 'C'
 final_metrics['BOTANY_tier'] = final_metrics.apply(fill_botany_tiers, axis=1)
 
 # fill null values with 0 in certain columns
 cols_to_fill = ['nha_site_score', 'nha_score_percentile', 'count_species', 'count_EOs', 'percent_protected',
                 'BOTANY_weighted_score', 'BOTANY_count_species', 'BOTANY_count_EOs', 'BOTANY_count_S1S2S3_species',
-                'BOTANY_count_S1S2S3_EOs', 'BOTANY_high_grank']
+                'BOTANY_count_S1S2S3_EOs', 'BOTANY_high_grank', 'VERTEBRATE_count_species', 'VERTEBRATE_count_eos',
+                'MUSSEL_count_eos', 'MUSSEL_count_species', 'INVERT_count_species', 'INVERT_count_eos']
 final_metrics[cols_to_fill] = final_metrics[cols_to_fill].fillna(0)
 
 final_metrics[["update_priority","update_type","taxa_target"]] = np.nan

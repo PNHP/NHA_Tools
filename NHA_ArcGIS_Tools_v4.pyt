@@ -16,6 +16,7 @@ from getpass import getuser
 import sqlite3 as lite
 import pandas as pd
 import datetime
+from datetime import date
 import arcgis
 from arcgis import GIS
 from arcgis.gis._impl._content_manager import SharingLevel
@@ -113,7 +114,8 @@ class Toolbox(object):
         self.label = "NHA Tools v4"
         self.alias = "NHA Tools v4"
         self.canRunInBackground = False
-        self.tools = [CreateNHAv3,ModifyNHA,SpeciesTransfer,FillAttributes,CalculateSiteRank,SiteNameLister,SiteAccountUploader]
+        self.tools = [CreateNHAv3,ModifyNHA,SpeciesTransfer,FillAttributes,CalculateSiteRank,SiteNameLister,
+                      SiteAccountUploader,NHAExport,UpdatePublicFeatureService,OrphanEOReport]
 
 ########################################################################################################################
 ## Begin create NHA tool - this tool creates the core NHA from selected CPPs and fills initial attributes for the NHA
@@ -146,7 +148,6 @@ class CreateNHAv3(object):
             datatype = "GPString",
             parameterType = "Optional",
             direction = "Input")
-        source_report.value = r"None"
 
         cpp_core = arcpy.Parameter(
             displayName = "Selected CPP Core(s)",
@@ -154,7 +155,7 @@ class CreateNHAv3(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        cpp_core.value = r'CPP Read Only\CPP Core'
+        cpp_core.value = r'CPP Core - NHA spatial eligible'
 
         params = [site_name,site_desc,source_report,cpp_core]
         return params
@@ -276,6 +277,7 @@ class ModifyNHA(object):
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
+        nha_cores.value = r'Natural Heritage Areas'
 
         cpp_core = arcpy.Parameter(
             displayName = "Selected CPP Core(s)",
@@ -283,7 +285,7 @@ class ModifyNHA(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        cpp_core.value = r'CPP Read Only\CPP Core'
+        cpp_core.value = r'CPP Core - NHA spatial eligible'
 
         site_desc = arcpy.Parameter(
             displayName = "Brief Site Description - if updates are needed",
@@ -298,7 +300,6 @@ class ModifyNHA(object):
             datatype = "GPString",
             parameterType = "Optional",
             direction = "Input")
-        source_report.value = r"None"
 
         params = [nha_cores,cpp_core,site_desc,source_report]
         return params
@@ -447,6 +448,7 @@ class SpeciesTransfer(object):
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
+        nha_cores.value = r'Natural Heritage Areas'
 
         eo_layer = arcpy.Parameter(
             displayName="EO Reps Polygon Layer (this tool will explode multipart EOs and use their centroids to reduce issues with large, low accuracy polygons)",
@@ -454,6 +456,7 @@ class SpeciesTransfer(object):
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
+        eo_layer.value = r'Biotics\EO Reps'
 
         params = [nha_cores, eo_layer]
         return params
@@ -589,7 +592,7 @@ class FillAttributes(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        nha_core.value = r'NHA Beta EDIT\Natural Heritage Areas'
+        nha_core.value = r'Natural Heritage Areas'
 
         params = [nha_core]
         return params
@@ -704,7 +707,7 @@ class CalculateSiteRank(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        nha_core.value = r'NHA Beta EDIT\Natural Heritage Areas'
+        nha_core.value = r'Natural Heritage Areas'
 
         params = [nha_core]
         return params
@@ -818,7 +821,7 @@ class SiteNameLister(object):
             datatype = "GPFeatureLayer",
             parameterType = "Required",
             direction = "Input")
-        nha_core.value = r'NHA Beta EDIT\Natural Heritage Areas'
+        nha_core.value = r'Natural Heritage Areas'
 
         params = [nha_core]
         return params
@@ -956,6 +959,113 @@ class SiteAccountUploader(object):
 
 
 ######################################################################################################################################################
+## Site Account Uploader - This tool takes selected NHAs, looks for site reports, and adds them or updates them on the Portal if there is a newer version available.
+######################################################################################################################################################
+
+class SiteAccountUploader(object):
+    def __init__(self):
+        """Define the tool (tool name is the name of the class)."""
+        self.label = "Site Account Uploader"
+        self.description = "This tool takes selected NHAs, looks for site reports, and adds them or updates them on the Portal if there is a newer version available."
+        self.canRunInBackground = False
+        self.category = "Site Report Helpers"
+
+    def getParameterInfo(self):
+        nha_core = arcpy.Parameter(
+            displayName = "Selected NHA Core Layer",
+            name = "nha_core",
+            datatype = "GPFeatureLayer",
+            parameterType = "Required",
+            direction = "Input")
+        nha_core.value = r'NHA Beta EDIT\Natural Heritage Areas'
+
+        params = [nha_core]
+        return params
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, params):
+        return
+
+    def updateMessages(self, params):
+        return
+
+    def execute(self, params, messages):
+        nha_core = params[0].valueAsText
+
+        # check for selection on nha core layer and exit if there is no selection
+        desc = arcpy.Describe(nha_core)
+        if not desc.FIDSet == '':
+            pass
+        else:
+            arcpy.AddWarning("No NHA Cores are selected. Please make a selection and try again.")
+            sys.exit()
+
+        # load gis credentials from OS environment variables - these need to be setup in your operating system environment variables
+        wpc_gis_username = os.environ.get("wpc_webgis_username")
+        wpc_gis_username = "mmooreWPC"
+        wpc_gis_password = os.environ.get("wpc_gis_password")
+        # connect to Portal account
+        gis = GIS('https://www.arcgis.com', wpc_gis_username, wpc_gis_password)
+
+        # define path where site reports are held - THESE NEED TO CHANGE IF THE PATHS CHANGE!!!!
+        site_report_dir = r"H:\Scripts\NHA_Tools\SiteReports\_data\output"
+        site_folder = gis.content.folders.get(folder="NHA Site Reports")
+
+        # get list of nha_join_ids for selected nhas
+        with arcpy.da.UpdateCursor(nha_core,["nha_join_id","site_name","site_pdf_link"]) as cursor:
+            for row in cursor:
+                nha_join_id = row[0] # get nha_join_id for record
+                site_name = row[1] # get site_name for record
+
+                # get list of files in local site_report_directory to see if there are any ready to upload
+                files = [f for f in os.listdir(site_report_dir) if os.path.isfile(os.path.join(site_report_dir, f)) if f.split("_")[-1][0:-4] == nha_join_id]
+                # if there aren't any, pass and move on to the next one
+                if len(files) == 0:
+                    arcpy.AddMessage("No PDF site account is present for: "+nha_join_id+". We have nothing to update, so we're moving on to the next one.")
+                    pass
+                else:
+                    file = files[-1] # use this to get the most recent site report
+
+                    # see if this site account is already uploaded
+                    site_match = gis.content.search(query="title:" + files[-1][0:-4])
+                    # if there is already a site account with the same filename, skip it. otherwise, move on
+                    if len(site_match) > 0:
+                        arcpy.AddMessage(
+                            "There is already a file of exactly the same name for : " + nha_join_id + ". We have nothing to update, so we're moving on to the next one.")
+                        pass
+                    else:
+                        # if there are site accounts that match the nha_join_id, delete them! because we are uploading a more current version
+                        site_del = gis.content.search(query="title:" + nha_join_id)
+                        # DELETE SITE ACCOUNTS
+                        for item in site_del:
+                            item.delete()
+                        # now we will upload new site account to NHA Site Reports portal folder
+                        # first set item properties to record metadata - fill more of this in later
+                        nha_item_properties = arcgis.gis.ItemProperties(
+                            item_type="PDF",
+                            title=file[0:-4],
+                            description="NHA Site Account PDF for "+site_name+" uploaded on "+date+"."
+                        )
+
+                        # get file path and add file to NHA Site Report folder on the portal
+                        upload_file = os.path.join(site_report_dir, file)
+                        site_item = site_folder.add(item_properties = nha_item_properties, file = upload_file).result()
+                        # update sharing to PUBLIC using the sharing manager
+                        sharing_mgr = site_item.sharing
+                        sharing_mgr.sharing_level = SharingLevel.EVERYONE
+
+                        # get item id to use to build pdf url
+                        item_id = site_item.id
+                        site_account_url = r"https://wpcgis.maps.arcgis.com/sharing/rest/content/items/"+item_id+r"/data"
+
+                        # update pdf site account url in feature service
+                        row[2] = site_account_url
+                        cursor.updateRow(row)
+
+
+######################################################################################################################################################
 ## NHA Export Tool
 ######################################################################################################################################################
 
@@ -1047,6 +1157,13 @@ class NHAExport(object):
         nha_expression = "nha_join_id IN ({0})".format(','.join("'{0}'".format(id) for id in nha_ids))
         species_expression = "nha_join_id IN ({0}) AND exclude = 'N'".format(','.join("'{0}'".format(id) for id in nha_ids))
 
+        core_temp = arcpy.FeatureClassToFeatureClass_conversion(nha_core, "memory", "NHA_Core", nha_expression)
+        with arcpy.da.UpdateCursor(core_temp, ["site_type","sig_rank"]) as cursor:
+            for row in cursor:
+                if row[0] == "hist":
+                    row[1] = "H"
+                    cursor.updateRow(row)
+
         #load qualifying core NHAs to feature set and save in output file gdb
         arcpy.AddMessage("Copying Selected NHA Cores")
 
@@ -1055,13 +1172,13 @@ class NHAExport(object):
         # Add all fields from inputs.
         fieldmappings.addTable(nha_core)
         # Name fields you want to delete.
-        keep_fields = ["site_name","desc_","sig_rank","nha_join_id"]
+        keep_fields = ["site_name","desc_","sig_rank","site_pdf_link","nha_join_id"]
         # Remove all output fields you don't want.
         for field in fieldmappings.fields:
             if field.name not in keep_fields:
                 fieldmappings.removeFieldMap(fieldmappings.findFieldMapIndex(field.name))
 
-        core = arcpy.FeatureClassToFeatureClass_conversion(nha_core,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
+        core = arcpy.FeatureClassToFeatureClass_conversion(core_temp,output_gdb+".gdb","NHA_Core",nha_expression,fieldmappings)
 
         # check if species table should be copied
         if sensitive_species == "Exclude species table from export":
@@ -1116,3 +1233,421 @@ class NHAExport(object):
                 arcpy.AddMessage("You have chosen not to mask sensitive species")
 
             arcpy.JoinField_management(os.path.join(output_gdb+".gdb","SpeciesTable"),"nha_join_id",core,"nha_join_id",["site_name"])
+
+######################################################################################################################################################
+## update public feature service
+######################################################################################################################################################
+
+class UpdatePublicFeatureService(object):
+        def __init__(self):
+            """Define the tool (tool name is the name of the class)."""
+            self.label = "Update Public Feature Service"
+            self.description = ""
+            self.canRunInBackground = False
+            self.category = "Public Feature Service Tools"
+
+        def getParameterInfo(self):
+            return
+
+        def isLicensed(self):
+            return True
+
+        def execute(self, params, messages):
+            """
+            ---------------------------------------------------------------------------------------------------------------------
+            Name: NHA_Public_Update.py
+            Purpose: This script deletes all features from the NHA public dataset and copies and formats NHA data from our
+            internal NHA database to the public feature service.
+            Author: Molly Moore for Pennsylvania Natural Heritage Program
+            Created: 03/24/2025
+            Updates:
+            ------------------------------------------------------------------------------------------------------------------------
+            """
+
+            # import packages
+            import arcpy
+            from arcgis.gis import GIS
+            from arcgis.features import FeatureLayer
+            from arcgis.features import FeatureSet
+            import os
+            import pandas as pd
+            import numpy as np
+
+            # environment variables
+            pd.options.mode.copy_on_write = True
+            arcpy.env.overwriteOutput = True
+
+            # define function to take feature layer and keep only most recent record. Returns a Pandas DF. We will use this function
+            # below to get most recent site account entries.
+            def get_latest_records(feature_layer_url, id_field, date_field):
+                """
+                Fetches data from a feature layer, keeps only the most recent record for each ID,
+                and returns a Pandas DataFrame.
+                """
+
+                # Create a FeatureLayer object
+                fl = FeatureLayer(feature_layer_url)
+
+                # Query all features from the layer and convert to pandas dataframe
+                df = fl.query(out_fields='*', return_geometry=False).sdf
+
+                if not df.empty:
+                    # Sort by ID and date field in descending order
+                    df.sort_values([id_field, date_field], ascending=[True, False], inplace=True)
+
+                    # Drop duplicates, keeping only the first (most recent) record for each ID
+                    df.drop_duplicates(subset=[id_field], keep='first', inplace=True)
+
+                    # Drop rows that have null id field
+                    df.dropna(subset=[id_field])
+
+                return df
+
+            # define NHA feature service rest endpoints
+            nha_url = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/0"
+            site_account_url = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/5"
+            species_url = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/6"
+            tr_bullets_url = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/7"
+            nha_references_url = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/4"
+
+            # eo rest end point to bring in current EO data
+            eo_ptreps = r"https://gis.waterlandlife.org/server/rest/services/PNHP/Biotics_READ_ONLY/FeatureServer/0"
+
+            # define NHA PUBLIC feature service rest endpoints - these are on our WEBGIS Portal
+            PUBLIC_nha_url = r"https://webgis.waterlandlife.org/server/rest/services/Hosted/Natural_Heritage_Area_Public_Data/FeatureServer/0"
+            PUBLIC_site_accounts_url = r"https://webgis.waterlandlife.org/server/rest/services/Hosted/Natural_Heritage_Area_Public_Data/FeatureServer/1"
+            PUBLIC_species_url = r"https://webgis.waterlandlife.org/server/rest/services/Hosted/Natural_Heritage_Area_Public_Data/FeatureServer/2"
+            PUBLIC_tr_bullets_url = r"https://webgis.waterlandlife.org/server/rest/services/Hosted/Natural_Heritage_Area_Public_Data/FeatureServer/3"
+            PUBLIC_nha_references_url = r"https://webgis.waterlandlife.org/server/rest/services/Hosted/Natural_Heritage_Area_Public_Data/FeatureServer/4"
+
+            ###################
+            ## FIRST WE ARE GOING TO CONNECT TO THE WPC GIS PORTAL AND BRING IN ALL THE DATA AT ONCE SO WE DON'T  HAVE TO KEEP SWITCHING PORTALS
+            # load wpc gis portal credentials from OS environment variables - these need to be setup in your operating system environment variables
+            wpc_gis_username = os.environ.get("wpc_portal_username")
+            wpc_gis_password = os.environ.get("wpc_gis_password")
+            # connect to wpc gis Portal account
+            gis = GIS('https://gis.waterlandlife.org/portal', wpc_gis_username, wpc_gis_password)
+
+            # make a layer of nha cores that are ready for review or approved - EXCLUDE draft and not approved. These will be loaded
+            # into the public layer in a bit
+            nha_layer = arcpy.MakeFeatureLayer_management(nha_url, "nha_layer", where_clause="status = 'rev' OR status = 'app'")
+
+            ##########################
+            ## LOAD SITE ACCOUNTS
+            ##########################
+            # load in the most current site account records for all NHAs
+            site_accounts = get_latest_records(site_account_url, "nha_join_id", "written_date")
+            site_accounts = site_accounts.fillna(np.nan)
+            site_accounts = site_accounts.replace({np.nan: None})
+
+            site_accounts_df = site_accounts[['site_desc', 'tr_summary', 'nha_join_id']]
+
+            # convert dataframe to feature set
+            site_accounts_fs = FeatureSet.from_dataframe(site_accounts_df)
+
+            # create dictionary with site description and tr summary that will be used to in the PUBLIC NHA layer after it is loaded with the updated NHA data
+            # site_account_dict = site_accounts.set_index('nha_join_id')[["site_desc", "tr_summary"]].apply(list,axis=1).to_dict()
+            # site_account_dict = {k: v for k, v in site_account_dict.items() if pd.notna(k) and k != ""}
+
+            ##########################
+            ## LOAD AND FORMAT SPECIES RECORDS
+            ##########################
+            # Create Pandas dataframe from species table for records are not excluded
+            fields = ['EO_ID', 'taxa', 'species_url', 'nha_join_id', 'exclude']
+            species_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(species_url, fields) if row[4] != "Y"), columns=fields)
+            # format NA values so they play nicely with ArcGIS
+            species_sdf = species_sdf.fillna(np.nan)
+            species_sdf = species_sdf.replace({np.nan: None})
+
+            # create pandas dataframe from eo_ptreps layer
+            fields = ['EO_ID', 'SNAME', 'SCOMNAME', 'GRANK', 'SRANK', 'USESA', 'SPROT', 'PBSSTATUS', 'EORANK',
+                      'SENSITV_SP', 'SENSITV_EO', 'LASTOBS_YR']
+            et_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(eo_ptreps, fields)), columns=fields)
+
+            # join species table with eo_ptreps data by EO_ID
+            species_sdf = pd.merge(species_sdf, et_sdf, on='EO_ID', how='left')
+
+            # sort values by lastobs_yr and drop duplicate species by nha group
+            species_sdf = species_sdf.sort_values(['nha_join_id', 'LASTOBS_YR'], ascending=[True, False])
+            species_sdf = species_sdf.drop_duplicates(subset=['nha_join_id', 'SNAME'], keep='first')
+
+            # add species_name column that includes combined species name and HTML tags to include bolding and italics
+            # species_sdf['species_name'] = '<b>' + species_sdf['SCOMNAME'] + '</b>' + ' (<i>' + species_sdf['SNAME'] + '</i>)'
+
+            # This is a dictionary of taxa photos. If photo path changes, then the paths need to change here.
+            taxa_dict = {
+                "Salamander": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/d4395781f79f4809ac5771ed46afcebe/data",
+                "Frog": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/d4395781f79f4809ac5771ed46afcebe/data",
+                "Invertebrate - Spiders": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/76355679a9de4b75b0e258d0dac50ed2/data",
+                "Bird": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/186836d959cf4395950fed5d06fa555a/data",
+                "Invertebrate - Butterflies and Skippers": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/d28d85867aa44e6a90e00bd709633d86/data",
+                "Invertebrate - Caddisflies": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/f94523b016054bf58672657c3e25a2d7/data",
+                "Community": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/2e46204a9d664cec8752f7ffaa6705c0/data",
+                "Invertebrate - Crayfishes": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/46f9fb536e414fc588d9b3161fe4bdac/data",
+                "Fish": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/a71cab580062496bb51bbc8fdfcc170f/data",
+                "Mammal": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/2b02184a22454072b69e6b2e29b3429a/data",
+                "Invertebrate - Moths": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/dbf1e79db4ed44c8aa3b8f3260484395/data",
+                "Invertebrate - Mussels": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/15483e775cf54fba916069f6da9c8660/data",
+                "Invertebrate - Dragonflies and Damselflies": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/79fb1762c6b54de39f6f0ea688f0f1f0/data",
+                "Invertebrate - Other Beetles": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/82dc6ca9f6b9441aa7f7de9401dbfb82/data",
+                "Vascular Plant": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/f1712d5fc50647189c11deef3256832e/data",
+                "Invertebrate - Gastropods": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/ccbaf34a23924e608b244db2ae370f35/data",
+                "Invertebrate - Sponges": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/3fa77fe0511942efbff26c5a2715bed2/data",
+                "Invertebrate - Tiger Beetles": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/0e821d1634c44c9e9f7eb844f5452152/data",
+                "Reptile": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/6e03a571988a4fd286dbddd97d5e4640/data",
+                "Invertebrate - Stoneflies": "https://webgis.waterlandlife.org/portal/sharing/rest/content/items/82dc6ca9f6b9441aa7f7de9401dbfb82/data"}
+
+            # join taxa_photo url with species dataframe based on taxa
+            species_sdf['taxa_photo'] = species_sdf['taxa'].map(taxa_dict)
+
+            # Deal with sensitive species by masking attributes if sensitive species or sensitive eo are marked Yes
+            # species_sdf['species_name'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), 'Sensitive Species',species_sdf['species_name'])
+            species_sdf['SNAME'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), 'Sensitive Species', species_sdf['SNAME'])
+            species_sdf['SCOMNAME'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), 'Sensitive Species', species_sdf['SCOMNAME'])
+            species_sdf['GRANK'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'),'--', species_sdf['GRANK'])
+            species_sdf['SRANK'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'),'--', species_sdf['SRANK'])
+            species_sdf['SPROT'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'),'--', species_sdf['SPROT'])
+            species_sdf['PBSSTATUS'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), '--', species_sdf['PBSSTATUS'])
+            species_sdf['taxa'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'),'--', species_sdf['taxa'])
+            species_sdf['taxa_photo'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'),
+                'https://webgis.waterlandlife.org/portal/sharing/rest/content/items/aaf80c376eb44dc6bf7cae1a1bb51333/data',
+                species_sdf['taxa_photo'])
+
+            # Get final species dataframe that will be loaded into PUBLIC feature service
+            species_sdf = species_sdf[
+                ['SNAME', 'SCOMNAME', 'GRANK', 'SRANK', 'SPROT', 'PBSSTATUS', 'LASTOBS_YR', 'EORANK', 'taxa', 'taxa_photo',
+                 'species_url', 'nha_join_id']]
+
+            # deal with field name mismatches and data type issues
+            species_sdf.rename(columns={'SNAME': 'sname', 'SCOMNAME': 'scomname', 'GRANK': 'grank', 'SRANK': 'srank', 'SPROT': 'sprot', 'PBSSTATUS': 'pbsstatus',
+                                        'LASTOBS_YR': 'lastobs_yr', 'EORANK': 'eorank'}, inplace=True)
+            species_sdf['lastobs_yr'] = species_sdf['lastobs_yr'].astype('Int64')
+
+            # convert dataframe to feature set
+            species_fs = FeatureSet.from_dataframe(species_sdf)
+
+            ##########################
+            ## LOAD TR BULLETS RECORDS
+            ##########################
+
+            # create pandas dataframe from tr_bullets table
+            fields = ['threat_text', 'nha_join_id', 'threat_desc']
+            tr_bullets_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(tr_bullets_url, fields)),
+                                          columns=fields)
+            # format NA values so they play nicely with ArcGIS
+            tr_bullets_sdf = tr_bullets_sdf.fillna(np.nan)
+            tr_bullets_sdf = tr_bullets_sdf.replace({np.nan: None})
+
+            # convert dataframe to feature set
+            tr_bullets_fs = FeatureSet.from_dataframe(tr_bullets_sdf)
+
+            ##########################
+            ## LOAD REFERENCE RECORDS
+            ##########################
+
+            # create pandas dataframe from references table
+            fields = ['source_id', 'full_cite']
+            references_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(nha_references_url, fields)),
+                                          columns=fields)
+            # format NA values so they play nicely with ArcGIS
+            references_sdf = references_sdf.fillna(np.nan)
+            references_sdf = references_sdf.replace({np.nan: None})
+
+            references_sdf['full_cite'] = references_sdf['full_cite'].str.replace(r'<div class="csl-entry">', '', regex=True)
+            references_sdf['full_cite'] = references_sdf['full_cite'].str.replace(r'</div>', '', regex=True)
+
+            # convert dataframe to feature set
+            references_fs = FeatureSet.from_dataframe(references_sdf)
+
+            ######################
+            ## NOW WE ARE GOING TO CONNECT TO THE PUBLIC WEBGIS PORTAL AND START DELETING AND LOADING DATA
+            ######################
+
+            # load wpc WEBGIS credentials from OS environment variables - these need to be setup in your operating system environment variables
+            wpc_webgis_username = os.environ.get("wpc_webgis_username")
+            wpc_gis_password = os.environ.get("wpc_gis_password")
+            # connect to Portal account
+            webgis = GIS('https://webgis.waterlandlife.org/portal', wpc_webgis_username, wpc_gis_password)
+
+            ###### this section deletes NHA polygons and appends current polygons to the Public NHA dataset
+            # delete all features from NHA Public layer
+            public_nha_flayer = FeatureLayer(PUBLIC_nha_url)
+            public_nha_flayer.delete_features(where="objectid > 0")
+
+            # append nha cores to public feature service layer
+            arcpy.Append_management(nha_layer, PUBLIC_nha_url, "NO_TEST")
+
+            ############ THIS SECTION UPDATES THE NHA LAYER FOR DOMAIN THINGS
+            with arcpy.da.UpdateCursor(PUBLIC_nha_url, "sig_rank") as cursor:
+                for row in cursor:
+                    if row[0] is None:
+                        pass
+                    elif row[0] == "G":
+                        row[0] = "Global"
+                        cursor.updateRow(row)
+                    elif row[0] == "R":
+                        row[0] = "Regional"
+                        cursor.updateRow(row)
+                    elif row[0] == "S":
+                        row[0] = "State"
+                        cursor.updateRow(row)
+                    else:
+                        row[0] = "Local"
+                        cursor.updateRow(row)
+
+            with arcpy.da.UpdateCursor(PUBLIC_nha_url, ["site_type"]) as cursor:
+                for row in cursor:
+                    if row[0] is None:
+                        pass
+                    elif row[0] == "curr":
+                        row[0] = "NHA - Current"
+                        cursor.updateRow(row)
+                    elif row[0] == "hist":
+                        row[0] = "NHA - Historic"
+                        cursor.updateRow(row)
+                    elif row[0] == "susn":
+                        row[0] = "SUSN - Species of Unusual Spatial Need"
+                        cursor.updateRow(row)
+                    else:
+                        row[0] = None
+                        cursor.updateRow(row)
+
+            ############
+            ## DELETE AND LOAD IN SITE ACCOUNT RECORDS
+            ############
+
+            # create public species feature layer
+            public_site_accounts_flayer = FeatureLayer(PUBLIC_site_accounts_url)
+            # delete species records from public feature layer
+            public_site_accounts_flayer.delete_features(where="objectid > 0")
+            # load species records from species feature set
+            public_site_accounts_flayer.edit_features(adds=site_accounts_fs)
+
+            # update the site description and tr summary in the public nha core layer with most recent entries in site account
+            with arcpy.da.UpdateCursor(PUBLIC_site_accounts_url, ["site_desc", "tr_summary"]) as cursor:
+                for row in cursor:
+                    if row[0] is None:
+                        row[
+                            0] = "Site description is not yet databased for this site. Please see the Site Account PDF if available."
+                        cursor.updateRow(row)
+                    if row[1] is None:
+                        row[
+                            1] = "Threats and recommendations summary is not yet databased for this site. Please see the Site Account PDF if available."
+                        cursor.updateRow(row)
+
+            ############
+            ## DELETE AND LOAD IN SPECIES RECORDS
+            ############
+            # create public species feature layer
+            public_species_flayer = FeatureLayer(PUBLIC_species_url)
+            # delete species records from public feature layer
+            public_species_flayer.delete_features(where="objectid > 0")
+            # load species records from species feature set
+            public_species_flayer.edit_features(adds=species_fs)
+
+            #######
+            ## DELETE AND LOAD IN TR BULLETS
+            #######
+            # create public tr bullets layer
+            tr_bullets_flayer = FeatureLayer(PUBLIC_tr_bullets_url)
+            # delete all records from the public tr bullets table
+            tr_bullets_flayer.delete_features(where="objectid > 0")
+            # load tr bullet records from tr bullets feature set
+            tr_bullets_flayer.edit_features(adds=tr_bullets_fs)
+
+            #######
+            ## DELETE AND LOAD IN NHA REFERENCES
+            #######
+            # create public references feature layer
+            references_flayer = FeatureLayer(PUBLIC_nha_references_url)
+            # delete all records from public references table
+            references_flayer.delete_features(where="objectid > 0")
+            # load references records from references feature set
+            references_flayer.edit_features(adds=references_fs)
+
+######################################################################################################################################################
+## EOs not in NHA
+######################################################################################################################################################
+
+class OrphanEOReport(object):
+    def __init__(self):
+        """Define the tool (tool name is the name of the class)."""
+        self.label = "Orphan EO Report"
+        self.description = "This tool checks for exploded EO centroids that are NOT within an NHA boundary."
+        self.canRunInBackground = False
+        self.category = "Data Management QC Tools"
+
+    def getParameterInfo(self):
+        geo_area = arcpy.Parameter(
+            displayName = "Geographic area within which to report on qualifying orphan EOs (exploded EO centroids NOT within NHA boundary)",
+            name = "geo_area",
+            datatype = "GPFeatureLayer",
+            parameterType = "Required",
+            direction = "Input")
+        geo_area.value = r'Counties'
+
+        nha_core = arcpy.Parameter(
+            displayName = "Selected NHA Core Layer",
+            name = "nha_core",
+            datatype = "GPFeatureLayer",
+            parameterType = "Required",
+            direction = "Input")
+        nha_core.value = r'NHAEdit\NHA Core Habitat'
+
+        eo_layer = arcpy.Parameter(
+            displayName="EO Reps Polygon Layer (this tool will explode multipart EOs and use their centroids to reduce issues with large, low accuracy polygons)",
+            name="eo_layer",
+            datatype="GPFeatureLayer",
+            parameterType="Required",
+            direction="Input")
+        eo_layer.value = r'Biotics\EO Reps'
+
+
+        params = [geo_area, nha_core, eo_layer]
+        return params
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, params):
+        return
+
+    def updateMessages(self, params):
+        return
+
+    def execute(self, params, messages):
+        geo_area = params[0].valueAsText
+        nha_core = params[1].valueAsText
+        eo_layer = params[2].valueAsText
+
+        # we are going to make the eo polygons into single part centroids to tag to NHAs
+        eo_singles = arcpy.MultipartToSinglepart_management(eo_layer, os.path.join("memory","eo_singles"))
+        eo_centroids = arcpy.FeatureToPoint_management(eo_singles, os.path.join("memory","eo_centroids"),"INSIDE")
+        eo_lyr = arcpy.MakeFeatureLayer_management(eo_centroids,"eo_lyr")
+
+        geo_lyr = arcpy.MakeFeatureLayer_management(geo_area,"geo_lyr")
+        nha_lyr = arcpy.MakeFeatureLayer_management(nha_core,"nha_lyr")
+
+        arcpy.SelectLayerByLocation_management(eo_lyr,"INTERSECT",geo_lyr)
+
+        arcpy.SelectLayerByLocation_management(eo_lyr,"INTERSECT",nha_lyr,"","REMOVE_FROM_SELECTION")
+
+        # today = date.today()
+        # formatted_date = today.strftime("%Y%m%d")
+        output_file = "NHA_orphan_eos.csv"
+        arcpy.ExportTable_conversion(eo_lyr,output_file)
+        os.startfile(output_file)
+
+        where_clause = "{0} = '{1}'".format("NHAEligible", "Y")
+        arcpy.SelectLayerByAttribute_management(eo_lyr,"SUBSET_SELECTION",where_clause)
+
+        with arcpy.da.SearchCursor(eo_lyr,"EO_ID") as cursor:
+            qualifying_eos = sorted({row[0] for row in cursor})
+
+        where_clause = "EO_ID IN ({})".format(", ".join(str(eo) for eo in qualifying_eos))
+        arcpy.AddMessage(where_clause)
+        arcpy.SelectLayerByAttribute_management(eo_layer,"NEW_SELECTION",where_clause)
+
+
+
+

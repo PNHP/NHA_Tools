@@ -75,180 +75,241 @@ if(!is.na(selected_nha$photo_caption)){
 % Site Description
 \normalsize
 \noindent
-\Sexpr{as.character(site_account$site_desc)}\\\\
-% paragraph about significance ranks
-This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because of
-% calculates what text to say
-<<label=sigparagraph, echo=FALSE, results='asis'>>=
-
-# Case 1: global significance and the species are not sensitive
-if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
-  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-# case 1a:
-} else if(nha_siterank=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
-  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-  # Case 1b: global significance and the species are not sensitive
-} else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
-  cat(paste0("the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME, " (\\textit{",spExample_GImperiled$SNAME,"})",", which occurs within the NHA."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-  # case 1c: global sig because of a winter bat colony
-} else if(nha_siterank=="Global" & nrow(species_table==1) & species_table$SNAME[1]=="Bat Hibernaculum") {
-  cat(paste0("the presence of a sensitive species of concern that is either of a G1 or G2 rank."," Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
-    # Case 2: regional significance and the species are not sensitive
-} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
-  cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
-  # Case 2a: regional significance and the species are sensitive
-} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
-  cat(paste0("the occurrence of a sensitive species of concern that is of G3 rank."))
-# Case 2b: regional significance and the species are not sensitive
-} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
-   cat(paste0(" the high concentration of G4, G5, or GNR species at this site."))  
-# Case 2c: regional significance and their are sensitive and non sensitive G3 species present
-} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
-   cat(paste0("the occurrence of at least ",words(spCount_GVulnerable)," globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME, " (\\textit{",spExample_GVulnerable$SNAME,"})",", within this NHA."))
-# Case 4: state significance and the species are not sensitive
-} else if(nha_siterank=="State" & spCount_GSecure>0) {
-  cat("the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
-# Case 4a: state significance and the species are all sensitive
-} else if(nha_siterank=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
-  cat("the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level, and also sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
-# Case 4b: state significance and species are G3G4 and the species are all sensitive
-} else if(nha_siterank=="State" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
-  cat("the tracked species at the site being ranked G3G4, and also sensitive to collection or disturbance. Within Pennsylvania, these species may be severely declining.")
-  # Case 5: local significance and the species are not sensitive
-} else if(nha_siterank=="Local" & spCount_GSecure>0) {
-  cat("tracked species which are secure globally, but occur at the edge of their range in Pennsylvania and thus are of local conservation concern.")
-# Case 5: local significance and the species are  sensitive
-} else if(nha_siterank=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
-  cat("tracked species which are secure globally, but occur at the edge of their range in Pennsylvania and are thus of local conservation concern.")
+<<label=site_desc, echo=FALSE, results='asis'>>=
+if(nrow(site_account)>0){
+  if(is.na(site_account$site_desc)==FALSE){
+  cat(paste0("\\noindent ", as.character(site_account$site_desc), "\\\\"))
+  }
 }
 @
-\noindent
+
+
+\\
+\medskip
+% paragraph about significance ranks
+\noindent This site is of \Sexpr{nha_siterank} significance. It has been assigned this significance level because
+<<label=sigparagraph, echo=FALSE, results='asis'>>=
+# Case 1: Global significance, species not sensitive
+if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no") {
+  cat(paste0(" of the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME,
+             " (\\textit{", spExample_GImperiled$SNAME, "}), which occurs within the NHA. Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+# Case 1a: Global, no G1/G2 species, sensitive
+} else if(nha_siterank=="Global" & spCount_GImperiled==0 & spCount_GImperiledSens=="yes") {
+  cat(" of the presence of a sensitive species of concern that is either of a G1 or G2 rank. Sites designated as Globally Significant are of highest conservation concern within the Commonwealth.")
+# Case 1b: Global, species present and sensitive
+} else if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="yes") {
+  cat(paste0(" of the presence of a globally rare species, such as ", spExample_GImperiled$SCOMNAME,
+             " (\\textit{", spExample_GImperiled$SNAME, "}), which occurs within the NHA. Sites designated as Globally Significant are of highest conservation concern within the Commonwealth."))
+# Case 1c: Global, winter bat colony
+} else if(nha_siterank=="Global" & nrow(species_table)==1 & species_table$SNAME[1]=="Bat Hibernaculum") {
+  cat(" of the presence of a sensitive species of concern that is either of a G1 or G2 rank. Sites designated as Globally Significant are of highest conservation concern within the Commonwealth.")
+# Case 2: Regional, species not sensitive
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="no") {
+  cat(paste0(" of the occurrence of at least ", word(spCount_GVulnerable),
+             " globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME,
+             " (\\textit{", spExample_GVulnerable$SNAME, "}), within this NHA."))
+# Case 2a: Regional, species sensitive
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
+  cat(" of the occurrence of a sensitive species of concern that is of G3 rank.")
+# Case 2b: Regional, species not sensitive, G4/G5/GNR
+} else if(nha_siterank=="Regional" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="no") {
+  cat(" of the high concentration of G4, G5, or GNR species at this site.")
+# Case 2c: Regional, mixed sensitive/non-sensitive G3
+} else if(nha_siterank=="Regional" & spCount_GVulnerable>0 & spCount_GVulnerableSens=="yes") {
+  cat(paste0(" of the occurrence of at least ", word(spCount_GVulnerable),
+             " globally vulnerable (G3) species, such as ", spExample_GVulnerable$SCOMNAME,
+             " (\\textit{", spExample_GVulnerable$SNAME, "}), within this NHA."))
+# Case 4: State significance, species not sensitive
+} else if(nha_siterank=="State" & spCount_GSecure>0) {
+  cat(" of the tracked species at the site, which are considered Secure (G5) or Apparently Secure (G4) at the global level. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
+# Case 4a: State, all species sensitive
+} else if(nha_siterank=="State" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat(" of the tracked species at the site being considered Secure (G5) or Apparently Secure (G4) at the global level, and also sensitive to collection or disturbance. Within Pennsylvania, these species have limited numbers, due to occurring at the edge of their range or to loss of habitat.")
+# Case 4b: State, G3/G4, all sensitive
+} else if(nha_siterank=="State" & spCount_GVulnerable==0 & spCount_GVulnerableSens=="yes") {
+  cat(" of the tracked species at the site being ranked G3G4, and also sensitive to collection or disturbance. Within Pennsylvania, these species may be severely declining.")
+# Case 5: Local significance, species not sensitive
+} else if(nha_siterank=="Local" & spCount_GSecure>0) {
+  cat(" of tracked species which are globally secure, but may be of local conservation concern.")
+# Case 5a: Local, species sensitive
+} else if(nha_siterank=="Local" & spCount_GSecure==0 & spCount_GSecureSens=="yes") {
+  cat(" of tracked species which are globally secure, but may be of local conservation concern.")
+# Case Historic
+} else if(nha_siterank=="Historic") {
+  cat(" it no longer qualifies as a current NHA. This site may have previously included species of concern that are now delisted or extirpated. Although historic NHAs may continue to have local conservation value, we no longer maintain or update these sites. Historic NHAs are kept in our dataset for legacy purposes.\\\\\\")
+}
+@
+
+
+
+<<species_table_wrapper, echo=FALSE, results='asis'>>=
+if (nrow(species_table) > 0) {
+
+  cat('
+\\noindent
 \\\\All species tracked by PNHP documented at this NHA include:
-\smallskip
-\afterpage{\clearpage}
-% Species Table
-\begin{ThreePartTable}
-\renewcommand\TPTminimum{\textwidth}
-%% Arrange for "longtable" to take up full width of text block
-\setlength\LTleft{0pt}
-\setlength\LTright{0pt}
-\setlength\tabcolsep{0pt}
+\\smallskip
+\\afterpage{\\clearpage}
 
-\begin{TableNotes}
- \begin{footnotesize}
-    \item [1] See the PNHP (\href{\Sexpr{url_PNHPrank}}{\Sexpr{url_PNHPrank}}) for an explanation of PNHP ranks and legal status. PABS status refers to the status recommended by the Pennsylvania Biological Survey.
-    \item [2] See NatureServe (\href{\Sexpr{url_NSrank}}{\Sexpr{url_NSrank}}) for an explanation of quality ranks.
-    <<SensitiveFNote3, echo=FALSE, results='asis'>>=
-     SensitiveFNote <- ifelse(any(species_table$SENSITV_SP=="Y"), "\\item [3] This species is not named by request of the   jurisdictional agency responsible for its protection.","") # \\end{tablenotes} \\end{tablenotes}
-     @
-    \Sexpr{paste(SensitiveFNote)}
-  \end{footnotesize}
-\end{TableNotes}
+\\begin{ThreePartTable}
+\\renewcommand\\TPTminimum{\\textwidth}
+\\setlength\\LTleft{0pt}
+\\setlength\\LTright{0pt}
+\\setlength\\tabcolsep{0pt}
 
-\begin{longtable}{ l @{\extracolsep{\fill}} *{7}{c} } 
-\toprule
-\textbf{Species or Natural Community Name} &  & \textbf{Global}\tnote{1} & \textbf{State}\tnote{1} & \textbf{\shortstack{PA Legal\\Status}}\tnote{1} & \textbf{\shortstack{PABS\\Status}}\tnote{1} & \textbf{\shortstack{Last\\Observed}}	& \textbf{Quality}\tnote{2} \\
+\\begin{TableNotes}
+  \\begin{footnotesize}
+    \\item [1] See the PNHP (\\href{', url_PNHPrank, '}{', url_PNHPrank, '}) for an explanation of PNHP ranks and legal status.
+    \\item [2] See NatureServe (\\href{', url_NSrank, '}{', url_NSrank, '}) for an explanation of quality ranks.
+')
 
-\midrule
-\endhead
+  # Optional footnote [3]
+  if (any(species_table$SENSITV_SP == "Y", na.rm = TRUE)) {
+    cat("\\item [3] This species is not named by request of the jurisdictional agency responsible for its protection.\n")
+  }
 
-\midrule[\heavyrulewidth]
-\multicolumn{8}{r}{\textit{table continued on next page}}\\
-\endfoot  
+  cat('
+  \\end{footnotesize}
+\\end{TableNotes}
 
-\midrule[\heavyrulewidth]
-\insertTableNotes  % tell LaTeX where to insert the table-related notes
-\endlastfoot
+\\begin{longtable}{ l @{\\extracolsep{\\fill}} *{7}{c} } 
+\\toprule
+\\textbf{Species or Natural Community Name} &  & \\textbf{Global}\\tnote{1} & \\textbf{State}\\tnote{1} & \\textbf{\\shortstack{PA Legal\\\\Status}}\\tnote{1} & \\textbf{\\shortstack{PABS\\\\Status}}\\tnote{1} & \\textbf{\\shortstack{Last\\\\Observed}} & \\textbf{Quality}\\tnote{2} \\\\
+\\midrule
+\\endhead
 
-     <<label=speciestable, echo=FALSE, results='asis'>>=
-     #Sort species table first taxonomically, and then alphabetically by SName
-     TaxOrder <- c("Mammal","Bird","Salamander","Frog","Reptile","Fish","Invertebrate - Mussels","Vascular Plant","Nonvascular   Plant","Invertebrate - Sponges","Invertebrate - Gastropods","Invertebrate - Dragonflies and Damselflies","Invertebrate - Butterflies and Skippers","Invertebrate - Moths","Invertebrate - Tiger Beetles","Invertebrate - Grasshoppers","Invertebrate - Stoneflies","Invertebrate - Spiders","Invertebrate - Crayfishes","Community","Sensitive")
-     species_table$OrderVec <- species_table$taxa
-     species_table <- within(species_table, OrderVec[SENSITV_SP =="Y"| SENSITV_EO =="Y"] <- "Sensitive")    
-     species_table$OrderVec <- factor(species_table$OrderVec, levels=TaxOrder)
-     species_table <- species_table[order(species_table$OrderVec, species_table$SNAME),]
-     
-     #Recode Sensitive Species names
-     species_table$SNAME_or <- species_table$SNAME
-     SSct <- length(species_table$SENSITV_SP[species_table$SENSITV_SP == "Y"])
-     SSOCid <- toupper(letters[1:SSct])
-     j=0 #set the indexing for the sensitive species 
-     for(i in 1:nrow(species_table)){ 
-       # replace common name if blank
-       if(is.na(species_table$SCOMNAME[i])){
-         species_table$SCOMNAME[i] <- "no common name"
-       } 
-       # remove double names for sensitive species of concern
-       if(species_table$SENSITV_SP[i]=="Y"){
-         j <- j + 1 # add one the sensitive species id
-         speciesstring <- paste("Sensitive Species of Concern ",SSOCid[j],"\\tnote{3}", sep="") 
-       } else {
-         speciesstring <- paste0(species_table$SCOMNAME[i]," (\\textit{",species_table$SNAME[i],"}) ")
-         if(nchar(speciesstring)>58) {
-           speciesstring <- paste0(species_table$SCOMNAME[i],"\\\\ \\enspace (\\textit{",species_table$SNAME[i],"}) ")
-         } else {
-           speciesstring <- speciesstring
-         }
-       }
-       # make the SCOMNAME (SNAME) strings here, eliminating the SNAME if they are the same
-       if(species_table$SCOMNAME[i]==species_table$SNAME[i] & species_table$SENSITV_SP[i]!="Y"){
-         speciesstring <- paste0(species_table$SCOMNAME[i])
-       } 
-       # replace the state status 'NA'
-       if(is.na(species_table$SPROT[i])){
-         species_table$SPROT[i] <- "--"
-       } 
-       if(is.na(species_table$PBSSTATUS[i])){
-         species_table$PBSSTATUS[i] <- "--"
-       }      
-       # mask information for sensitive species
-       if(species_table$SENSITV_SP[i]=="Y") {
-         species_table$SPROT[i] <- "--"
-         species_table$PBSSTATUS[i] <- "--"
-         species_table$GRANK[i] <- "--"
-         species_table$SRANK[i] <- "--"
-         species_table$icon[i] <- "Sensitive.png"
-       }
-       # concatenate and make the table row
-       cat(paste0(speciesstring, " &", "\\includegraphics[width=0.15in]{",species_table$icon[i],"}","&",species_table$GRANK[i], "&", species_table$SRANK[i],"&", species_table$SPROT[i], "&", species_table$PBSSTATUS[i], "&", species_table$LASTOBS_YR[i], "&", species_table$EORANK[i],"\\\\") )
-     }
-@       
+\\midrule[\\heavyrulewidth]
+\\multicolumn{8}{r}{\\textit{table continued on next page}}\\\\
+\\endfoot  
 
-\end{longtable}   
-\end{ThreePartTable}
+\\midrule[\\heavyrulewidth]
+\\insertTableNotes
+\\endlastfoot
+')
+
+  # ---- Table rows ----
+  TaxOrder <- c(
+    "Mammal","Bird","Salamander","Frog","Reptile","Fish",
+    "Invertebrate - Mussels","Vascular Plant","Nonvascular Plant",
+    "Invertebrate - Sponges","Invertebrate - Gastropods",
+    "Invertebrate - Dragonflies and Damselflies",
+    "Invertebrate - Butterflies and Skippers",
+    "Invertebrate - Moths","Invertebrate - Tiger Beetles",
+    "Invertebrate - Grasshoppers","Invertebrate - Stoneflies",
+    "Invertebrate - Spiders","Invertebrate - Crayfishes",
+    "Community","Sensitive"
+  )
+  species_table$OrderVec <- species_table$taxa
+  species_table <- within(species_table, OrderVec[SENSITV_SP == "Y" | SENSITV_EO == "Y"] <- "Sensitive")    
+  species_table$OrderVec <- factor(species_table$OrderVec, levels = TaxOrder)
+  species_table <- species_table[order(species_table$OrderVec, species_table$SNAME),]
+
+  SSct <- sum(species_table$SENSITV_SP == "Y", na.rm = TRUE)
+  SSOCid <- toupper(letters[1:SSct])
+  j <- 0
+
+  for (i in seq_len(nrow(species_table))) {
+    if (is.na(species_table$SCOMNAME[i])) species_table$SCOMNAME[i] <- "no common name"
+
+    if (species_table$SENSITV_SP[i] == "Y") {
+      j <- j + 1
+      speciesstring <- paste0("Sensitive Species of Concern ", SSOCid[j], "\\tnote{3}")
+    } else {
+      speciesstring <- paste0(species_table$SCOMNAME[i],
+                              " (\\textit{", species_table$SNAME[i], "}) ")
+      if (nchar(speciesstring) > 58) {
+        speciesstring1 <- species_table$SCOMNAME[i]
+        speciesstring2 <- species_table$SNAME[i]
+        if (nchar(speciesstring2) > 58) {
+          sname_split <- unlist(strsplit(speciesstring2, "\\s+"))
+          sname1 <- paste(sname_split[1:7], collapse=" ")
+          sname2 <- paste(sname_split[8:length(sname_split)], collapse = " ")
+          speciesstring <- paste0(speciesstring1, "\\\\ \\enspace (\\texit{", sname1, "}", "\\\\ \\enspace \\texit{"  , sname2, "})")
+        }
+        else {
+        speciesstring <- paste0(species_table$SCOMNAME[i],
+                                "\\\\ \\enspace (\\textit{", species_table$SNAME[i], "}) ")
+      }
+      }
+    }
+
+    if (species_table$SCOMNAME[i] == species_table$SNAME[i] && species_table$SENSITV_SP[i] != "Y") {
+      speciesstring <- species_table$SCOMNAME[i]
+    }
+
+    if (is.na(species_table$SPROT[i])) species_table$SPROT[i] <- "--"
+    if (is.na(species_table$PBSSTATUS[i])) species_table$PBSSTATUS[i] <- "--"
+
+    if (species_table$SENSITV_SP[i] == "Y") {
+      species_table$SPROT[i] <- "--"
+      species_table$PBSSTATUS[i] <- "--"
+      species_table$GRANK[i] <- "--"
+      species_table$SRANK[i] <- "--"
+      species_table$icon[i] <- "Sensitive.png"
+    }
+
+    cat(paste0(
+      speciesstring, " & ",
+      "\\includegraphics[width=0.15in]{", species_table$icon[i], "} & ",
+      species_table$GRANK[i], " & ", species_table$SRANK[i], " & ",
+      species_table$SPROT[i], " & ", species_table$PBSSTATUS[i], " & ",
+      species_table$LASTOBS_YR[i], " & ", species_table$EORANK[i], " \\\\\n"
+    ))
+  }
+
+  cat('\\end{longtable}\n\\end{ThreePartTable}\n')
+}
+@
+
 
 %%% Threats and Species Recommendations %%%
 \medskip
 \noindent
-\textbf{\underline{Threats and Species Recommendations}}\\\\
-\normalsize 
-\noindent \Sexpr{as.character(site_account$tr_summary)} Specific threats and stresses to the elements present at this site, as well as conservation actions, include:  
-\begin{itemize}
-<<echo=FALSE, results='asis'>>=
-for(t in 1:nrow(tr_bullets)){
-  cat(paste0("\\item ",tr_bullets$threat_text[t]))#as.character()
+
+
+
+% calculates what text to say
+<<label=threatsrecs, echo=FALSE, results='asis'>>=
+if(nrow(site_account)>0){
+  if(is.na(site_account$tr_summary)==FALSE | nrow(tr_bullets)>0){
+    cat(paste0("\\noindent\\textbf{\\underline{Threats and Species Recommendations}}\\\\"))
+    cat("\\normalsize")
+  if(is.na(site_account$tr_summary)==FALSE){
+    cat(paste0("\\noindent ",as.character(site_account$tr_summary),"\\\\"))
+  }
+  if(nrow(tr_bullets)>0){
+    cat("\\begin{itemize}")
+    for(t in 1:nrow(tr_bullets)){
+      cat(paste0("\\item ",tr_bullets$threat_text[t]))
+    }
+    cat("\\end{itemize}")
+  }
+  }
 }
 @
-\end{itemize}
-\medskip
-\noindent This NHA site account is one of the first steps for promoting conservation management actions to support the species of concern at the site. NHA sites may have multiple habitat types present and require a variety of conservation strategies that may occasionally conflict. PNHP staff are available for additional consultation to help address specific site challenges. For additional information, please contact naturalheritage@paconserve.org.
 
-\bigskip
+<<label=nextsteps, echo=FALSE, results='asis'>>=
+if (nha_siterank != "Historic") {
+  cat("\\medskip\n\\noindent This NHA site account is one of the first steps for promoting conservation management actions to support the species of concern at the site. NHA sites may have multiple habitat types present and require a variety of conservation strategies that may occasionally conflict. PNHP staff are available for additional consultation to help address specific site challenges. For additional information, please contact naturalheritage@paconserve.org.\n\\medskip\n")
+}
+@
 
 %%% Location and Additional Infomation %%% 
 \pagebreak[1]
 \noindent\textbf{\underline{Location}}\\\\
 \smallskip
-\textbf{Municipalities:} \Sexpr{site_account$CountyMuni} \\
-\textbf{Overlapping Protected Lands:} \Sexpr{site_account$protected_lands} \\
+\textbf{Municipalities:} \Sexpr{selected_nha$CountyMuni} \\
+\textbf{Overlapping Protected Lands:} \Sexpr{selected_nha$protected_lands} \\
 \textbf{Approximate Acreage:} \Sexpr{round(area_acres)} acres \\  
   
 %%% References %%% 
-\noindent\textbf{\underline{References}} \\
-\smallskip
 <<results="asis", echo=FALSE>>=
+if(nrow(references) > 0){
+  cat("\\noindent\\textbf{\\underline{References}} \\\\ \n\\smallskip")
+
   refs = references$latex_citation
   cat("", refs, sep="\n\\item\\hangpara{2em}{1} ")
+}
 @
 
 \p

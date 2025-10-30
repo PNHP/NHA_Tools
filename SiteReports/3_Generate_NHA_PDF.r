@@ -12,7 +12,8 @@
 
 # PASTE LIST OF NHA SITE NAMES FOR WHICH TO CREATE SITE REPORTS HERE - USE THE
 # SITE NAME LISTER TOOL IN ARCGIS TO GET LIST OF SITE NAMES FROM SELECTED NHAS.
-nha_list <- c('Chestnut Ridge at Limestone Run','Jumonville','Middle Morgan Run')
+nha_list <- c('Alpine Road Site', 'Andersontown Woods', 'Atom Road Woods', 'Bandana Woods', 'Beaver Creek ROW', 'Beaver Creek-York Co', 'Bermudian Creek at T809', 'Blymire and Rehmeyer Hollow Woods', 'Boyds Run Ravine', 'Bryansville Station Seep', 'Cabin Creek', 'Chimney Rock', 'Codorus State Park Site', 'Crystal Pit Cave', 'Deer Creek Woods', 'East Berlin Meadow', 'Ebaughs Creek', 'Erney Cliff', 'Felton and Fenmore Outcrops', 'Fishing Creek - Susquehanna River Site', 'Gifford Pinchot State Park Site', 'High Rock', 'Highrock Outcrops', 'Indian Rock Floodplain', 'Indian Steps Woods', 'Kiwanis Lake', 'Lake Redman Site', 'Laurel Run-York Co', 'Leibs Creek Hollow', 'Marsh Run', 'Michael Run', 'Mt Olivet Marsh', 'Muddy Creek At Woodbine', 'Muddy Creek Gorge', 'Nells Hill Swamp', 'Oakland Run', 'Oakland Run Woods', 'Otter Creek Woods', 'Peach Bottom Woods', 'Plum Run Upland', 'Rambo Run Woods', 'Rock Ridge Woods', 'Sawmill Run Woods', 'Seitzland Marsh', 'Shady Lane Woods', 'Shaffers Hollow', 'Shenks Ferry York Woods', 'Southside Woods', 'State Game Lands 243', 'Stewartstown Ravine', 'Straight Hill Woods', 'West Bridgeton Woods', 'Wildcat Run Cliffs', 'Wildcat Run Gorge', 'Winterstown Station Woods', 'York Furnace Woods')
+#nha_name <- "West Bridgeton Woods"
 
 
 if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
@@ -51,7 +52,7 @@ for (nha_name in nha_list){
 
   # Pull in the selected NHA data ################################################
   nha_name <- nha_name
-  #nha_name <- "Jumonville" # use this for testing a single site
+  #nha_name <- "Haycock Mountain (State Game Lands 157) & Nockamixon State Park" # use this for testing a single site
   print(paste0("Creating site report for: ",nha_name))
   nha_nameSQL <- paste("'", nha_name, "'", sep='')
   nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
@@ -72,18 +73,20 @@ for (nha_name in nha_list){
   # open the nha site accounts and select those that match the nha_join_id. keep only record of most recent written date.
   site_account <- arc.open(site_account_url)
   site_account <- arc.select(site_account, where_clause=paste("nha_join_id=", nha_join_id_SQL, sep="")) # need to add statement or loop for multiple NHAs
+  if(nrow(site_account)>0){
   site_account <- site_account %>%
     group_by(nha_join_id) %>% 
     filter(written_date == max(written_date))
+  }
   
   # open protected lands records for selected nha
   protected_lands <- arc.open(protected_lands_url)
   protected_lands <- arc.select(protected_lands, where_clause=paste("nha_join_id=", nha_join_id_SQL, sep=""))
   
   if(nrow(protected_lands)==0){
-    site_account$protected_lands <- paste("This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements.")
+    selected_nha$protected_lands <- paste("This site is not documented as overlapping with any Federal, state, or locally protected land or conservation easements.")
   } else {
-    site_account$protected_lands <- paste(protected_lands$protected_land, collapse=', ')
+    selected_nha$protected_lands <- paste(protected_lands$protected_land, collapse=', ')
   }
   
   # open political boundary records for selected nha
@@ -91,30 +94,35 @@ for (nha_name in nha_list){
   political_boundaries <- arc.select(political_boundaries, where_clause=paste("nha_join_id=", nha_join_id_SQL, sep="")) 
   
   PBs <- split(political_boundaries, political_boundaries$county)
-  munil <- list()
-  for(i in 1:length(PBs)){
-    munil[[i]] <- unique(PBs[[i]]$municipality)  
-  }
+  if(length(PBs) > 0){
+    munil <- list()
+    for(i in 1:length(PBs)){
+      munil[[i]] <- unique(PBs[[i]]$municipality)  
+    }
   
-  printCounty <- list()
-  for (i in 1:length(PBs)){
-    printCounty[[i]]  <- paste0(PBs[[i]]$county[1], " County",": ", paste(munil[[i]], collapse=', '))  
-  }
+    printCounty <- list()
+    for (i in 1:length(PBs)){
+      printCounty[[i]]  <- paste0(PBs[[i]]$county[1], " County",": ", paste(munil[[i]], collapse=', '))  
+    }
   
-  site_account$CountyMuni <- paste(printCounty, collapse='; ')
+    selected_nha$CountyMuni <- paste(printCounty, collapse='; ')
+  } else {
+    selected_nha$CountyMuni <- "None recorded"
+  }
   
   # species table
   # open the related species table and get the rows that match the NHA join ids from the selected NHAs
   species_table <- arc.open(species_url)
   species_table <- arc.select(species_table, where_clause=paste("nha_join_id=", nha_join_id_SQL, "AND exclude = 'N'", sep="")) 
   
+  
   # replace missing values with NA
   species_table$EORANK[is.na(species_table$EORANK)] <- "E"
   
   # merge the species table with the taxonomic icons
   # taxaicon lookup
-  taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Crustacean.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png","OtherInverts.png"),
-                         c("Salamander","Frog","Invertebrate - Spiders","Bird","Invertebrate - Butterflies and Skippers","Invertebrate - Caddisflies","Community","","Invertebrate - Crayfishes","","Fish","","Mammal","","Invertebrate - Moths","Invertebrate - Mussels","Invertebrate - Dragonflies and Damselflies","Invertebrate - Other Beetles","Vascular Plant","","Invertebrate - Gastropods","Invertebrate - Sponges","Invertebrate - Tiger Beetles","Reptile","Invertebrate - Stoneflies"), stringsAsFactors = FALSE)
+  taxaicon <- data.frame(c("Amphibians.png","Amphibians.png","Arachnids.png","Birds.png","Butterflies.png","Caddisflies.png","Communities.png","Craneflies.png","Crustacean.png","Earwigscorpionfly.png","Fish.png","Liverworts.png","Mammals.png","Mosses.png","Moths.png","Mussels.png","Odonates.png","OtherInverts.png","Plants.png","Sensitive.png","Snails.png","Sponges.png","TigerBeetles.png","Reptile.png","OtherInverts.png", "Communities.png"),
+                         c("Salamander","Frog","Invertebrate - Spiders","Bird","Invertebrate - Butterflies and Skippers","Invertebrate - Caddisflies","Community","","Invertebrate - Crayfishes","","Fish","","Mammal","","Invertebrate - Moths","Invertebrate - Mussels","Invertebrate - Dragonflies and Damselflies","Invertebrate - Other Beetles","Vascular Plant","","Invertebrate - Gastropods","Invertebrate - Sponges","Invertebrate - Tiger Beetles","Reptile","Invertebrate - Stoneflies", "Other"), stringsAsFactors = FALSE)
   names(taxaicon) <- c("icon","ELEMENT_TYPE")
   species_table <- merge(species_table, taxaicon, by.x="taxa", by.y="ELEMENT_TYPE")
   # do a check here if it results in a zero length table and will break the script
@@ -167,7 +175,7 @@ for (nha_name in nha_list){
   # G3G4 but has state significance
   
   # vulnerable species
-  a <- nrow(granklist[which((granklist$grank_rounded=="G3")&granklist$SENSITIVE!="Y"),])
+  a <- nrow(granklist[which((granklist$grank_rounded=="G3")&granklist$SENSITV_SP!="Y"),])
   if(a>0){
     spExample_GVulnerable <- sample_n(granklist[which(granklist$SENSITV_SP!="Y" & granklist$grank_rounded=="G3"),c("SNAME","SCOMNAME")], 1, replace=FALSE, prob=NULL) 
   }
@@ -209,6 +217,9 @@ for (nha_name in nha_list){
   } else {
     nha_siterank <- NA
   }
+  if(selected_nha$site_type=="hist"){
+    nha_siterank <- "Historic"
+  }
   
   # sources and funding - we're not going to do this right now
   # db_nha <- dbConnect(SQLite(), dbname=nha_databasename) # connect to the database
@@ -218,7 +229,7 @@ for (nha_name in nha_list){
   ###############################################################
   ## format various blocks of text to be formatted in terms of italics and bold font
   # italicize all SNAMEs in the descriptive text.
-  ETitalics <- read.csv(here::here("SNAMEitalics.csv"))
+  ETitalics <- read.csv(here::here("_data","SNAMEitalics.csv"))
   ETitalics <- ETitalics$ETitalics # turn into a vector
   ETitalics <- ETitalics[ETitalics!="Alle"] # remove some problematic names
   vecnames <- ETitalics 
@@ -231,10 +242,11 @@ for (nha_name in nha_list){
   # italicize all SNAMEs in the threats and recommendations text. 
   site_account$tr_summary <- str_replace_all(site_account$tr_summary, ETitalics) # for the paragraph
   # italicize all SNAMEs in the threats and recommendations bullets
-  for(j in 1:nrow(tr_bullets)){
-    tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], ETitalics)
+  if(nrow(tr_bullets)>0){
+    for(j in 1:nrow(tr_bullets)){
+      tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], ETitalics)
+    }
   }
-  
   
   # italicize SNAMEs in photo caption
   if(!is.na(selected_nha$photo_caption)) {
@@ -247,10 +259,11 @@ for (nha_name in nha_list){
   # replace apostrophes in the description paragraph
   site_account$tr_summary <- str_replace_all(site_account$tr_summary, c("â€™"="'"))
   site_account$tr_summary <- str_replace_all(site_account$tr_summary, c("â€™"="'"))
-  for(j in 1:nrow(tr_bullets)){
-    tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], c("â€™"="'"))
+  if(nrow(tr_bullets)>0){
+    for(j in 1:nrow(tr_bullets)){
+      tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], c("â€™"="'"))
+    }
   }
-  
   
   # bold tracked species names
   namesbold <- species_table$SCOMNAME
@@ -267,15 +280,17 @@ for (nha_name in nha_list){
   
   site_account$site_desc <- str_replace_all(site_account$site_desc, namesbold)
   site_account$tr_summary <- str_replace_all(site_account$tr_summary, namesbold)
-  for(j in 1:nrow(tr_bullets)){
-    tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], namesbold)
+  if(nrow(tr_bullets)>0){
+    for(j in 1:nrow(tr_bullets)){
+      tr_bullets$threat_text[j] <- str_replace_all(tr_bullets$threat_text[j], namesbold)
+    }
   }
   
-  
   # replace <br><br> html page breaks with latex page breaks
-  site_account$site_desc <- gsub("<br><br>","\\\\newline\\\\newline",site_account$site_desc)
-  site_account$tr_summary <- gsub("<br><br>","\\\\newline\\\\newline",site_account$tr_summary)
-  
+  site_account$site_desc <- gsub("<br><br>","\\\\newline\\\\newline ",site_account$site_desc)
+  site_account$tr_summary <- gsub("<br><br>","\\\\newline\\\\newline ",site_account$tr_summary)
+  site_account$site_desc <- gsub("<br /><br />","\\\\newline\\\\newline ",site_account$site_desc)
+  site_account$tr_summary <- gsub("<br /><br />","\\\\newline\\\\newline ",site_account$tr_summary)
   
   # build references to print in report
   # get list of tr bullet ids
@@ -298,10 +313,11 @@ for (nha_name in nha_list){
   # the below formatting is to get the url wrapped in the latex \url{} to make sure it wraps appropriately
   url_pattern <- "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
   references$url <- str_extract(references$latex_citation, url_pattern)
+  if(!is.na(references$url)){
   references$updated_url <- paste0("\\\\url{",str_extract(references$latex_citation, url_pattern),"}")
-  
   references$latex_citation <- str_replace(references$latex_citation, references$url, references$updated_url)
-  }  
+  }
+  }
 
   # get the output folder and the file name
   output_folder <- here::here("_data","output")
@@ -349,7 +365,7 @@ for (nha_name in nha_list){
   }
   
   # RNW file to use
-  rnw_template <- "template_Formatted_NHA_PDF.rnw"
+  rnw_template <- "3_template_Formatted_NHA_PDF.rnw"
   makePDF(rnw_template, pdf_filename) # user created function
   deletepdfjunk(pdf_filename) # user created function # delete .txt, .log etc if pdf is created successfully.
   beepr::beep(sound=10, expr=NULL)
