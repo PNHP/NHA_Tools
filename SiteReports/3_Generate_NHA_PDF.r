@@ -12,8 +12,8 @@
 
 # PASTE LIST OF NHA SITE NAMES FOR WHICH TO CREATE SITE REPORTS HERE - USE THE
 # SITE NAME LISTER TOOL IN ARCGIS TO GET LIST OF SITE NAMES FROM SELECTED NHAS.
-nha_list <- c('Alpine Road Site', 'Andersontown Woods', 'Atom Road Woods', 'Bandana Woods', 'Beaver Creek ROW', 'Beaver Creek-York Co', 'Bermudian Creek at T809', 'Blymire and Rehmeyer Hollow Woods', 'Boyds Run Ravine', 'Bryansville Station Seep', 'Cabin Creek', 'Chimney Rock', 'Codorus State Park Site', 'Crystal Pit Cave', 'Deer Creek Woods', 'East Berlin Meadow', 'Ebaughs Creek', 'Erney Cliff', 'Felton and Fenmore Outcrops', 'Fishing Creek - Susquehanna River Site', 'Gifford Pinchot State Park Site', 'High Rock', 'Highrock Outcrops', 'Indian Rock Floodplain', 'Indian Steps Woods', 'Kiwanis Lake', 'Lake Redman Site', 'Laurel Run-York Co', 'Leibs Creek Hollow', 'Marsh Run', 'Michael Run', 'Mt Olivet Marsh', 'Muddy Creek At Woodbine', 'Muddy Creek Gorge', 'Nells Hill Swamp', 'Oakland Run', 'Oakland Run Woods', 'Otter Creek Woods', 'Peach Bottom Woods', 'Plum Run Upland', 'Rambo Run Woods', 'Rock Ridge Woods', 'Sawmill Run Woods', 'Seitzland Marsh', 'Shady Lane Woods', 'Shaffers Hollow', 'Shenks Ferry York Woods', 'Southside Woods', 'State Game Lands 243', 'Stewartstown Ravine', 'Straight Hill Woods', 'West Bridgeton Woods', 'Wildcat Run Cliffs', 'Wildcat Run Gorge', 'Winterstown Station Woods', 'York Furnace Woods')
-#nha_name <- "West Bridgeton Woods"
+nha_list <- c('Church Hill', 'Claylick Mountain', 'Concrete Bottom at Licking Creek', 'Conococheague Creek at Highland School', 'Conococheague Creek at Rt 16', 'Highland School Fields', 'Hykes Swamp', 'Lower Conococheague Creek', "Martins Mill Bridge", 'Mercersburg Woods', 'Muddy Run Spring', "Sportsmans Road Shale Bank", 'West Branch Conococheague', 'Williamson Red-cedar-Redbud Shrubland')
+nha_name <- 'Claylick Mountain'
 
 
 if (!requireNamespace("arcgisbinding", quietly = TRUE)) install.packages("arcgisbinding")
@@ -32,6 +32,7 @@ if (!requireNamespace("sf", quietly = TRUE)) install.packages("sf")
 require(sf)
 if (!requireNamespace("units", quietly = TRUE)) install.packages("units")
 require(units)
+
 
 nha_url = "https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_Beta_No_Edit/FeatureServer/0"
 site_account_url <- "https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_Beta_No_Edit/FeatureServer/5"
@@ -54,8 +55,14 @@ for (nha_name in nha_list){
   nha_name <- nha_name
   #nha_name <- "Haycock Mountain (State Game Lands 157) & Nockamixon State Park" # use this for testing a single site
   print(paste0("Creating site report for: ",nha_name))
-  nha_nameSQL <- paste("'", nha_name, "'", sep='')
+  
+  nha_nameSQL <- paste("'", gsub("'", "''", nha_name), "'", sep='')
+  if(grepl("'", nha_name)){
+    warning(paste0("Site name '", nha_name, "' contains an apostrophe. This has been escaped for the SQL query, but consider cleaning up the site name in the database."))
+  }
+  
   nha_nameLatex <- gsub("#","\\\\#", nha_name) # escapes our octothorpes
+  
   
   # open nha cores and make selection based on nha_name
   nha <- arc.open(nha_url)
@@ -73,10 +80,17 @@ for (nha_name in nha_list){
   # open the nha site accounts and select those that match the nha_join_id. keep only record of most recent written date.
   site_account <- arc.open(site_account_url)
   site_account <- arc.select(site_account, where_clause=paste("nha_join_id=", nha_join_id_SQL, sep="")) # need to add statement or loop for multiple NHAs
-  if(nrow(site_account)>0){
+  # keep most recent written date
   site_account <- site_account %>%
     group_by(nha_join_id) %>% 
     filter(written_date == max(written_date))
+  
+  # if there are multiple on the same written date, keep the one with the most recent created date
+  if(nrow(site_account) > 1){
+    warning(paste0("Multiple site accounts found with the same written_date for ", nha_name, ". Keeping the most recently created record."))
+    site_account <- site_account %>%
+      filter(created_date == max(created_date)) %>%
+      slice(1)
   }
   
   # open protected lands records for selected nha
@@ -287,10 +301,10 @@ for (nha_name in nha_list){
   }
   
   # replace <br><br> html page breaks with latex page breaks
-  site_account$site_desc <- gsub("<br><br>","\\\\newline\\\\newline ",site_account$site_desc)
-  site_account$tr_summary <- gsub("<br><br>","\\\\newline\\\\newline ",site_account$tr_summary)
-  site_account$site_desc <- gsub("<br /><br />","\\\\newline\\\\newline ",site_account$site_desc)
-  site_account$tr_summary <- gsub("<br /><br />","\\\\newline\\\\newline ",site_account$tr_summary)
+  site_account$site_desc <- gsub("<br><br>","\\\\medskip ",site_account$site_desc)
+  site_account$tr_summary <- gsub("<br><br>","\\\\medskip ",site_account$tr_summary)
+  site_account$site_desc <- gsub("<br /><br />","\\\\medskip ",site_account$site_desc)
+  site_account$tr_summary <- gsub("<br /><br />","\\\\medskip ",site_account$tr_summary)
   
   # build references to print in report
   # get list of tr bullet ids
@@ -309,14 +323,19 @@ for (nha_name in nha_list){
   references$latex_citation <-  gsub('&amp;', "\\\\&", references$latex_citation)
   references$latex_citation <-  gsub('<i>', "\\\\textit{", references$latex_citation)
   references$latex_citation <-  gsub('</i>', "}", references$latex_citation)
+  references <- references[!duplicated(references$latex_citation), ]
   
   # the below formatting is to get the url wrapped in the latex \url{} to make sure it wraps appropriately
   url_pattern <- "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
   references$url <- str_extract(references$latex_citation, url_pattern)
-  if(!is.na(references$url)){
-  references$updated_url <- paste0("\\\\url{",str_extract(references$latex_citation, url_pattern),"}")
-  references$latex_citation <- str_replace(references$latex_citation, references$url, references$updated_url)
-  }
+  has_url <- !is.na(references$url)
+  references$updated_url <- NA_character_
+  references$updated_url[has_url] <- paste0("\\\\url{", references$url[has_url], "}")
+  references$latex_citation[has_url] <- str_replace(
+    references$latex_citation[has_url],
+    references$url[has_url],
+    references$updated_url[has_url]
+  )
   }
 
   # get the output folder and the file name
