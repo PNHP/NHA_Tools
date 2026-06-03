@@ -67,10 +67,11 @@ eo_ptreps = r"https://gis.waterlandlife.org/server/rest/services/PNHP/Biotics_RE
 
 # define NHA PUBLIC feature service rest endpoints - these are on our WEBGIS Portal
 PUBLIC_nha_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/0"
-PUBLIC_site_accounts_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/2"
-PUBLIC_species_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/1"
-PUBLIC_tr_bullets_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/3"
-PUBLIC_nha_references_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/4"
+PUBLIC_susns_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/1"
+PUBLIC_site_accounts_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/3"
+PUBLIC_species_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/2"
+PUBLIC_tr_bullets_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/4"
+PUBLIC_nha_references_url = r"https://services2.arcgis.com/XM2fovFQqAVipH6f/arcgis/rest/services/Natural_Heritage_Area_Public_Data/FeatureServer/5"
 
 ###################
 ## FIRST WE ARE GOING TO CONNECT TO THE WPC GIS PORTAL AND BRING IN ALL THE DATA AT ONCE SO WE DON'T  HAVE TO KEEP SWITCHING PORTALS
@@ -85,7 +86,7 @@ gis = GIS('https://gis.waterlandlife.org/portal', wpc_gis_username, wpc_gis_pass
 
 field_mapping = 'site_name "Site Name" true true false 255 Text 0 0,First,#,Natural Heritage Areas,site_name,0,254;site_type "Site Type" true true false 4 Text 0 0,First,#,Natural Heritage Areas,site_type,0,3;desc_ "Brief Description" true true false 1000 Text 0 0,First,#,Natural Heritage Areas,desc_,0,999;status "Drawn Status" true true false 3 Text 0 0,First,#,Natural Heritage Areas,status,0,2;status_change_date "Status Change Date" true true false 8 Date 0 0,First,#,Natural Heritage Areas,status_change_date,-1,-1;status_change_reason "Status Change Reason" true true false 1000 Text 0 0,First,#,Natural Heritage Areas,status_change_reason,0,999;drawn_user "Drawn User" true true false 100 Text 0 0,First,#,Natural Heritage Areas,drawn_user,0,99;drawn_date "Drawn Date" true true false 8 Date 0 0,First,#,Natural Heritage Areas,drawn_date,-1,-1;drawn_notes "Drawn Notes" true true false 1000 Text 0 0,First,#,Natural Heritage Areas,drawn_notes,0,999;review_user "Review User" true true false 100 Text 0 0,First,#,Natural Heritage Areas,review_user,0,99;review_date "Review Date" true true false 8 Date 0 0,First,#,Natural Heritage Areas,review_date,-1,-1;review_notes "Review Notes" true true false 1000 Text 0 0,First,#,Natural Heritage Areas,review_notes,0,999;sig_rank "Significance Rank" true true false 12 Text 0 0,First,#,Natural Heritage Areas,sig_rank,0,1;sig_rank_comm "Significance Rank Comments" true true false 1000 Text 0 0,First,#,Natural Heritage Areas,sig_rank_comm,0,999;project "Project" true true false 255 Text 0 0,First,#,Natural Heritage Areas,project,0,254;source_report "Source Report" true true false 255 Text 0 0,First,#,Natural Heritage Areas,source_report,0,254;site_pdf_link "Site Account PDF Link" true true false 255 Text 0 0,First,#,Natural Heritage Areas,site_pdf_link,0,254;wpc_blueprint "WPC Blueprint?" true true false 2 Text 0 0,First,#,Natural Heritage Areas,wpc_blueprint,0,1;nha_join_id "NHA Join ID" true true false 25 Text 0 0,First,#,Natural Heritage Areas,nha_join_id,0,24;GlobalID "GlobalID" false false true 38 GlobalID 0 0,First,#,Natural Heritage Areas,GlobalID,-1,-1;created_user "created_user" false true true 255 Text 0 0,First,#,Natural Heritage Areas,created_user,0,254;created_date "created_date" false true true 8 Date 0 0,First,#,Natural Heritage Areas,created_date,-1,-1;last_edited_user "last_edited_user" false true true 255 Text 0 0,First,#,Natural Heritage Areas,last_edited_user,0,254;last_edited_date "last_edited_date" false true true 8 Date 0 0,First,#,Natural Heritage Areas,last_edited_date,-1,-1;photo_credit "Photo Credit Name" true true false 255 Text 0 0,First,#,Natural Heritage Areas,photo_credit,0,254;photo_affil "Photo Credit Affiliation" true true false 255 Text 0 0,First,#,Natural Heritage Areas,photo_affil,0,254;photo_caption "Photo Caption" true true false 255 Text 0 0,First,#,Natural Heritage Areas,photo_caption,0,254;Shape__Area "Shape.STArea()" false true true 0 Double 0 0,First,#,Natural Heritage Areas,Shape__Area,-1,-1;Shape__Length "Shape.STLength()" false true true 0 Double 0 0,First,#,Natural Heritage Areas,Shape__Length,-1,-1'
 
-nha_copy = arcpy.FeatureClassToFeatureClass_conversion(nha_url, "memory", "nha_copy", where_clause = "status = 'rev' OR status = 'app'", field_mapping=field_mapping)
+nha_copy = arcpy.FeatureClassToFeatureClass_conversion(nha_url, "memory", "nha_copy", where_clause = "site_type <> 'susn' AND (status = 'rev' OR status = 'app')", field_mapping=field_mapping)
 with arcpy.da.UpdateCursor(nha_copy,["site_type","sig_rank"]) as cursor:
     for row in cursor:
         if row[0] == "hist":
@@ -125,17 +126,64 @@ with arcpy.da.UpdateCursor(nha_copy, ["photo_caption", "photo_credit", "photo_af
                 photo_cap = row[0]
             row[0] = photo_cap
             cursor.updateRow(row)
-nha_layer = arcpy.MakeFeatureLayer_management(nha_copy, "nha_layer", where_clause = "status = 'rev' OR status = 'app'")
+nha_layer = arcpy.MakeFeatureLayer_management(nha_copy, "nha_layer", where_clause = "site_type <> 'susn' AND (status = 'rev' OR status = 'app')")
+
+
+#########################
+## PREP SUSNs
+#########################
+susn_copy = arcpy.FeatureClassToFeatureClass_conversion(nha_url, "memory", "susn_copy", where_clause = "site_type = 'susn' AND (status = 'rev' OR status = 'app')", field_mapping=field_mapping)
+
+with arcpy.da.UpdateCursor(susn_copy,"sig_rank") as cursor:
+    for row in cursor:
+        if row[0] is None:
+            pass
+        elif row[0] == "G":
+            row[0] = "Global"
+            cursor.updateRow(row)
+        elif row[0] == "R":
+            row[0] = "Regional"
+            cursor.updateRow(row)
+        elif row[0] == "S":
+            row[0] = "State"
+            cursor.updateRow(row)
+        elif row[0] == "L":
+            row[0] = "Local"
+            cursor.updateRow(row)
+        else:
+            row[0] = "Historic"
+            cursor.updateRow(row)
+
+with arcpy.da.UpdateCursor(susn_copy, ["photo_caption", "photo_credit", "photo_affil"]) as cursor:
+    for row in cursor:
+        if row[0] is not None:
+            if row[1] is not None and row[2] is not None:
+                photo_cap = row[0]+" Photo by: "+row[1]+", "+row[2]
+            elif row[1] is None and row[2] is not None:
+                photo_cap = row[0]+" Photo by: "+row[2]
+            elif row[1] is not None and row[2] is None:
+                photo_cap = row[0]+" Photo by: "+row[1]
+            else:
+                photo_cap = row[0]
+            row[0] = photo_cap
+            cursor.updateRow(row)
+susn_layer = arcpy.MakeFeatureLayer_management(susn_copy, "susn_layer", where_clause = "site_type = 'susn' AND (status = 'rev' OR status = 'app')")
 
 ##########################
 ## LOAD SITE ACCOUNTS
 ##########################
 # load in the most current site account records for all NHAs
 site_accounts = get_latest_records(site_account_url,"nha_join_id","written_date")
-site_accounts = site_accounts.fillna(np.nan)
-site_accounts = site_accounts.replace({np.nan: None})
+site_accounts = site_accounts.where(pd.notnull(site_accounts), None)
 
-site_accounts_df = site_accounts[['site_desc','tr_summary','nha_join_id']]
+# Fix date columns (NaT survives .where() and must be handled separately)
+date_cols = site_accounts.select_dtypes(include=['datetime64[ns]', 'datetimetz']).columns
+for col in date_cols:
+    site_accounts[col] = site_accounts[col].apply(
+        lambda x: None if pd.isnull(x) else int(x.timestamp() * 1000)
+    )
+
+site_accounts_df = site_accounts[['site_desc','tr_summary','nha_join_id','written_date']]
 
 italics_path = r"H:\Scripts\NHA_Tools\SiteReports\_data\SNAMEitalics.csv"
 ETitalics = pd.read_csv(italics_path)["ETitalics"].tolist()
@@ -196,8 +244,7 @@ site_accounts_fs = FeatureSet.from_dataframe(site_accounts_df)
 fields = ['EO_ID', 'taxa', 'species_url', 'nha_join_id', 'exclude']
 species_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(species_url, fields) if row[4] != "Y"), columns=fields)
 # format NA values so they play nicely with ArcGIS
-species_sdf = species_sdf.fillna(np.nan)
-species_sdf = species_sdf.replace({np.nan: None})
+species_sdf = species_sdf.where(pd.notnull(species_sdf), None)
 
 # create pandas dataframe from eo_ptreps layer
 fields = ['EO_ID', 'SNAME', 'SCOMNAME', 'GRANK', 'SRANK', 'USESA', 'SPROT', 'PBSSTATUS', 'EORANK', 'SENSITV_SP', 'SENSITV_EO', 'LASTOBS_YR']
@@ -207,7 +254,7 @@ et_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(eo_ptreps, fields)),
 species_sdf = pd.merge(species_sdf, et_sdf, on='EO_ID', how='left')
 
 # sort values by lastobs_yr and drop duplicate species by nha group
-species_sdf = species_sdf.sort_values(['nha_join_id', 'LASTOBS_YR'], ascending=[True, False])
+species_sdf = species_sdf.sort_values(['nha_join_id', 'LASTOBS_YR', 'SENSITV_EO'], ascending=[True, False, True])
 species_sdf = species_sdf.drop_duplicates(subset=['nha_join_id', 'SNAME'], keep='first')
 
 # add species_name column that includes combined species name and HTML tags to include bolding and italics
@@ -248,6 +295,7 @@ species_sdf['SRANK'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sd
 species_sdf['SPROT'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), '--', species_sdf['SPROT'])
 species_sdf['PBSSTATUS'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), '--', species_sdf['PBSSTATUS'])
 species_sdf['taxa'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), '--', species_sdf['taxa'])
+species_sdf['species_url'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), 'None', species_sdf['species_url'])
 species_sdf['taxa_photo'] = np.where((species_sdf['SENSITV_SP'] == 'Y') | (species_sdf['SENSITV_EO'] == 'Y'), 'https://wpcgis.maps.arcgis.com/sharing/rest/content/items/459e3842241042858937219419dec559/data', species_sdf['taxa_photo'])
 
 # Get final species dataframe that will be loaded into PUBLIC feature service
@@ -268,8 +316,7 @@ species_fs = FeatureSet.from_dataframe(species_sdf)
 fields = ['threat_text', 'nha_join_id', 'threat_desc']
 tr_bullets_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(tr_bullets_url, fields)), columns=fields)
 # format NA values so they play nicely with ArcGIS
-tr_bullets_sdf = tr_bullets_sdf.fillna(np.nan)
-tr_bullets_sdf = tr_bullets_sdf.replace({np.nan: None})
+tr_bullets_sdf = tr_bullets_sdf.where(pd.notnull(tr_bullets_sdf), None)
 
 # italicize snames
 tr_bullets_sdf["threat_text"] = tr_bullets_sdf["threat_text"].map(italicize_text)
@@ -288,8 +335,7 @@ tr_bullets_fs = FeatureSet.from_dataframe(tr_bullets_sdf)
 fields = ['source_id', 'full_cite']
 references_sdf = pd.DataFrame((row for row in arcpy.da.SearchCursor(nha_references_url, fields)), columns=fields)
 # format NA values so they play nicely with ArcGIS
-references_sdf = references_sdf.fillna(np.nan)
-references_sdf = references_sdf.replace({np.nan: None})
+references_sdf = references_sdf.where(pd.notnull(references_sdf), None)
 
 # convert dataframe to feature set
 references_fs = FeatureSet.from_dataframe(references_sdf)
@@ -314,6 +360,15 @@ public_nha_flayer.delete_features(where="objectid > 0")
 arcpy.env.maintainAttachments = True
 arcpy.Append_management(nha_layer,PUBLIC_nha_url,"NO_TEST")
 
+
+###### this section deletes SUSN polygons and appends current polygons to the Public SUSN dataset
+# delete all features from SUSN Public layer
+public_susn_flayer = FeatureLayer(PUBLIC_susns_url)
+public_susn_flayer.delete_features(where="objectid > 0")
+
+# append nha cores to public feature service layer
+arcpy.env.maintainAttachments = True
+arcpy.Append_management(susn_layer,PUBLIC_susns_url,"NO_TEST")
 
 ############
 ## DELETE AND LOAD IN SITE ACCOUNT RECORDS
@@ -386,6 +441,8 @@ if attachments == "yes":
     add_fields = ["photo_jpg", "photo_png", "photo_jpeg"]
     for f in add_fields:
         arcpy.AddField_management(nha_copy, f, "TEXT", "", "", 255)
+    for f in add_fields:
+        arcpy.AddField_management(susn_copy, f, "TEXT", "", "", 255)
 
     add_fields.append("nha_join_id")
     with arcpy.da.UpdateCursor(nha_copy, add_fields) as cursor:
@@ -396,9 +453,18 @@ if attachments == "yes":
                 row[2] = row[3]+".jpeg"
                 cursor.updateRow(row)
 
+    with arcpy.da.UpdateCursor(susn_copy, add_fields) as cursor:
+        for row in cursor:
+            if row[3] is not None:
+                row[0] = row[3]+".jpg"
+                row[1] = row[3]+".png"
+                row[2] = row[3]+".jpeg"
+                cursor.updateRow(row)
+
     # add .png photos to public fs
     for f in add_fields:
         arcpy.AddAttachments_management(PUBLIC_nha_url, "nha_join_id", nha_copy, "nha_join_id", f, photo_path)
+        arcpy.AddAttachments_management(PUBLIC_susns_url, "nha_join_id", susn_copy, "nha_join_id", f, photo_path)
 
 
 ############ THIS SECTION UPDATES THE NHA LAYER FOR DOMAIN THINGS
