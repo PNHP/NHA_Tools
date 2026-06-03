@@ -474,6 +474,7 @@ class SpeciesTransfer(object):
         nha_cores = params[0].valueAsText
         eo_layer = params[1].valueAsText
         nha_species = r"https://gis.waterlandlife.org/server/rest/services/PNHP/NHA_EDIT/FeatureServer/6"
+        species_urls = r"https://gis.waterlandlife.org/server/rest/services/Hosted/NHA_Reference_Layers/FeatureServer/6"
 
         # check for selection on nha core layer and exit if there is no selection
         desc = arcpy.Describe(nha_cores)
@@ -550,17 +551,37 @@ class SpeciesTransfer(object):
                         exclude = "Y"
                         exclude_reason = "EO does not qualify for inclusion in NHA because of tracking status, age, accuracy, or rank."
 
-                    insert_fields = eo_fields+["exclude","exclude_reason","nha_join_id","nha_rel_GUID","taxa"]
+                    insert_fields = eo_fields + ["exclude", "exclude_reason", "nha_join_id", "nha_rel_GUID", "taxa"]
+
+                    # map every field to the current value pulled from the source EO layer
+                    source_values = {
+                        "EO_ID": eoid, "ELCODE": elcode, "SNAME": sname, "SCOMNAME": scomname,
+                        "ELSUBID": elsubid, "LASTOBS_YR": lastobs, "SURVEY_YR": survey_yr,
+                        "EO_TRACK": eo_track, "GRANK": grank, "SRANK": srank, "SPROT": sprot,
+                        "USESA": usesa, "PBSSTATUS": pbsstatus, "SENSITV_SP": sensitv_sp,
+                        "SENSITV_EO": sensitv_eo, "EORANK": eorank, "exclude": exclude,
+                        "exclude_reason": exclude_reason, "nha_join_id": nha_join_id,
+                        "nha_rel_GUID": global_id, "taxa": taxa_group
+                    }
 
                     # if eo id is not yet in the related table for the NHA, add it
                     if eoid not in eos_in_NHA:
-                        insert_row = [eoid,elcode,sname,scomname,elsubid,lastobs,survey_yr,eo_track,grank,srank,sprot,usesa,
-                                        pbsstatus,sensitv_sp,sensitv_eo,eorank,exclude,exclude_reason,nha_join_id,global_id,taxa_group]
-                        with arcpy.da.InsertCursor(nha_species,insert_fields) as cursor:
-                            cursor.insertRow(tuple(insert_row))
+                        insert_row = [source_values[f] for f in insert_fields]
+                        with arcpy.da.InsertCursor(nha_species, insert_fields) as insert_cursor:
+                            insert_cursor.insertRow(tuple(insert_row))
+                    # if eo id is already related, refresh any attributes that have changed
                     else:
-                        pass
-                    #arcpy.management.DeleteIdentical(nha_species, ["EO_ID", "nha_join_id"])
+                        # update everything except the keys, relationship guid, and exclude fields
+                        update_fields = [f for f in insert_fields if f not in
+                                         ("EO_ID", "nha_join_id", "nha_rel_GUID", "exclude", "exclude_reason")]
+                        new_vals = [source_values[f] for f in update_fields]
+                        with arcpy.da.UpdateCursor(nha_species, update_fields,
+                                                   where_clause="EO_ID = {0} AND nha_join_id = '{1}'".format(eoid,
+                                                                                                             nha_join_id)) as update_cursor:
+                            for update_row in update_cursor:
+                                if update_row != new_vals:
+                                    update_cursor.updateRow(new_vals)
+                    # arcpy.management.DeleteIdentical(nha_species, ["EO_ID", "nha_join_id"])
 
             # check for EOs listed in NHA that no longer exist or no longer intersect the boundary and mark them to be excluded
             for eo in eos_in_NHA:
@@ -572,6 +593,19 @@ class SpeciesTransfer(object):
                             row[2] = "Y"
                             row[3] = "EO centroid no longer exists or no longer intersects NHA boundary."
                             cursor.updateRow(row)
+
+            # fill null urls with species account urls from reference layer
+            species_url_dict = {row[0]: row[1] for row in arcpy.da.SearchCursor(species_urls, ["element_su", "url"])
+                                if row[0] is not None}
+
+            with arcpy.da.UpdateCursor(nha_species, ["ELSUBID", "species_url"], where_clause="species_url IS NULL") as cursor:
+                for row in cursor:
+                    for k, v in species_url_dict.items():
+                        if k == row[0]:
+                            row[1] = v
+                            cursor.updateRow(row)
+                        else:
+                            pass
 
 
 ########################################################################################################################
@@ -1632,12 +1666,6 @@ class OrphanEOReport(object):
 
         arcpy.SelectLayerByLocation_management(eo_lyr,"INTERSECT",nha_lyr,"","REMOVE_FROM_SELECTION")
 
-        # today = date.today()
-        # formatted_date = today.strftime("%Y%m%d")
-        output_file = "NHA_orphan_eos.csv"
-        arcpy.ExportTable_conversion(eo_lyr,output_file)
-        os.startfile(output_file)
-
         where_clause = "{0} = '{1}'".format("NHAEligible", "Y")
         arcpy.SelectLayerByAttribute_management(eo_lyr,"SUBSET_SELECTION",where_clause)
 
@@ -1648,6 +1676,10 @@ class OrphanEOReport(object):
         arcpy.AddMessage(where_clause)
         arcpy.SelectLayerByAttribute_management(eo_layer,"NEW_SELECTION",where_clause)
 
-
+        # today = date.today()
+        # formatted_date = today.strftime("%Y%m%d")
+        output_file = "NHA_orphan_eos.csv"
+        arcpy.ExportTable_conversion(eo_lyr,output_file)
+        os.startfile(output_file)
 
 
