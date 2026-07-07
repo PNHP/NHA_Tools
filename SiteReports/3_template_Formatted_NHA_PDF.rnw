@@ -33,6 +33,9 @@
 \usepackage{lastpage}
 \usepackage{hanging}
 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\medskipamount}
+
 \geometry{letterpaper, top=0.45in, bottom=0.75in, left=0.75in, right=0.75in}
 \pagestyle{fancy} \fancyhf{} \renewcommand\headrulewidth{0pt} %strip default header/footer stuff
 
@@ -51,6 +54,12 @@
 \begin{document}
 %\RaggedRight
 \catcode`\_=11
+
+% Safety net: keep package messages, startup banners, and warnings out of the
+% rendered PDF. These are diagnostics for the console, not document content.
+<<setup, include=FALSE>>=
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+@
 
 % Header
 \noindent
@@ -72,6 +81,8 @@
 <<label=intro_layout, echo=FALSE, results='asis'>>=
 
 # ---- Build the significance paragraph text in R first ----------------
+nha_siterank <- trimws(nha_siterank)   # guard against stray whitespace from the feature service
+
 sig_text <- paste0(
   "\\noindent This site is of ",
   nha_siterank,
@@ -144,7 +155,18 @@ if(nha_siterank=="Global" & spCount_GImperiled>0 & spCount_GImperiledSens=="no")
   sig_text <- paste0(sig_text,
     " it no longer qualifies as a current NHA. This site may have previously included species of concern that are now delisted or extirpated."
   )
+} else {
+  warning(sprintf(
+    "Significance text: no branch matched (rank='%s', GImperiled=%s/%s, GVulnerable=%s/%s, GSecure=%s/%s).",
+    nha_siterank, spCount_GImperiled, spCount_GImperiledSens,
+    spCount_GVulnerable, spCount_GVulnerableSens, spCount_GSecure, spCount_GSecureSens))
+  sig_text <- paste0(sig_text,
+    " of the conservation value of the tracked species and habitats documented within this NHA.")
 }
+
+# Historic sites omit the significance explanation paragraph below; the
+# "Species List" blurb already conveys the site's historic status.
+emit_sig <- (nha_siterank != "Historic")
 
 # ---- Measure text length to decide layout ----------------------------
 desc_chars <- if(nrow(site_account) > 0 && !is.na(site_account$site_desc))
@@ -161,15 +183,15 @@ has_photo  <- isTRUE(
   exists("photo_path") && length(photo_path) > 0 &&
   file.exists(file.path(photo_path, photo_file[1]))
 )
-use_wrap   <- has_photo && (total_chars > 1500)
 
 # ---- Build temp_photo and capfun if a photo exists -------------------
 temp_photo <- NULL
 capfun     <- NULL
+img_asp    <- NA_real_     # photo height/width; > 1 means portrait (tall)
 
 if(has_photo){
   if(!requireNamespace("magick", quietly=TRUE)) install.packages("magick")
-  library(magick)
+  suppressPackageStartupMessages(library(magick))
 
   img <- tryCatch({
     im <- image_read(file.path(photo_path, photo_file[1]))
@@ -178,8 +200,18 @@ if(has_photo){
 
   if(is.null(img) || length(img) == 0){
     has_photo <- FALSE
-    use_wrap  <- FALSE
   } else {
+    info    <- image_info(img)
+    img_asp <- as.numeric(info$height[1]) / as.numeric(info$width[1])
+
+    # Flag tall portrait photos. These can out-measure the intro text and
+    # push the wrapfigure down onto the species table. Crop/standardize the
+    # flagged source images so the normal use_wrap logic handles them.
+    if(isTRUE(img_asp > 1.2)){
+      message(sprintf("TALL PHOTO (asp %.2f) for %s -- check layout / consider cropping.",
+                      img_asp, nha_name))
+    }
+
     temp_photo <- tempfile(fileext=".jpg")
     image_write(img, path=temp_photo, format="jpeg")
     temp_photo <- gsub("\\\\", "/", temp_photo)
@@ -191,77 +223,73 @@ if(has_photo){
   }
 }
 
+# Layout decision: character-count heuristic (hand-edit/crop the few tall
+# photos flagged above rather than auto-adjusting here).
+use_wrap <- has_photo && (total_chars > 1500)
+
 # ---- Emit LaTeX based on layout decision -----------------------------
+  if(!has_photo){
 
-if(!has_photo){
+    # NO PHOTO: full-width text in the main body (parskip works here)
+    cat("\\normalsize\n\n")
 
-  # NO PHOTO: just emit full-width text, no minipage or wrapfigure needed
-  cat("\\normalsize\n\n")
+    if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
+      cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
+    }
 
-  # Site description
-  if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
-    cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
-  }
+    if(emit_sig){
+      cat(paste0(sig_text, "\n\n"))      # sig_text already starts with \noindent
+    }
 
-  # Gap between site description and significance paragraph
-  cat("\\medskip\n")
+  } else if(use_wrap){
 
-  # Significance paragraph
-  cat(paste0(sig_text, "\n\n"))
-
-} else if(use_wrap){
-
-  # WRAPFIGURE layout: photo floats right, long text wraps beside+below it
-  cat(paste0(
-    "\\begin{wrapfigure}{R}{0.44\\textwidth}\n",
-    "\\vspace{0pt}\n",
-    "\\includegraphics[width=\\linewidth]{", temp_photo, "}\\\\[4pt]\n",
-    "{\\small ", capfun, "}\n",
-    "\\end{wrapfigure}\n\n",
-    "\\normalsize\n\n"
-  ))
-
-  # Site description
-  if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
-    cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
-  }
-
-  # Gap between site description and significance paragraph
-  cat("\\medskip\n")
-
-  # Significance paragraph
-  cat(paste0(sig_text, "\n\n"))
-
-} else {
-
-  # MINIPAGE layout: text left, photo right, white space below text is fine
-  cat("\\noindent\\begin{minipage}[t]{0.52\\textwidth}\n\\vspace{0pt}\n\\normalsize\n\n")
-
-  # Site description
-  if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
-    cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
-  }
-
-  # Gap between site description and significance paragraph
-  cat("\\medskip\n")
-
-  # Significance paragraph
-  cat(paste0(sig_text, "\n\n"))
-
-  cat("\\end{minipage}\n")
-
-  # Right minipage: photo (always present in this branch)
-  cat("\\hfill\n\\begin{minipage}[t]{0.44\\textwidth}\n\\vspace{0pt}\n\n")
-
-  if(has_photo){
+    # WRAPFIGURE layout: photo floats right, text in the main body (parskip works)
     cat(paste0(
+      "\\begin{wrapfigure}{R}{0.44\\textwidth}\n",
+      "\\vspace{0pt}\n",
       "\\includegraphics[width=\\linewidth]{", temp_photo, "}\\\\[4pt]\n",
-      "{\\small ", capfun, "}\n"
+      "{\\small ", capfun, "}\n",
+      "\\end{wrapfigure}\n\n",
+      "\\normalsize\n\n"
     ))
-  }
 
-  cat("\n\\end{minipage}\n")
-}
+    if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
+      cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
+    }
+
+    if(emit_sig){
+      cat(paste0(sig_text, "\n\n"))
+    }
+
+  } else {
+
+    # MINIPAGE layout: text left, photo right.
+    # minipage zeroes \parskip internally, so restore it here to keep the
+    # <br><br> paragraph breaks spaced the same as in the body-text branches.
+    cat("\\noindent\\begin{minipage}[t]{0.52\\textwidth}\n\\vspace{0pt}\n\\setlength{\\parskip}{\\medskipamount}\n\\normalsize\n\n")
+
+    if(nrow(site_account) > 0 && !is.na(site_account$site_desc)){
+      cat(paste0("\\noindent ", as.character(site_account$site_desc), "\n\n"))
+    }
+
+    if(emit_sig){
+      cat(paste0(sig_text, "\n\n"))
+    }
+
+    cat("\\end{minipage}\n")
+
+    # Right minipage: photo
+    cat("\\hfill\n\\begin{minipage}[t]{0.44\\textwidth}\n\\vspace{0pt}\n\n")
+
+    if(has_photo){
+      cat(paste0(
+        "\\includegraphics[width=\\linewidth]{", temp_photo, "}\\\\[4pt]\n",
+        "{\\small ", capfun, "}\n"
+      ))
+    }
+
+    cat("\n\\end{minipage}\n")
+  }
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -371,22 +399,34 @@ if (nrow(species_table) > 0) {
   }
 
   cat('\\end{longtable}\n\\end{ThreePartTable}\n\\normalsize\n')
+
+} else {
+
+  # No tracked species/communities documented at this site (e.g. historic NHAs).
+  # Print the Species List heading with an explanatory blurb instead of a table.
+  cat('
+\\medskip
+\\normalsize
+\\noindent\\textbf{\\underline{Species List}}\\\\[4pt]
+\\noindent No extant occurrences of tracked species or communities are currently documented within this NHA. This NHA may have once included extant tracked species or natural communities that have since been delisted or no longer have current documented occurrences. Although this NHA does not include documented extant tracked species or natural communities of conservation concern, it may be an example of a locally valuable site or a nice example of more common plant communities and is maintained as a historic NHA.
+\\medskip
+')
 }
 @
 
 
 %%% Threats and Species Recommendations %%%
 
-% calculates what text to say
 <<label=threatsrecs, echo=FALSE, results='asis'>>=
 if(nrow(site_account)>0){
   if(is.na(site_account$tr_summary)==FALSE | nrow(tr_bullets)>0){
     cat("\\medskip\n\\normalsize\n")
     cat("\\noindent\\textbf{\\underline{Threats and Species Recommendations}}\\\\[4pt]\n")
   if(is.na(site_account$tr_summary)==FALSE){
-    cat(paste0("\\noindent ",as.character(site_account$tr_summary),"\\\\"))
+    cat(paste0("\\noindent ",as.character(site_account$tr_summary),"\n\n"))
   }
   if(nrow(tr_bullets)>0){
+    cat("\\noindent Specific threats and stresses to the elements present at this site, as well as conservation actions, include:\n")
     cat("\\begin{itemize}")
     for(t in 1:nrow(tr_bullets)){
       cat(paste0("\\item ",tr_bullets$threat_text[t]))
@@ -414,10 +454,11 @@ if (nha_siterank != "Historic") {
   
 %%% References %%% 
 <<results="asis", echo=FALSE>>=
-if(nrow(references) > 0){
+refs <- references$latex_citation
+refs <- refs[!is.na(refs) & nzchar(trimws(refs))]   # drop NULL/NA/blank citations
+if(length(refs) > 0){
   cat("\\medskip\n\\normalsize\n\\noindent\\textbf{\\underline{References}}\n\n")
-  cat("\\begingroup\\sloppy\\setlength{\\parindent}{-2em}\\setlength{\\leftskip}{2em}\\setlength{\\parskip}{4pt}\n")
-  refs = references$latex_citation
+  cat("\\begingroup\\raggedright\\sloppy\\setlength{\\parindent}{-2em}\\setlength{\\leftskip}{2em}\\setlength{\\parskip}{4pt}\n")
   for(r in refs){
     cat(paste0(r, "\\par\n"))
   }
@@ -427,17 +468,18 @@ if(nrow(references) > 0){
 
 
 \bigskip
-% the next line moves the recommended citation to the bottom of the page
-\vspace*{\fill}
-%%%  Recommended Citation %%% 
+% the next line moves the recommended citation to the bottom of the page - taking this out for now because of issues with blank pages.
+% \vspace*{\fill}
+%%% Recommended Citation %%% 
 \setlength{\fboxsep}{5pt}
 \noindent\fbox{
  \begin{minipage}[c]{0.2\linewidth}
   \includegraphics[width=1.0\linewidth]{PNHP_New_Logo_cmpact}%png logo file at repository root
  \end{minipage}%
  \begin{minipage}[c]{0.75\linewidth}
+    \raggedright
     Please cite this Natural Heritage Area as: \\
-    Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. Available at: \href{\Sexpr{url_NHApage}}{\Sexpr{url_NHApage}}   
+    Pennsylvania Natural Heritage Program. \Sexpr{format(Sys.Date(), "%Y")}. \Sexpr{as.character(nha_nameLatex)} NHA. Created on \Sexpr{format(Sys.Date(), "%d %b %Y")}. Available at: \href{\Sexpr{url_NHApage}}{\nolinkurl{\Sexpr{url_NHApage}}}
   \end{minipage}
 }
 
@@ -446,9 +488,9 @@ if(nrow(references) > 0){
 
 % insert the NHA map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 <<label=mapimage, echo=FALSE, results='asis'>>=
-  map_path <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map__", nha_join_id, ".jpg", sep="")
+  map_path <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map_", nha_join_id, ".jpg", sep="")
   if(file.exists(map_path)){
-    mapfile <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map__", nha_join_id, ".jpg", sep="")
+    mapfile <- paste("H://Scripts//NHA_Tools//SiteReports//_data//site_maps//nha_site_map_", nha_join_id, ".jpg", sep="")
     cat(paste0("\\noindent\\includegraphics[width=1\\textwidth]{",mapfile,"} %  \n"))
   }
 @
